@@ -10,6 +10,8 @@ import kotlin.reflect.KProperty
  *
  * __NOTE:__ _This only works for class members,_ and is __Kotlin only__.
  *
+ * Also, __this is not thread safe.__ Thread safety will be implemented if required.
+ *
  * Usage example:
  * ```
  * class IntegerThatCanOnlyBeSetOnce {
