@@ -34,8 +34,8 @@ class TestOp : OpMode() {
     }
 
     private fun drive() = with(gamepad1) {
-        val triggered =
-            abs(left_stick_y) > 0.1 || abs(left_stick_x) > 0.1 || abs(left_trigger) > 0.1
+        val triggered = listOf(left_stick_y, left_stick_x, right_stick_x)
+            .any { abs(it) > 0.1 }
 
         var flp = left_stick_y - left_stick_x - right_stick_x
         var frp = -left_stick_y - left_stick_x - right_stick_x
@@ -60,6 +60,8 @@ class TestOp : OpMode() {
         motors.frontRight.power = frp * powerMulti
         motors.backLeft.power = blp * powerMulti
         motors.backRight.power = brp * powerMulti
+
+        motors.logData(telemetry) { it.power }
     }
 
     private fun shoot() = with(shooter) {
