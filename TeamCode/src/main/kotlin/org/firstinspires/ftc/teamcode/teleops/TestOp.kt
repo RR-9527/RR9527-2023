@@ -37,18 +37,14 @@ class TestOp : OpMode() {
         val triggered = listOf(left_stick_y, left_stick_x, right_stick_x)
             .any { abs(it) > 0.1 }
 
-        var flp = left_stick_y - left_stick_x - right_stick_x
-        var frp = -left_stick_y - left_stick_x - right_stick_x
-        var blp = left_stick_y + left_stick_x - right_stick_x
-        var brp = -left_stick_y + left_stick_x - right_stick_x
+        val flp = left_stick_y - left_stick_x - right_stick_x
+        val frp = -left_stick_y - left_stick_x - right_stick_x
+        val blp = left_stick_y + left_stick_x - right_stick_x
+        val brp = -left_stick_y + left_stick_x - right_stick_x
 
-        val max = listOf(flp, frp, blp, brp).maxByOrNull(Float::absoluteValue)!!
-        if (max > 1) {
-            flp /= max
-            frp /= max
-            blp /= max
-            brp /= max
-        }
+        val max = listOf(flp, frp, blp, brp)
+            .maxByOrNull(Float::absoluteValue)!!
+            .coerceAtLeast(1f)
 
         val powerMulti = when {
             !triggered -> 0.0
@@ -56,10 +52,10 @@ class TestOp : OpMode() {
             else -> 1.0
         }
 
-        motors.frontLeft.power = flp * powerMulti
-        motors.frontRight.power = frp * powerMulti
-        motors.backLeft.power = blp * powerMulti
-        motors.backRight.power = brp * powerMulti
+        motors.frontLeft.power = flp * powerMulti / max
+        motors.frontRight.power = frp * powerMulti / max
+        motors.backLeft.power = blp * powerMulti / max
+        motors.backRight.power = brp * powerMulti / max
 
         motors.logData(telemetry) { it.power }
     }
