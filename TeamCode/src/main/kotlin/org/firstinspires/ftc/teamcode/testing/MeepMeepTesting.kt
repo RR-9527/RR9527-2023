@@ -10,7 +10,7 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-const val PATH_RADIUS = 60
+const val PATH_RADIUS = 55
 const val PATH_SIDES = 4
 
 const val ROBOT_SIZE = 20
@@ -36,7 +36,7 @@ fun main() {
             }
 
             val startY = (ROBOT_SIZE - FieldUtil.FIELD_HEIGHT) / 2.0
-            val startPose = Pose2d(coords[0].x, startY, rad(90))
+            val startPose = Pose2d(0.0, startY, rad(90))
 
             it.trajectorySequenceBuilder(startPose).run {
                 lineTo(Vector2d(coords[0].x, coords[0].y))
@@ -50,14 +50,18 @@ fun main() {
                         theta
                     )
 
-                    addDisplacementMarker {}
+                    if (i < coords.size) {
+                        addDisplacementMarker {}
 
-                    UNSTABLE_addTemporalMarkerOffset(0.5) {}
+                        UNSTABLE_addTemporalMarkerOffset(0.5) {}
 
-                    waitSeconds(.51)
+                        waitSeconds(.51)
+                    } else {
+                        turn(Math.PI * 8)
+                    }
                 }
 
-                lineTo(Vector2d(coords[0].x, startY))
+                lineTo(Vector2d(0.0, startY))
                 build()
             }
         }
