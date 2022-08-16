@@ -16,15 +16,15 @@ import kotlin.math.sin
 @Autonomous(name = "TestAutoKt")
 class TestAuto : LinearOpMode() {
     companion object {
-        const val FIELD_SIZE = 144
+        const val FIELD_SIZE = 130
         const val ROBOT_LENGTH = 16.45
-        const val PATH_RADIUS = 55
+        const val PATH_RADIUS = 50
         const val PATH_SIDES = 4
     }
 
     var drive: SampleMecanumDrive by LateInitVal()
     var shooter: Shooter by LateInitVal()
-
+    
     override fun runOpMode() {
         drive = SampleMecanumDrive(hardwareMap)
         shooter = initializedShooter(hardwareMap)
@@ -53,21 +53,21 @@ class TestAuto : LinearOpMode() {
                 )
 
                 if (i < coords.size) {
+
                     addDisplacementMarker {
-                        shooter.motor.power = 1.0
                         shooter.setIndexerToggled(true)
                     }
 
-                    UNSTABLE_addTemporalMarkerOffset(0.5) {
-                        shooter.motor.power = 0.0
+                    UNSTABLE_addTemporalMarkerOffset(0.25) {
                         shooter.setIndexerToggled(false)
                     }
 
-                    waitSeconds(.51)
+                    waitSeconds(.5)
                 } else {
                     turn(Math.PI * 8)
                 }
             }
+
 
             lineTo(Vector2d(0.0, startY))
             build()
@@ -77,6 +77,9 @@ class TestAuto : LinearOpMode() {
 
         if (isStopRequested) return
 
+        shooter.motor.power = 1.0
         drive.followTrajectorySequence(trajectorySequence)
+        shooter.motor.power = 0.0
+        shooter.setIndexerToggled(false)
     }
 }

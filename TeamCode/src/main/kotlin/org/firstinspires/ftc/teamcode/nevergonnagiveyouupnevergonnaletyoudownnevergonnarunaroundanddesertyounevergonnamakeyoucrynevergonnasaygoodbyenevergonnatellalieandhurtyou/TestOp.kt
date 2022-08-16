@@ -58,6 +58,9 @@ class TestOp : OpMode() {
         motors.backRight.power = brp * powerMulti / max
 
         motors.logData(telemetry) { it.power }
+        shooter.logMotorData(telemetry) { it.power }
+        telemetry.addData("Right trigger", gamepad1.right_trigger)
+        telemetry.update()
     }
 
     private fun shoot() = with(shooter) {
