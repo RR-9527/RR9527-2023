@@ -71,6 +71,11 @@ public class MeepMeepPersistence {
 
         startPersistenceThread();
 
+        // Add a shutdown hook to save the settings when the program is closed
+        // Due to the way shutdown hooks work in Java, this is only called if the program
+        // is exited 'normally', using System.exit(0). This means that this will be run
+        // if the GUI is closed from the 'X' button, but it won't run if the code is killed
+        // using the red 'stop' button from the IDE or something.
         Runtime.getRuntime().addShutdownHook(
             new Thread(this::save)
         );
@@ -90,6 +95,18 @@ public class MeepMeepPersistence {
      * the {@code MeepMeep} state every time it is called.
      */
     private void startPersistenceThread() {
+        // Basically creates a new thread that can run at a fixed time.
+
+        // The "thread" takes in a Runnable object, which can be implemented as a simple lambda
+        // expression, shorthand for:
+        // new Runnable() { @Override public void run() { ... } }.
+
+        // However, in this case, it can be shortened even further, using the Method Reference
+        // syntax, to 'this::save', casted to a Runnable. This is just referring to the save
+        // function below.
+
+        // It is called every 2 seconds, specified by the TimeUnit.SECONDS parameter.
+        // It's automatically killed when the program is closed.
         Executors.newSingleThreadScheduledExecutor().schedule(
             (Runnable) this::save, 2L, TimeUnit.SECONDS
         );
@@ -114,9 +131,12 @@ public class MeepMeepPersistence {
     public void save(String path) {
         ensureFileExistence(path);
 
+        // Just saves the x and y coordinates of the MeepMeep GUI to the properties object
         properties.setProperty("windows_x", String.valueOf(meepMeep.getWindowFrame().getX()));
         properties.setProperty("windows_y", String.valueOf(meepMeep.getWindowFrame().getY()));
 
+        // Persists the properties to a file, so that the state can be saved across
+        // program restarts.
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
             properties.store(writer, null);
         } catch (Exception ex) {
@@ -139,6 +159,7 @@ public class MeepMeepPersistence {
     public void reload(String path) {
         ensureFileExistence(path);
 
+        // Loads in the properties from the given file
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             properties.load(reader);
         } catch (Exception ex) {
@@ -153,6 +174,8 @@ public class MeepMeepPersistence {
      * However, the code is fully extensible, and other desired settings may be restored.
      */
     public void restore() {
+        // Sets the x, y coords of the MeepMeep window to the values stored in the properties object
+        // Needs to be converted to an int first, as the properties object stores them as strings
         meepMeep.getWindowFrame().setLocation(
             Integer.parseInt(properties.getProperty("windows_x")),
             Integer.parseInt(properties.getProperty("windows_y"))
@@ -166,6 +189,8 @@ public class MeepMeepPersistence {
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void ensureFileExistence(String path) {
+        // The .createNewFile() method creates the file if it doesn't exist,
+        // and does nothing at all if it already exists
         try {
             new File(path).createNewFile();
         } catch (Exception e) {
