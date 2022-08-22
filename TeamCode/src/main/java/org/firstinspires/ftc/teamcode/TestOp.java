@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.noahbres.meepmeep.MeepMeep;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -25,6 +26,8 @@ public class TestOp extends OpMode {
         motors = DriveMotorsKt.initializedDriveMotors(hardwareMap);
         deadwheels = DeadwheelsKt.initializedDeadwheels(motors);
         shooter = ShooterKt.initializedShooter(hardwareMap);
+
+        new MeepMeep(111).getWindowFrame().getX();
     }
 
     @Override

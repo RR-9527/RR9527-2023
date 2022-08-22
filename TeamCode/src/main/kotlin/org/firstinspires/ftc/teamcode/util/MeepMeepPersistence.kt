@@ -6,6 +6,8 @@ import java.awt.event.WindowEvent
 import java.io.File
 import java.util.*
 
+const val DEFAULT_FILE_PATH = "TeamCode/src/main/res/raw/meepmeep.properties"
+
 class MeepMeepPersistence(private val meepMeep: MeepMeep) {
     private val properties = Properties()
 
@@ -17,18 +19,18 @@ class MeepMeepPersistence(private val meepMeep: MeepMeep) {
         })
     }
 
-    fun reload(filePath: String = DEFAULT_FILE_PATH) {
+    @JvmOverloads fun reload(filePath: String = DEFAULT_FILE_PATH) {
         File(filePath).also { it.createNewFile() }.bufferedReader().use {
             properties.load(it)
         }
     }
 
-    fun save(filePath: String = DEFAULT_FILE_PATH) {
+    @JvmOverloads fun save(filePath: String = DEFAULT_FILE_PATH) {
         properties["window_x"] = meepMeep.windowFrame.x.toString()
         properties["window_y"] = meepMeep.windowFrame.y.toString()
 
         File(filePath).also { it.createNewFile() }.bufferedWriter().use {
-            properties.store(it, "")
+            properties.store(it, null)
         }
     }
 
@@ -37,9 +39,5 @@ class MeepMeepPersistence(private val meepMeep: MeepMeep) {
             properties.getProperty("window_x", "0").toInt(),
             properties.getProperty("window_y", "0").toInt(),
         )
-    }
-
-    companion object {
-        const val DEFAULT_FILE_PATH = "TeamCode/src/main/res/raw/meepmeep.properties"
     }
 }
