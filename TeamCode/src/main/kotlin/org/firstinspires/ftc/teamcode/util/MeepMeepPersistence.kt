@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.util
 
 import com.noahbres.meepmeep.MeepMeep
-import java.awt.event.WindowAdapter
-import java.awt.event.WindowEvent
 import java.io.File
 import java.util.*
 
