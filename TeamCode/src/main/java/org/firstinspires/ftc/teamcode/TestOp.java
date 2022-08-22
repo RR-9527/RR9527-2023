@@ -70,8 +70,8 @@ public class TestOp extends OpMode {
     }
 
     private void shoot() {
-        double power = gamepad2.left_trigger > .6
-            ? gamepad2.left_trigger
+        double power = gamepad1.left_trigger > .6
+            ? gamepad1.left_trigger
             : 0;
         shooter.getMotor().setPower(power);
 

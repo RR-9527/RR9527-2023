@@ -6,6 +6,8 @@ import com.noahbres.meepmeep.MeepMeep
 import com.noahbres.meepmeep.core.util.FieldUtil
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder
 import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants
+import org.firstinspires.ftc.teamcode.util.MeepMeepPersistence
+import java.util.*
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -17,6 +19,9 @@ const val ROBOT_SIZE = 20
 
 fun main() {
     val meepMeep = MeepMeep(1000, fps = 165)
+
+    val persistence = MeepMeepPersistence(meepMeep)
+    persistence.restore()
 
     val bot = DefaultBotBuilder(meepMeep)
         .setConstraints(
