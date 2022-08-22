@@ -138,7 +138,7 @@ public class MeepMeepPersistence {
         // Persists the properties to a file, so that the state can be saved across
         // program restarts.
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            properties.store(writer, null);
+            properties.store(writer, null); // Null means no comments added to the file
         } catch (Exception ex) {
             ex.printStackTrace();
         }
