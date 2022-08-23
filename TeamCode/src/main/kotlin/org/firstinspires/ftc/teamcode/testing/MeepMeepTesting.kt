@@ -3,24 +3,26 @@ package org.firstinspires.ftc.teamcode.testing
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.noahbres.meepmeep.MeepMeep
+import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeBlueLight
 import com.noahbres.meepmeep.core.util.FieldUtil
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder
 import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants
+import org.firstinspires.ftc.teamcode.util.MeepMeepFun
 import org.firstinspires.ftc.teamcode.util.MeepMeepPersistence
-import java.util.*
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
 const val PATH_RADIUS = 55
 const val PATH_SIDES = 4
-
 const val ROBOT_SIZE = 20
+const val CONFIG_FILE_PATH =
+    "TeamCode/src/main/res/raw/meepmeep.properties"
 
 fun main() {
     val meepMeep = MeepMeep(1000, fps = 165)
 
-    val persistence = MeepMeepPersistence(meepMeep)
+    val persistence = MeepMeepPersistence(meepMeep, CONFIG_FILE_PATH)
     persistence.restore()
 
     val bot = DefaultBotBuilder(meepMeep)
@@ -70,6 +72,8 @@ fun main() {
                 build()
             }
         }
+
+    MeepMeepFun(meepMeep, bot).launch()
 
     meepMeep
         .setBackground(MeepMeep.Background.GRID_GRAY)

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.util;
 
 import com.noahbres.meepmeep.MeepMeep;
 
@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.Properties;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,22 +15,16 @@ import java.util.concurrent.TimeUnit;
  * <p>Basically saves the position of the {@link MeepMeep} GUI window so that it opens in the some position
  * that it was closed in.
  *
- * <pre>{@code
- * // Basic usage:
- *
- * MeepMeep meepMeep = new MeepMeep(windowSize);
+ * <p> Basic usage example:
+ * <pre>{@code MeepMeep meepMeep = new MeepMeep(windowSize);
  *
  * // Create a persistence object linked to the MeepMeep instance
  * MeepMeepPersistence persistence = new MeepMeepPersistence(meepMeep);
  *
  * // Restore the settings from the persistence object to the MeepMeep instance
- * persistence.restore();
- * }</pre>
+ * persistence.restore();}</pre>
  *
- * <b>NOTE:</b> 'DEFAULT_FILE_PATH' must be changed to the desired file path of the persistence
- * file.
- * <p>
- * <b>NOTE:</b> The settings autosave every 2 seconds, and when MeepMeep is closed from the 'X'.
+ * <p><b>NOTE:</b> The settings autosave every 2 seconds, and when MeepMeep is closed from the 'X'.
  *
  * @author KG
  * @see MeepMeep
@@ -39,10 +32,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class MeepMeepPersistence {
     /**
-     * The default file path for the persistence file. Should be changed to suit the user's primary
+     * The default file path for the persistence file. Should be set to suit the user's primary
      * desired file path.
      */
-    static final String DEFAULT_FILE_PATH = "TeamCode/src/main/res/raw/meepmeep.properties";
+    private String defaultFilePath;
 
     /**
      * The {@link Properties} object used to save and interpret the settings.
@@ -61,10 +54,11 @@ public class MeepMeepPersistence {
      * as well as a shutdown hook to save the settings when the program is closed.
      *
      * @param meepMeep The linked {@link MeepMeep} instance
-     * @param path     The file path to initially load state from
+     * @param defaultFilePath The file path to initially load state from
      */
-    public MeepMeepPersistence(MeepMeep meepMeep, String path) {
+    public MeepMeepPersistence(MeepMeep meepMeep, String defaultFilePath) {
         this.properties = new Properties();
+        this.defaultFilePath = defaultFilePath;
         this.meepMeep = meepMeep;
 
         reload();
@@ -87,7 +81,7 @@ public class MeepMeepPersistence {
      * @param meepMeep The linked {@link MeepMeep} instance
      */
     public MeepMeepPersistence(MeepMeep meepMeep) {
-        this(meepMeep, DEFAULT_FILE_PATH);
+        this(meepMeep, "./meepmeep.properties");
     }
 
     /**
@@ -95,7 +89,8 @@ public class MeepMeepPersistence {
      * the {@code MeepMeep} state every time it is called.
      */
     private void startPersistenceThread() {
-        // Basically creates a new thread that can run at a fixed time.
+        // Basically utilizes a ScheduledExecutorService which launched a new thread which
+        // can run a given piece of code at a fixed time.
 
         // The "thread" takes in a Runnable object, which can be implemented as a simple lambda
         // expression, shorthand for:
@@ -107,7 +102,7 @@ public class MeepMeepPersistence {
 
         // It is called every 2 seconds, specified by the TimeUnit.SECONDS parameter.
         // It's automatically killed when the program is closed.
-        Executors.newSingleThreadScheduledExecutor().schedule(
+        ScheduledMeepMeepExecutor.executor.schedule(
             (Runnable) this::save, 2L, TimeUnit.SECONDS
         );
     }
@@ -116,7 +111,7 @@ public class MeepMeepPersistence {
      * Default method for {@link MeepMeepPersistence#save(String) save(String path)}, using the default file path.
      */
     public void save() {
-        save(DEFAULT_FILE_PATH);
+        save(defaultFilePath);
     }
 
     /**
@@ -148,7 +143,7 @@ public class MeepMeepPersistence {
      * Default method for {@link MeepMeepPersistence#reload(String) reload(String path)}, using the default file path.
      */
     public void reload() {
-        reload(DEFAULT_FILE_PATH);
+        reload(defaultFilePath);
     }
 
     /**
@@ -172,6 +167,11 @@ public class MeepMeepPersistence {
      *
      * <p>At the moment, it only restores the window position of the {@link MeepMeep} GUI window.
      * However, the code is fully extensible, and other desired settings may be restored.
+     *
+     * <p><b>Note:</b> This does NOT restore the settings from the persistence file, but rather from
+     * whatever settings are in the {@code Properties} object currently.
+     * {@link MeepMeepPersistence#reload()} must be manually called first to restore the settings
+     * from the persistence file <u>if the persistence file is manually changed.</u>
      */
     public void restore() {
         // Sets the x, y coords of the MeepMeep window to the values stored in the properties object
@@ -183,7 +183,7 @@ public class MeepMeepPersistence {
     }
 
     /**
-     * Ensures that the given file path exists. Creates the file if not.
+     * Ensures that the given file path exists. Creates the file if it does not.
      *
      * @param path The file path to ensure exists
      */
@@ -196,5 +196,23 @@ public class MeepMeepPersistence {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Gets the default file path.
+     *
+     * @return The default file path
+     */
+    public String getDefaultFilePath() {
+        return defaultFilePath;
+    }
+
+    /**
+     * Sets the default file path.
+     *
+     * @param defaultFilePath The new default file path
+     */
+    public void setDefaultFilePath(String defaultFilePath) {
+        this.defaultFilePath = defaultFilePath;
     }
 }
