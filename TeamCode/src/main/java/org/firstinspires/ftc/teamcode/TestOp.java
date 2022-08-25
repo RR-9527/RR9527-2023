@@ -26,8 +26,6 @@ public class TestOp extends OpMode {
         motors = DriveMotorsKt.initializedDriveMotors(hardwareMap);
         deadwheels = DeadwheelsKt.initializedDeadwheels(motors);
         shooter = ShooterKt.initializedShooter(hardwareMap);
-
-        new MeepMeep(111).getWindowFrame().getX();
     }
 
     @Override

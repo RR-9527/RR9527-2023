@@ -26,6 +26,10 @@ class Shooter {
     var motor: DcMotorEx by LateInitVal()
 
     fun setIndexerToggled(value: Boolean) {
+        if (motor.power < .1f) {
+            indexer.position = INDEXER_BACK
+            return
+        }
         indexer.position = if (value) INDEXER_FORWARD else INDEXER_BACK
     }
 

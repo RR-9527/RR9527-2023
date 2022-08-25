@@ -52,7 +52,7 @@ class TestOp : OpMode() {
             else -> 1.0
         }
 
-        motors.frontLeft.power = flp * powerMulti / max
+        motors.frontLeft.power =  flp * powerMulti / max
         motors.frontRight.power = frp * powerMulti / max
         motors.backLeft.power = blp * powerMulti / max
         motors.backRight.power = brp * powerMulti / max
