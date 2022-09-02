@@ -114,9 +114,9 @@ public class SnakeOp extends LinearOpMode {
                 }
             }
 
-            System.out.println(row);
+            telemetry.addLine(row.toString());
         }
-        System.out.println();
+        telemetry.update();
     }
 
     private Point randPoint(int rows, int cols) {
