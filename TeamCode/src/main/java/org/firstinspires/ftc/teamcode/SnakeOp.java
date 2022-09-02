@@ -7,27 +7,29 @@ import com.sun.tools.javac.util.List;
 import org.firstinspires.ftc.teamcode.components.snake.Direction;
 import org.firstinspires.ftc.teamcode.components.snake.Point;
 
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings({"SameParameterValue", "SpellCheckingInspection", "ConstantConditions"})
+@SuppressWarnings({"SameParameterValue", "ConstantConditions"})
 @TeleOp(name = "Snake")
 public class SnakeOp extends LinearOpMode {
     public static final int ROWS = 10;
     public static final int COLS = 16;
 
-    public static final int TARGET_FPS = 2;
+    public static final double TARGET_FPS = 1.5;
 
     private Deque<Point> snake;
-    private Direction direction;
     private Point food;
 
-    private boolean boostEnabled;
+    private Direction direction;
+    private int score;
 
     @Override
     public void runOpMode() {
@@ -42,9 +44,11 @@ public class SnakeOp extends LinearOpMode {
 
         waitForStart();
 
+        printBoard();
+
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         ScheduledFuture<?> game = executor.scheduleAtFixedRate(
-            this::update, 0, 1000 / TARGET_FPS, TimeUnit.MILLISECONDS
+            this::update, 0, (long) (1000 / TARGET_FPS), TimeUnit.MILLISECONDS
         );
 
         if (isStopRequested() || !opModeIsActive()) {
@@ -54,24 +58,45 @@ public class SnakeOp extends LinearOpMode {
     }
 
     private void update() {
-        printBoard();
         setDirectionFromDPad();
 
         snake.offer(direction.nextHeadPoint(snake.peekLast()));
 
-        if (Objects.equals(snake.peekLast(), food)) {
+        if (food.equals(snake.peekLast())) {
             food = randPoint(ROWS, COLS);
+            score += 50;
         } else {
             snake.poll();
+            score += 5;
         }
+
+        printBoard();
+
+        if (!inBounds() || !isDisjoint()) {
+            System.out.println("Game over!");
+            System.exit(0);
+        }
+    }
+
+    private boolean inBounds() {
+        return snake.stream()
+            .allMatch(point ->
+                point.getX() >= 0 && point.getX() < COLS &&
+                point.getY() >= 0 && point.getY() < ROWS);
+    }
+
+    private boolean isDisjoint() {
+        return snake.stream()
+            .distinct()
+            .count() == snake.size();
     }
 
     private void setDirectionFromDPad() {
         direction =
-            gamepad1.dpad_up ? Direction.UP :
-            gamepad1.dpad_down ? Direction.DOWN :
-            gamepad1.dpad_left ? Direction.LEFT :
-            gamepad1.dpad_right ? Direction.RIGHT :
+            gamepad1.dpad_up && direction != Direction.DOWN ? Direction.UP :
+            gamepad1.dpad_down && direction != Direction.UP ? Direction.DOWN :
+            gamepad1.dpad_left && direction != Direction.RIGHT ? Direction.LEFT :
+            gamepad1.dpad_right && direction != Direction.LEFT ? Direction.RIGHT :
             direction;
     }
 
@@ -95,6 +120,10 @@ public class SnakeOp extends LinearOpMode {
     }
 
     private Point randPoint(int rows, int cols) {
-        return new Point((int) (Math.random() * rows), (int) (Math.random() * cols));
+        Point p;
+        do {
+            p = new Point((int) (Math.random() * rows), (int) (Math.random() * cols));
+        } while (snake.contains(p));
+        return p;
     }
 }
