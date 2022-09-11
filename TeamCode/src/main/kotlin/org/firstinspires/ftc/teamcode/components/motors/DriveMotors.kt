@@ -43,6 +43,20 @@ class DriveMotors {
     var backLeft: DcMotorEx by LateInitVal()
     var backRight: DcMotorEx by LateInitVal()
 
+    fun setPowers(flp: Number, frp: Number, blp: Number, brp: Number) {
+        frontLeft.power = flp.toDouble()
+        frontRight.power = frp.toDouble()
+        backLeft.power = blp.toDouble()
+        backRight.power = brp.toDouble()
+    }
+
+    fun scalePowers(scaleFunction: (Double) -> Double) {
+        frontLeft.power = scaleFunction(frontLeft.power)
+        frontRight.power = scaleFunction(frontRight.power)
+        backLeft.power = scaleFunction(backLeft.power)
+        backRight.power = scaleFunction(backRight.power)
+    }
+
     fun logData(telemetry: Telemetry, dataSupplier: DataSupplier<DcMotorEx>) {
         telemetry.addData("Front-left motor:", dataSupplier(frontLeft))
         telemetry.addData("Front-right motor:", dataSupplier(frontRight))

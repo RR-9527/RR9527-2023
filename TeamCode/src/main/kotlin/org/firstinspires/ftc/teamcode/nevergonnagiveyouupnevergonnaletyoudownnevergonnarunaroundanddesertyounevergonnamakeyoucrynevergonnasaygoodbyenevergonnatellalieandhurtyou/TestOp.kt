@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.components.motors.DriveMotors
 import org.firstinspires.ftc.teamcode.components.motors.initializedDriveMotors
 import org.firstinspires.ftc.teamcode.components.shooter.Shooter
 import org.firstinspires.ftc.teamcode.components.shooter.initializedShooter
+import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer
 import org.firstinspires.ftc.teamcode.util.LateInitVal
 import kotlin.math.abs
 import kotlin.math.absoluteValue
@@ -48,7 +49,7 @@ class TestOp : OpMode() {
 
         val powerMulti = when {
             !triggered -> 0.0
-            left_trigger > 0.5 -> 0.35
+            left_trigger > 0.8 -> 1.0 - left_trigger
             else -> 1.0
         }
 

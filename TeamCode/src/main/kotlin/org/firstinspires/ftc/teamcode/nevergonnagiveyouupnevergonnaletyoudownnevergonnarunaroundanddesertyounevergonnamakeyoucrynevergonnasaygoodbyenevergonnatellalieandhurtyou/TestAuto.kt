@@ -8,12 +8,10 @@ import org.firstinspires.ftc.teamcode.components.shooter.Shooter
 import org.firstinspires.ftc.teamcode.components.shooter.initializedShooter
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.util.LateInitVal
+import org.firstinspires.ftc.teamcode.util.rad
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
-
-fun rad(int: Int) = Math.toRadians(int.toDouble())
-fun rad(double: Double) = Math.toRadians(double)
 
 @Autonomous(name = "TestAutoKt")
 class TestAuto : LinearOpMode() {
