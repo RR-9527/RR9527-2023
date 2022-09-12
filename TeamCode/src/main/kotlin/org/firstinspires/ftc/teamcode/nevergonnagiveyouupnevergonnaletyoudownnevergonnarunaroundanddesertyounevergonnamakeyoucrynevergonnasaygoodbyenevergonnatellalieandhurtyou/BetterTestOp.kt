@@ -35,13 +35,12 @@ class BetterTestOp : OpMode() {
     }
 
     private fun drive() {
-        if (gamepad1.y) {
+        if (gamepad1.y)
             driveType = when (driveType) {
                 is NormalDrive -> NormalImprovedDrive()
                 is NormalImprovedDrive -> FieldCentricDrive()
                 is FieldCentricDrive -> NormalDrive()
             }
-        }
 
         driveType.drive()
         telemetry.addData("Drive Type", driveType::class.simpleName)
@@ -131,9 +130,9 @@ class BetterTestOp : OpMode() {
         fun drive() = driveFunction()
     }
 
-    private inner class NormalDrive : DriveType({ driveNormal() })
-    private inner class NormalImprovedDrive : DriveType({ driveImproved() })
-    private inner class FieldCentricDrive : DriveType({ driveFc() })
+    private inner class NormalDrive : DriveType(::driveNormal)
+    private inner class NormalImprovedDrive : DriveType(::driveImproved)
+    private inner class FieldCentricDrive : DriveType(::driveFc)
 
     private fun initializedDriveMotorsV2(hwMap: HardwareMap) = DriveMotors().apply {
         frontLeft = initializedMotor("FL", hwMap)
