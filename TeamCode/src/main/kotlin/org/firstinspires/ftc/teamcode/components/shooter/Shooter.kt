@@ -26,7 +26,7 @@ class Shooter {
     var motor: DcMotorEx by LateInitVal()
 
     fun setIndexerToggled(value: Boolean) {
-        if (motor.velocity < .2f) {
+        if (motor.velocity < .35f) {
             indexer.position = INDEXER_BACK
             return
         }

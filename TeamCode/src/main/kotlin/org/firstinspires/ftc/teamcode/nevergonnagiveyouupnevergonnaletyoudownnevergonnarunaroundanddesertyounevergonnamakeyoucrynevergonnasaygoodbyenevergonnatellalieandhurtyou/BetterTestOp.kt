@@ -31,19 +31,22 @@ class BetterTestOp : OpMode() {
     override fun loop() {
         drive()
         shoot()
+        localizer.update()
         telemetry.update()
     }
 
     private fun drive() {
-        if (gamepad1.y)
-            driveType = when (driveType) {
-                is NormalDrive -> NormalImprovedDrive()
-                is NormalImprovedDrive -> FieldCentricDrive()
-                is FieldCentricDrive -> NormalDrive()
-            }
+        driveType = when {
+            gamepad1.dpad_left -> NormalDrive()
+            gamepad1.dpad_up -> FieldCentricDrive()
+            gamepad1.dpad_right -> NormalImprovedDrive()
+            else -> driveType
+        }
 
         driveType.drive()
         telemetry.addData("Drive Type", driveType::class.simpleName)
+        motors.logData(telemetry) { it.power }
+        telemetry.addData("Heading", localizer.poseEstimate.heading)
     }
 
     private fun driveNormal() = with(gamepad1) {
@@ -54,14 +57,18 @@ class BetterTestOp : OpMode() {
         val blp = speed - strafe + rotation
         val brp = speed + strafe - rotation
 
-        val powerScale = listOf(flp, frp, blp, brp, 1f)
+        val powerScale = listOf(flp, frp, blp, brp)
             .maxByOrNull(Float::absoluteValue)!!
+            .coerceAtLeast(1f)
 
         val powerMulti = when {
             !gamepad1.isJoystickTriggered() -> 0.0
-            left_trigger > 0.8 -> 1.0 - left_trigger
+            left_trigger > 0.8 -> (1.0 - left_trigger).coerceAtLeast(.1)
             else -> 1.0
         }
+
+        telemetry.addData("Power scale", powerScale)
+        telemetry.addData("Power multi", powerMulti)
 
         motors.setPowers(flp, frp, blp, brp)
         motors.scalePowers { it * powerMulti / powerScale }
@@ -78,18 +85,25 @@ class BetterTestOp : OpMode() {
 
         val max = max(abs(xComponent), abs(yComponent))
 
-        val flp = yComponent / max + rotation
-        val frp = xComponent / max - rotation
-        val blp = xComponent / max + rotation
-        val brp = yComponent / max - rotation
+        telemetry.addData("Max", max);
 
-        val powerScale = (power + rotation).coerceAtLeast(1f)
+        val flp = ((yComponent / max).takeUnless(Double::isNaN) ?: .0) + rotation
+        val frp = ((xComponent / max).takeUnless(Double::isNaN) ?: .0) - rotation
+        val blp = ((xComponent / max).takeUnless(Double::isNaN) ?: .0) + rotation
+        val brp = ((yComponent / max).takeUnless(Double::isNaN) ?: .0) - rotation
+
+        val powerScale = listOf(flp, frp, blp, brp)
+            .maxByOrNull(Double::absoluteValue)!!
+            .coerceAtLeast(1.0)
 
         val powerMulti = when {
             !gamepad1.isJoystickTriggered() -> 0.0
-            left_trigger > 0.8 -> 1.0 - left_trigger
+            left_trigger > 0.8 -> (1.0 - left_trigger).coerceAtLeast(.1)
             else -> 1.0
         }
+
+        telemetry.addData("Rotation", rotation)
+        telemetry.addData("Flp", flp)
 
         motors.setPowers(flp, frp, blp, brp)
         motors.scalePowers { it * powerMulti / powerScale }
@@ -99,7 +113,7 @@ class BetterTestOp : OpMode() {
     private fun driveFc() = with(gamepad1) {
         val (speed, strafe, turn) = gamepad1.getDriveSticks()
 
-        val heading = localizer.poseEstimate.heading
+        val heading = -localizer.poseEstimate.heading
         val xRotation = strafe * cos(heading) - speed * sin(heading)
         val yRotation = strafe * sin(heading) + speed * cos(heading)
 
@@ -108,14 +122,21 @@ class BetterTestOp : OpMode() {
         val blp = yRotation - xRotation + turn
         val brp = yRotation + xRotation - turn
 
-        val powerScale = listOf(flp, frp, blp, brp, 1.0)
+        val powerScale = listOf(flp, frp, blp, brp)
+            .map { abs(it) }
             .maxByOrNull(Double::absoluteValue)!!
+            .coerceAtLeast(1.0)
 
         val powerMulti = when {
             !gamepad1.isJoystickTriggered() -> 0.0
             left_trigger > 0.8 -> 1.0 - left_trigger
             else -> 1.0
         }
+
+        telemetry.addData("FLP", flp * powerMulti / powerScale)
+        telemetry.addData("FRP", frp * powerMulti / powerScale)
+        telemetry.addData("BLP", blp * powerMulti / powerScale)
+        telemetry.addData("BRP", brp * powerMulti / powerScale)
 
         motors.setPowers(flp, frp, blp, brp)
         motors.scalePowers { it * powerMulti / powerScale }
@@ -135,9 +156,9 @@ class BetterTestOp : OpMode() {
     private inner class FieldCentricDrive : DriveType(::driveFc)
 
     private fun initializedDriveMotorsV2(hwMap: HardwareMap) = DriveMotors().apply {
-        frontLeft = initializedMotor("FL", hwMap)
-        frontRight = initializedMotor("FR", hwMap, reversed = true)
-        backLeft = initializedMotor("BL", hwMap)
-        backRight = initializedMotor("BR", hwMap, reversed = true)
+        frontLeft = initializedMotor("FL", hwMap, reversed = true)
+        frontRight = initializedMotor("FR", hwMap)
+        backLeft = initializedMotor("BL", hwMap, reversed = true)
+        backRight = initializedMotor("BR", hwMap)
     }
 }
