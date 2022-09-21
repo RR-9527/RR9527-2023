@@ -6,6 +6,16 @@ package org.firstinspires.ftc.teamcode.util
  * Simple utility function to convert from degrees to radians without having to type out a
  * long function name (and without having to do `<Int>.toDouble()` in Kotlin)
  *
+ * Kotlin usage examples:
+ * ```
+ * val theta = rad(180)
+ * ```
+ *
+ * Java usage examples:
+ * ```java
+ * double theta = MU.rad(180);
+ * ```
+ *
  * @param int The degree value to convert
  *
  * @return 'int' in radians

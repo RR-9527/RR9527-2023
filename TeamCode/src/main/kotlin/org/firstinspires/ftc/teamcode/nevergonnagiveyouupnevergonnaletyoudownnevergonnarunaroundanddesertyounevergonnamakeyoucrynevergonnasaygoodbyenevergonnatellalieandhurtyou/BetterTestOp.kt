@@ -27,9 +27,18 @@ class BetterTestOp : OpMode() {
         localizer = StandardTrackingWheelLocalizer(hardwareMap)
     }
 
+    private val loopTimes = mutableListOf(System.currentTimeMillis())
+
     override fun loop() {
+        loopTimes += System.currentTimeMillis() - loopTimes.last()
+        if (loopTimes.size > 50)
+            loopTimes.removeAt(1)
+
+        telemetry.addData("Avg. loop time", loopTimes.average())
+
         drive()
         shoot()
+
         localizer.update()
         telemetry.update()
     }
@@ -64,7 +73,7 @@ class BetterTestOp : OpMode() {
         }
 
         motors.setPowers(flp, frp, blp, brp)
-        motors.scalePowers { it * powerMulti / powerScale }
+        motors.transformPowers { it * powerMulti / powerScale }
     }
 
     private fun driveImproved() = with(gamepad1) {
@@ -83,8 +92,7 @@ class BetterTestOp : OpMode() {
         val blp = ((xComponent / max).takeUnless(Double::isNaN) ?: .0) + rotation
         val brp = ((yComponent / max).takeUnless(Double::isNaN) ?: .0) - rotation
 
-        val powerScale = listOf(flp, frp, blp, brp)
-            .maxByOrNull(Double::absoluteValue)!!
+        val powerScale = listOf(flp, frp, blp, brp).maxOf { abs(it) }
             .coerceAtLeast(1.0)
 
         val powerMulti = when {
@@ -94,9 +102,8 @@ class BetterTestOp : OpMode() {
         }
 
         motors.setPowers(flp, frp, blp, brp)
-        motors.scalePowers { it * powerMulti / powerScale }
+        motors.transformPowers { it * powerMulti / powerScale }
     }
-
 
     private fun driveFc() = with(gamepad1) {
         val (speed, strafe, turn) = gamepad1.getDriveSticks()
@@ -110,9 +117,7 @@ class BetterTestOp : OpMode() {
         val blp = yRotation - xRotation + turn
         val brp = yRotation + xRotation - turn
 
-        val powerScale = listOf(flp, frp, blp, brp)
-            .map { abs(it) }
-            .maxByOrNull(Double::absoluteValue)!!
+        val powerScale = listOf(flp, frp, blp, brp).maxOf { abs(it) }
             .coerceAtLeast(1.0)
 
         val powerMulti = when {
@@ -122,11 +127,11 @@ class BetterTestOp : OpMode() {
         }
 
         motors.setPowers(flp, frp, blp, brp)
-        motors.scalePowers { it * powerMulti / powerScale }
+        motors.transformPowers { it * powerMulti / powerScale }
     }
 
     private fun shoot() = with(shooter) {
-        setPower(gamepad1.right_trigger, deadzone = .5)
+        setPower(gamepad1.right_trigger, minThreshold = .4)
         setIndexerToggled(gamepad1.a)
     }
 }

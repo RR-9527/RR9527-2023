@@ -30,7 +30,7 @@ package org.firstinspires.ftc.teamcode.components.easytoggle
  *
  * @author KG
  */
-class EasyToggle (initialState: Boolean = false) {
+class EasyToggle(initialState: Boolean = false) {
     var state = initialState
         set(value) {
             previousState = field
@@ -42,10 +42,10 @@ class EasyToggle (initialState: Boolean = false) {
     /**
      * Returns `true` on the rising edge.
      */
-    fun nowTrue(): Boolean { return state && !previousState }
+    fun nowTrue() = state && !previousState
 
     /**
      * Returns `true` on the falling edge.
      */
-    fun nowFalse(): Boolean { return !state && previousState }
+    fun nowFalse() = !state && previousState
 }

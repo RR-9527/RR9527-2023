@@ -38,30 +38,30 @@ import org.firstinspires.ftc.teamcode.util.LateInitVal
  * @author KG
  */
 class DriveMotors {
-    var frontLeft: DcMotorEx by LateInitVal()
+    var frontLeft:  DcMotorEx by LateInitVal()
     var frontRight: DcMotorEx by LateInitVal()
-    var backLeft: DcMotorEx by LateInitVal()
-    var backRight: DcMotorEx by LateInitVal()
+    var backLeft:   DcMotorEx by LateInitVal()
+    var backRight:  DcMotorEx by LateInitVal()
 
     fun setPowers(flp: Number, frp: Number, blp: Number, brp: Number) {
-        frontLeft.power = flp.toDouble()
-        frontRight.power = frp.toDouble()
-        backLeft.power = blp.toDouble()
-        backRight.power = brp.toDouble()
+        frontLeft.power   =   flp.toDouble()
+        frontRight.power  =   frp.toDouble()
+        backLeft.power    =   blp.toDouble()
+        backRight.power   =   brp.toDouble()
     }
 
-    fun scalePowers(scaleFunction: (Double) -> Double) {
-        frontLeft.power = scaleFunction(frontLeft.power)
-        frontRight.power = scaleFunction(frontRight.power)
-        backLeft.power = scaleFunction(backLeft.power)
-        backRight.power = scaleFunction(backRight.power)
+    fun transformPowers(scaleFunction: (Double) -> Double) {
+        frontLeft.power   =   scaleFunction(frontLeft.power)
+        frontRight.power  =   scaleFunction(frontRight.power)
+        backLeft.power    =   scaleFunction(backLeft.power)
+        backRight.power   =   scaleFunction(backRight.power)
     }
 
     fun logData(telemetry: Telemetry, dataSupplier: DataSupplier<DcMotorEx>) {
-        telemetry.addData("Front-left motor:", dataSupplier(frontLeft))
+        telemetry.addData("Front-left motor:",  dataSupplier(frontLeft))
         telemetry.addData("Front-right motor:", dataSupplier(frontRight))
-        telemetry.addData("Back-left motor:", dataSupplier(backLeft))
-        telemetry.addData("Back-right motor:", dataSupplier(backRight))
+        telemetry.addData("Back-left motor:",   dataSupplier(backLeft))
+        telemetry.addData("Back-right motor:",  dataSupplier(backRight))
     }
 }
 
@@ -84,10 +84,10 @@ class DriveMotors {
  * @author KG
  */
 fun initializedDriveMotors(hwMap: HardwareMap) = DriveMotors().apply {
-    frontLeft = initializedMotor("FL", hwMap)
-    frontRight = initializedMotor("FR", hwMap)
-    backLeft = initializedMotor("BL", hwMap)
-    backRight = initializedMotor("BR", hwMap)
+    frontLeft   =   initializedMotor("FL", hwMap)
+    frontRight  =   initializedMotor("FR", hwMap)
+    backLeft    =   initializedMotor("BL", hwMap)
+    backRight   =   initializedMotor("BR", hwMap)
 }
 
 /**
@@ -100,8 +100,8 @@ fun initializedDriveMotors(hwMap: HardwareMap) = DriveMotors().apply {
  * @author KG
  */
 fun initializedDriveMotorsV2(hwMap: HardwareMap) = DriveMotors().apply {
-    frontLeft = initializedMotor("FL", hwMap, reversed = true)
-    frontRight = initializedMotor("FR", hwMap)
-    backLeft = initializedMotor("BL", hwMap, reversed = true)
-    backRight = initializedMotor("BR", hwMap)
+    frontLeft   =   initializedMotor("FL", hwMap, reversed = true)
+    frontRight  =   initializedMotor("FR", hwMap)
+    backLeft    =   initializedMotor("BL", hwMap, reversed = true)
+    backRight   =   initializedMotor("BR", hwMap)
 }

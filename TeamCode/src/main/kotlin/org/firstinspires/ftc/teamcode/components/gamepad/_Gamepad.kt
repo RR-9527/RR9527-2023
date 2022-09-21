@@ -21,8 +21,8 @@ import kotlin.math.abs
  * ```java
  * @Override
  * public void loop() {
- *   _GamepadKt.isJoystickTriggered(gamepad1)
- *   _GamepadKt.isJoystickTriggered(gamepad1, .3)
+ *   _GamepadKt.isJoystickTriggered(gamepad1);
+ *   _GamepadKt.isJoystickTriggered(gamepad1, .3);
  * }
  * ```
  *

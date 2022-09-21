@@ -39,14 +39,14 @@ import org.firstinspires.ftc.teamcode.util.LateInitVal
  * @author KG
  */
 class Deadwheels {
-    var left: Deadwheel by LateInitVal()
+    var left:  Deadwheel by LateInitVal()
     var right: Deadwheel by LateInitVal()
-    var back: Deadwheel by LateInitVal()
+    var back:  Deadwheel by LateInitVal()
 
     fun logData(telemetry: Telemetry, dataSupplier: DataSupplier<Deadwheel>) {
-        telemetry.addData("Left wheel:", dataSupplier(left))
+        telemetry.addData("Left wheel:",  dataSupplier(left))
         telemetry.addData("Right wheel:", dataSupplier(right))
-        telemetry.addData("Back wheel:", dataSupplier(back))
+        telemetry.addData("Back wheel:",  dataSupplier(back))
     }
 
     /**
@@ -79,7 +79,7 @@ class Deadwheels {
  * @author KG
  */
 fun initializedDeadwheels(motors: DriveMotors) = Deadwheels().apply {
-    left = Deadwheel(motors.backRight)
-    right = Deadwheel(motors.frontLeft)
-    back = Deadwheel(motors.frontRight)
+    left  =  Deadwheel(motors.backRight)
+    right =  Deadwheel(motors.frontLeft)
+    back  =  Deadwheel(motors.frontRight)
 }

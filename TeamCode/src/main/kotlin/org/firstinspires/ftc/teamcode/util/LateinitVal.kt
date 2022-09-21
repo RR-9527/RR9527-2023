@@ -34,6 +34,10 @@ import kotlin.reflect.KProperty
  * }
  * ```
  *
+ * _Motivation:_ When reading through Rogue's opmodes from last year, a major issue was that
+ * I simply could not tell which variables were genuinely intended to be modified and which
+ * ones were effectively final. This helps makes intentions more clear from the get-go.
+ *
  * @param T The type of the value that is being delegated to.
  * @author KG
  */

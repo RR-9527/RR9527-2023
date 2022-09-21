@@ -30,10 +30,10 @@ class Shooter {
      * deadzone. If the given power is below this deadzone, it is set to `0`.
      *
      * @param power The desired power
-     * @param deadzone The minimum power threshold; defaults to `0.1`
+     * @param minThreshold The minimum power threshold; defaults to `0.1`
      */
-    fun setPower(power: Float, deadzone: Double = 0.1) {
-        motor.power = power.toDouble().takeIf { it > deadzone } ?: 0.0
+    fun setPower(power: Float, minThreshold: Double = 0.1) {
+        motor.power = power.toDouble().takeIf { it > minThreshold } ?: 0.0
     }
 
     /**
@@ -43,11 +43,11 @@ class Shooter {
      * @param value Whether or not the indexer is engaged
      */
     fun setIndexerToggled(value: Boolean) {
-        if (motor.velocity < .35f) {
+        if (motor.velocity < .3f) {
             indexer.position = INDEXER_BACK
-            return
+        } else{
+            indexer.position = if (value) INDEXER_FORWARD else INDEXER_BACK
         }
-        indexer.position = if (value) INDEXER_FORWARD else INDEXER_BACK
     }
 
     fun logIndexerData(telemetry: Telemetry, dataSupplier: DataSupplier<Servo>) {
