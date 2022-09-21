@@ -3,11 +3,10 @@ package org.firstinspires.ftc.teamcode.nevergonnagiveyouupnevergonnaletyoudownne
 import com.acmerobotics.roadrunner.localization.Localizer
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.teamcode.components.gamepad.getDriveSticks
 import org.firstinspires.ftc.teamcode.components.gamepad.isJoystickTriggered
 import org.firstinspires.ftc.teamcode.components.motors.DriveMotors
-import org.firstinspires.ftc.teamcode.components.motors.initializedMotor
+import org.firstinspires.ftc.teamcode.components.motors.initializedDriveMotorsV2
 import org.firstinspires.ftc.teamcode.components.shooter.Shooter
 import org.firstinspires.ftc.teamcode.components.shooter.initializedShooter
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer
@@ -20,7 +19,7 @@ class BetterTestOp : OpMode() {
     private var shooter: Shooter by LateInitVal()
     private var localizer: Localizer by LateInitVal()
 
-    private var driveType: DriveType = NormalDrive()
+    private var driveFunction = ::driveNormal
 
     override fun init() {
         motors = initializedDriveMotorsV2(hardwareMap)
@@ -36,17 +35,14 @@ class BetterTestOp : OpMode() {
     }
 
     private fun drive() {
-        driveType = when {
-            gamepad1.dpad_left -> NormalDrive()
-            gamepad1.dpad_up -> FieldCentricDrive()
-            gamepad1.dpad_right -> NormalImprovedDrive()
-            else -> driveType
-        }
+        if (gamepad1.dpad_left ) driveFunction = ::driveNormal
+        if (gamepad1.dpad_up   ) driveFunction = ::driveImproved
+        if (gamepad1.dpad_right) driveFunction = ::driveFc
 
-        driveType.drive()
-        telemetry.addData("Drive Type", driveType::class.simpleName)
+        driveFunction()
+
+        telemetry.addData("Drive Type", driveFunction::class.simpleName)
         motors.logData(telemetry) { it.power }
-        telemetry.addData("Heading", localizer.poseEstimate.heading)
     }
 
     private fun driveNormal() = with(gamepad1) {
@@ -67,9 +63,6 @@ class BetterTestOp : OpMode() {
             else -> 1.0
         }
 
-        telemetry.addData("Power scale", powerScale)
-        telemetry.addData("Power multi", powerMulti)
-
         motors.setPowers(flp, frp, blp, brp)
         motors.scalePowers { it * powerMulti / powerScale }
     }
@@ -85,8 +78,6 @@ class BetterTestOp : OpMode() {
 
         val max = max(abs(xComponent), abs(yComponent))
 
-        telemetry.addData("Max", max);
-
         val flp = ((yComponent / max).takeUnless(Double::isNaN) ?: .0) + rotation
         val frp = ((xComponent / max).takeUnless(Double::isNaN) ?: .0) - rotation
         val blp = ((xComponent / max).takeUnless(Double::isNaN) ?: .0) + rotation
@@ -101,9 +92,6 @@ class BetterTestOp : OpMode() {
             left_trigger > 0.8 -> (1.0 - left_trigger).coerceAtLeast(.1)
             else -> 1.0
         }
-
-        telemetry.addData("Rotation", rotation)
-        telemetry.addData("Flp", flp)
 
         motors.setPowers(flp, frp, blp, brp)
         motors.scalePowers { it * powerMulti / powerScale }
@@ -133,32 +121,12 @@ class BetterTestOp : OpMode() {
             else -> 1.0
         }
 
-        telemetry.addData("FLP", flp * powerMulti / powerScale)
-        telemetry.addData("FRP", frp * powerMulti / powerScale)
-        telemetry.addData("BLP", blp * powerMulti / powerScale)
-        telemetry.addData("BRP", brp * powerMulti / powerScale)
-
         motors.setPowers(flp, frp, blp, brp)
         motors.scalePowers { it * powerMulti / powerScale }
     }
 
     private fun shoot() = with(shooter) {
-        motor.power = gamepad1.right_trigger.toDouble().takeIf { it > 0.6 } ?: 0.0
+        setPower(gamepad1.right_trigger, deadzone = .5)
         setIndexerToggled(gamepad1.a)
-    }
-
-    private sealed class DriveType(val driveFunction: () -> Unit) {
-        fun drive() = driveFunction()
-    }
-
-    private inner class NormalDrive : DriveType(::driveNormal)
-    private inner class NormalImprovedDrive : DriveType(::driveImproved)
-    private inner class FieldCentricDrive : DriveType(::driveFc)
-
-    private fun initializedDriveMotorsV2(hwMap: HardwareMap) = DriveMotors().apply {
-        frontLeft = initializedMotor("FL", hwMap, reversed = true)
-        frontRight = initializedMotor("FR", hwMap)
-        backLeft = initializedMotor("BL", hwMap, reversed = true)
-        backRight = initializedMotor("BR", hwMap)
     }
 }

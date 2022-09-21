@@ -22,7 +22,8 @@ package org.firstinspires.ftc.teamcode.util
  *   driveMotors.logMotorData { it.power } // logs the drive motors' powers
  *   driveMotors.logMotorData { motor -> motor.velocity } // logs velocities
  * }
- *
+ * ```
+ * ```java
  * public static void main(String... args) {
  *   DriveMotors driveMotors = //...
  *   driveMotors.logMotorData(DcMotorEx::getPower); // logs the drive motors' powers

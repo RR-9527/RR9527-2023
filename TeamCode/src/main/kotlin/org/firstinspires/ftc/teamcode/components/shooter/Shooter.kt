@@ -25,6 +25,23 @@ class Shooter {
     var indexer: Servo by LateInitVal()
     var motor: DcMotorEx by LateInitVal()
 
+    /**
+     * Sets the shooter motor power to the given input, as long as it's above the optional
+     * deadzone. If the given power is below this deadzone, it is set to `0`.
+     *
+     * @param power The desired power
+     * @param deadzone The minimum power threshold; defaults to `0.1`
+     */
+    fun setPower(power: Float, deadzone: Double = 0.1) {
+        motor.power = power.toDouble().takeIf { it > deadzone } ?: 0.0
+    }
+
+    /**
+     * Sets the indexer to either the `INDEXER_FORWARD` or `INDEXER_BACK` position depending on
+     * the input. `true` corresponds to `INDEXER_FORWARD`.
+     *
+     * @param value Whether or not the indexer is engaged
+     */
     fun setIndexerToggled(value: Boolean) {
         if (motor.velocity < .35f) {
             indexer.position = INDEXER_BACK
@@ -62,7 +79,7 @@ class Shooter {
  * ```
  *
  * Java usage example:
- * ```
+ * ```java
  * Shooter shooter = ShooterKt.initializedShooter(hardwareMap);
  * ```
  *
@@ -71,7 +88,6 @@ class Shooter {
  *
  * @author KG
  */
-private object IgnoreMeIExistSoKDocsWillActuallyRenderTheDoc
 fun initializedShooter(hwMap: HardwareMap) = Shooter().apply {
     indexer = initializedServo("IND", hwMap, pos = Shooter.INDEXER_BACK)
     motor = initializedMotor("SH", hwMap, zpb = ZPB.FLOAT, runMode = DCMode.RUN_USING_ENCODER)

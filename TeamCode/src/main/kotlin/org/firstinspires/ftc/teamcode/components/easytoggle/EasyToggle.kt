@@ -15,7 +15,7 @@ package org.firstinspires.ftc.teamcode.components.easytoggle
  * ```
  *
  * Java usage examples:
- * ```
+ * ```java
  * public static void main(String... args) {
  *   EasyToggle toggle = new EasyToggle(false);
  *   EasyToggle troglodyte = new EasyToggle(true);

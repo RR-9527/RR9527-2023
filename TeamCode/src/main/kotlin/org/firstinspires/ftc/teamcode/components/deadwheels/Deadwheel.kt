@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
  * ```
  *
  * Java usage examples:
- * ```
+ * ```java
  * public static void main(String... args) {
  *   DcMotor motor = initializedMotor("frontRight", hardwareMap);
  *   Deadwheel rightDeadwheel = new Deadwheel(motor);

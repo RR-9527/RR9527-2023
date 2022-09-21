@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.util.LateInitVal
  * ```
  *
  * Java usage example:
- * ```
+ * ```java
  * public static void main(String... args) {
  *   DriveMotors motors = initializedDriveMotors(hardwareMap);
  *   Deadwheels deadwheels = DeadwheelsKt.initializedDeadwheels(motors);
@@ -53,7 +53,6 @@ class Deadwheels {
      * Snapshots the current ticks of the deadwheels. Should be called at the end of every
      * OpMode loop so that movement change can be tracked.
      */
-    private object IgnoreMeIExistSoKDocsWillActuallyRenderTheDoc
     fun snapshotTicks() = this.run {
         left.snapshotTicks()
         right.snapshotTicks()
@@ -70,7 +69,7 @@ class Deadwheels {
  * ```
  *
  * Java usage example:
- * ```
+ * ```java
  * Deadwheels deadwheels = DeadwheelsKt.initializedDeadwheels(hardwareMap)
  * ```
  *
@@ -79,7 +78,6 @@ class Deadwheels {
  *
  * @author KG
  */
-private object IgnoreMeIExistSoKDocsWillActuallyRenderTheDoc
 fun initializedDeadwheels(motors: DriveMotors) = Deadwheels().apply {
     left = Deadwheel(motors.backRight)
     right = Deadwheel(motors.frontLeft)

@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.util.LateInitVal
  * ```
  *
  * Java usage example:
- * ```
+ * ```java
  * public static void main(String... args) {;
  *   DriveMotors motors = DriveMotorsKt.initializedDriveMotors(hardwareMap);
  *   motors.getFrontLeft().setPower(0.5);
@@ -83,10 +83,25 @@ class DriveMotors {
  *
  * @author KG
  */
-private object IgnoreMeIExistSoKDocsWillActuallyRenderTheDoc
 fun initializedDriveMotors(hwMap: HardwareMap) = DriveMotors().apply {
     frontLeft = initializedMotor("FL", hwMap)
     frontRight = initializedMotor("FR", hwMap)
     backLeft = initializedMotor("BL", hwMap)
+    backRight = initializedMotor("BR", hwMap)
+}
+
+/**
+ * Initializes a [DriveMotors] object with the default configurations 2.0.
+ * Just the same as the above, except the left motors are reversed
+ *
+ * @param hwMap The [HardwareMap]
+ * @return A [DriveMotors] object with the motors initialized initialized.`
+ *
+ * @author KG
+ */
+fun initializedDriveMotorsV2(hwMap: HardwareMap) = DriveMotors().apply {
+    frontLeft = initializedMotor("FL", hwMap, reversed = true)
+    frontRight = initializedMotor("FR", hwMap)
+    backLeft = initializedMotor("BL", hwMap, reversed = true)
     backRight = initializedMotor("BR", hwMap)
 }

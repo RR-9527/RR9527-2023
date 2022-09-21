@@ -16,13 +16,10 @@ import kotlin.math.absoluteValue
 @TeleOp(name = "TestOpKt")
 class TestOp : OpMode() {
     private var motors: DriveMotors by LateInitVal()
-    private var deadwheels: Deadwheels by LateInitVal()
     private var shooter: Shooter by LateInitVal()
 
-    //TODO: Probably remove the deadwheels from the TeleOp
     override fun init() {
         motors = initializedDriveMotors(hardwareMap)
-        deadwheels = initializedDeadwheels(motors)
         shooter = initializedShooter(hardwareMap)
     }
 
@@ -30,7 +27,6 @@ class TestOp : OpMode() {
         drive()
         shoot()
 
-        deadwheels.snapshotTicks()
         updateTelemetry(telemetry)
     }
 

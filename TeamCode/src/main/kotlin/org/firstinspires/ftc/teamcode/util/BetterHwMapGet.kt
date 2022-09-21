@@ -26,7 +26,4 @@ import com.qualcomm.robotcore.hardware.HardwareMap
  * @param name The name of the component you want to get.
  * @author KG
  */
-private class KDocBugsOutForSingleExpressionFunctionsAndDoesntRenderSoJustIgnoreThisClassPlease
-private class IJustPutTheseHereToMakeKDocsWorkIgnoreThemTheDocRefersToHardwareMapDotUnderscoreGet
-
 inline fun <reified T> HardwareMap._get(name: String): T = get(T::class.java, name)
