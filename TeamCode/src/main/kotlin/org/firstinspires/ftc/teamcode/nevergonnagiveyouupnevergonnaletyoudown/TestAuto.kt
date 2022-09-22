@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.nevergonnagiveyouupnevergonnaletyoudownnevergonnarunaroundanddesertyounevergonnamakeyoucrynevergonnasaygoodbyenevergonnatellalieandhurtyou
+package org.firstinspires.ftc.teamcode.nevergonnagiveyouupnevergonnaletyoudown
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
@@ -62,7 +62,7 @@ class TestAuto : LinearOpMode() {
                         shooter.setIndexerToggled(false)
                     }
 
-                    waitSeconds(.5)
+                    waitSeconds(.3)
                 } else {
                     turn(Math.PI * 8)
                 }

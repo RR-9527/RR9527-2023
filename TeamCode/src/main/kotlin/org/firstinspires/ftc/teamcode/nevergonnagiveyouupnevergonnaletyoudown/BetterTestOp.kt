@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.nevergonnagiveyouupnevergonnaletyoudownnevergonnarunaroundanddesertyounevergonnamakeyoucrynevergonnasaygoodbyenevergonnatellalieandhurtyou
+package org.firstinspires.ftc.teamcode.nevergonnagiveyouupnevergonnaletyoudown
 
 import com.acmerobotics.roadrunner.localization.Localizer
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.util.LateInitVal
 import kotlin.math.*
 
 @TeleOp(name = "BetterTestOpKt")
-class BetterTestOp : OpMode() {
+open class BetterTestOp : OpMode() {
     private var motors: DriveMotors by LateInitVal()
     private var shooter: Shooter by LateInitVal()
     private var localizer: Localizer by LateInitVal()

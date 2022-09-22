@@ -1,14 +1,11 @@
-package org.firstinspires.ftc.teamcode.nevergonnagiveyouupnevergonnaletyoudownnevergonnarunaroundanddesertyounevergonnamakeyoucrynevergonnasaygoodbyenevergonnatellalieandhurtyou
+package org.firstinspires.ftc.teamcode.nevergonnagiveyouupnevergonnaletyoudown
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import org.firstinspires.ftc.teamcode.components.deadwheels.Deadwheels
-import org.firstinspires.ftc.teamcode.components.deadwheels.initializedDeadwheels
 import org.firstinspires.ftc.teamcode.components.motors.DriveMotors
 import org.firstinspires.ftc.teamcode.components.motors.initializedDriveMotors
 import org.firstinspires.ftc.teamcode.components.shooter.Shooter
 import org.firstinspires.ftc.teamcode.components.shooter.initializedShooter
-import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer
 import org.firstinspires.ftc.teamcode.util.LateInitVal
 import kotlin.math.abs
 import kotlin.math.absoluteValue
