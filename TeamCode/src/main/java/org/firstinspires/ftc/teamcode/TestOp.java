@@ -1,30 +1,25 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.noahbres.meepmeep.MeepMeep;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.sun.tools.javac.util.List;
 
-import org.firstinspires.ftc.teamcode.components.deadwheels.Deadwheels;
-import org.firstinspires.ftc.teamcode.components.deadwheels.DeadwheelsKt;
+import org.firstinspires.ftc.teamcode.components.gamepad._GamepadKt;
 import org.firstinspires.ftc.teamcode.components.motors.DriveMotors;
 import org.firstinspires.ftc.teamcode.components.motors.DriveMotorsKt;
 import org.firstinspires.ftc.teamcode.components.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.components.shooter.ShooterKt;
+import org.firstinspires.ftc.teamcode.util.MU;
 
 import java.util.stream.Stream;
 
 @TeleOp(name = "TestOpJava")
 public class TestOp extends OpMode {
     private DriveMotors motors;
-    private Deadwheels deadwheels;
     private Shooter shooter;
 
     @Override
     public void init() {
-        motors = DriveMotorsKt.initializedDriveMotors(hardwareMap);
-        deadwheels = DeadwheelsKt.initializedDeadwheels(motors);
+        motors = DriveMotorsKt.initializedDriveMotorsV2(hardwareMap);
         shooter = ShooterKt.initializedShooter(hardwareMap);
     }
 
@@ -32,50 +27,49 @@ public class TestOp extends OpMode {
     public void loop() {
         drive();
         shoot();
-
-        deadwheels.snapshotTicks();
-        updateTelemetry(telemetry);
     }
 
     private void drive() {
-        final boolean triggered = List.of(
-            gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x
-        ).stream().anyMatch(x -> Math.abs(x) > 0.1);
+        double speed = -gamepad1.left_stick_y;
+        double strafe = gamepad1.left_stick_x;
+        double rotation = gamepad1.right_stick_x;
 
-        float flp = gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x;
-        float frp = -gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x;
-        float blp = gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x;
-        float brp = -gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x;
+        double direction = Math.atan2(speed, strafe);
+        double power = Math.sqrt(speed * speed + strafe * strafe);
 
-        float max = Stream.of(flp, frp, blp, brp)
-            .map(Math::abs)
-            .max(Float::compare)
-            .get();
+        double xComponent = power * Math.sin(direction - Math.PI / 4);
+        double yComponent = power * Math.cos(direction - Math.PI / 4);
 
-        if (max > 1) {
-            flp /= max;
-            frp /= max;
-            blp /= max;
-            brp /= max;
-        }
+        double max = Math.max(Math.abs(xComponent), Math.abs(yComponent));
 
-        double powerMulti =
-            !triggered ? 0 : gamepad1.left_trigger > .5 ? .35 : 1;
+        double flp = MU.ifNaN(yComponent / max, 0) + rotation;
+        double frp = MU.ifNaN(xComponent / max, 0) - rotation;
+        double blp = MU.ifNaN(xComponent / max, 0) + rotation;
+        double brp = MU.ifNaN(yComponent / max, 0) - rotation;
 
-        motors.getFrontLeft().setPower(flp * powerMulti);
-        motors.getFrontRight().setPower(frp * powerMulti);
-        motors.getBackLeft().setPower(blp * powerMulti);
-        motors.getBackRight().setPower(brp * powerMulti);
+        boolean triggered = _GamepadKt.isJoystickTriggered(gamepad1);
+        boolean slowMode = gamepad1.left_trigger > 0.8;
 
-        motors.logData(telemetry, DcMotorEx::getPower);
+        double powerMulti;
+
+        if (!triggered)
+            powerMulti = 0.0;
+        else if (slowMode)
+            powerMulti = Math.max(1 - gamepad1.left_trigger, 1);
+        else
+            powerMulti = 1.0;
+
+        double powerScale = Stream.of(flp, frp, blp, brp, 1.0)
+                .map(Math::abs)
+                .max(Double::compareTo)
+                .get();
+
+        motors.setPowers(flp, frp, blp, brp);
+        motors.transformPowers(pow -> pow * powerMulti / powerScale);
     }
 
     private void shoot() {
-        double power = gamepad1.left_trigger > .6
-            ? gamepad1.left_trigger
-            : 0;
-        shooter.getMotor().setPower(power);
-
+        shooter.setPower(gamepad1.right_trigger, .6);
         shooter.setIndexerToggled(gamepad1.a);
     }
 }

@@ -27,20 +27,24 @@ open class BetterTestOp : OpMode() {
         localizer = StandardTrackingWheelLocalizer(hardwareMap)
     }
 
-    private val loopTimes = mutableListOf(System.currentTimeMillis())
-
     override fun loop() {
-        loopTimes += System.currentTimeMillis() - loopTimes.last()
-        if (loopTimes.size > 50)
-            loopTimes.removeAt(1)
-
-        telemetry.addData("Avg. loop time", loopTimes.average())
+        measureLoopTime()
 
         drive()
         shoot()
 
         localizer.update()
         telemetry.update()
+    }
+
+    private val loopTimes = mutableListOf(System.currentTimeMillis())
+
+    private fun measureLoopTime() {
+        loopTimes += System.currentTimeMillis() - loopTimes.last()
+        if (loopTimes.size > 50)
+            loopTimes.removeAt(1)
+
+        telemetry.addData("Avg. loop time", loopTimes.average())
     }
 
     private fun drive() {
@@ -92,8 +96,7 @@ open class BetterTestOp : OpMode() {
         val blp = ((xComponent / max).takeUnless(Double::isNaN) ?: .0) + rotation
         val brp = ((yComponent / max).takeUnless(Double::isNaN) ?: .0) - rotation
 
-        val powerScale = listOf(flp, frp, blp, brp).maxOf { abs(it) }
-            .coerceAtLeast(1.0)
+        val powerScale = listOf(flp, frp, blp, brp, 1.0).maxOf { abs(it) }
 
         val powerMulti = when {
             !gamepad1.isJoystickTriggered() -> 0.0
