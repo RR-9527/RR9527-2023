@@ -52,7 +52,7 @@ abstract public class RobotCommon extends LinearOpMode {
     private static final int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
     private int numFramesWithoutDetection = 0;
 
-    private double detectedNumber = 1;
+    protected int detectedNumber = 1;
 
 
 
@@ -109,6 +109,7 @@ abstract public class RobotCommon extends LinearOpMode {
         pathing.follow();
 
         // Add any other runtime code here - you probably won't though
+
     }
 
 

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
+import android.annotation.SuppressLint;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerUnit;
@@ -18,6 +20,7 @@ public class RRPathSequenceWrapperTest extends RobotCommon {
      * where the op mode needs to be terminated early.
      *
      */
+    @SuppressLint("DefaultLocale")
     @Override
     public void runOpMode() throws InterruptedException {
         pathing = new RoadrunnerWrapper(hardwareMap, RoadrunnerUnit.CM);
@@ -27,7 +30,10 @@ public class RRPathSequenceWrapperTest extends RobotCommon {
                 .forward(10)
                 .lineToSplineHeading(50, 20, 0)
         );
+
         initialize();
+        telemetry.addLine(String.format("\nFinal Detected tag ID=%d", detectedNumber));
+        telemetry.update();
 
         run();
     }
