@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.SequenceWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.WrapperBuilder;
 
 @Autonomous(name="RRPathSequenceWrapperTest")
-public class RRPathSequenceWrapperTest extends RobotCommon {
+public class RRPlusTest extends RobotCommon {
 
     /**
      * Override this method and place your code here.
@@ -32,6 +32,8 @@ public class RRPathSequenceWrapperTest extends RobotCommon {
         );
 
         initialize();
+
+        // detectedNumber is protected variable that stores the detected apriltag number
         telemetry.addLine(String.format("\nFinal Detected tag ID=%d", detectedNumber));
         telemetry.update();
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcodekt.opmodes
+package org.firstinspires.ftc.teamcodekt.opmodes.auto
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d

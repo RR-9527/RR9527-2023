@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcodekt.opmodes
+package org.firstinspires.ftc.teamcodekt.opmodes.teleop
 
 import com.acmerobotics.roadrunner.localization.Localizer
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
