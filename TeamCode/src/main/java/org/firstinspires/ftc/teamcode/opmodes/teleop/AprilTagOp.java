@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.teleop;
+
+import android.annotation.SuppressLint;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -37,6 +39,7 @@ public class AprilTagOp extends LinearOpMode
     private static final float THRESHOLD_HIGH_DECIMATION_RANGE_METERS = 1.0f;
     private static final int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void runOpMode()
     {
