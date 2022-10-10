@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
+import org.firstinspires.ftc.teamcode.opmodes.ScheduleSetup;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.ScheduledTask;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerUnit;
@@ -9,24 +10,12 @@ import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.SequenceWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.WrapperBuilder;
 
 
-public class SchedulerRRPlusTest extends RobotCommon {
-    /**
-     * Override this method and place your code here.
-     * <p>
-     * Please do not swallow the InterruptedException, as it is used in cases
-     * where the op mode needs to be terminated early.
-     *
-     * @throws InterruptedException
-     */
-    @Override
-    public void runOpMode() throws InterruptedException {
-        initialize();
+public class SchedulerRRPlusTest extends ScheduleSetup {
 
+    @Override
+    public void setupCommands() {
         ScheduledTask t1 = Scheduler.scheduleNow(this::move);
         Scheduler.scheduleDuring(t1, this::deployClaw);
-
-        Scheduler.run(this);
-
     }
 
     public void move(ScheduledTask scheduledTask){
@@ -42,7 +31,7 @@ public class SchedulerRRPlusTest extends RobotCommon {
 
     }
 
-    public void deployClaw(ScheduledTask scheduledTask){
+    public void deployClaw(ScheduledTask scheduledTask) {
 
     }
 }

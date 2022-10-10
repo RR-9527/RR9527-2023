@@ -22,11 +22,6 @@ abstract public class RobotCommon extends LinearOpMode {
     protected RoadrunnerWrapper pathing;
 
     /**
-     * Implements the CommandBased pattern
-     */
-    protected Scheduler scheduler;
-
-    /**
      * Name object for the webcam
      */
     private WebcamName webcameraName;
