@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
-import org.firstinspires.ftc.teamcode.opmodes.scheduler.LinearOpModeScheduler;
+import org.firstinspires.ftc.teamcode.components.scheduler.LinearOpModeScheduler;
 import org.firstinspires.ftc.teamcodekt.components.gamepad._GamepadKt;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
-import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotorsKt;
 import org.firstinspires.ftc.teamcodekt.components.shooter.Shooter;
-import org.firstinspires.ftc.teamcodekt.components.shooter.ShooterKt;
 import org.firstinspires.ftc.teamcodekt.util.MU;
 
 import java.util.stream.Stream;

@@ -1,15 +1,15 @@
-package org.firstinspires.ftc.teamcode.opmodes.scheduler;
+package org.firstinspires.ftc.teamcode.components.scheduler;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotorsKt;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.ScheduledTask;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
-import kotlin.Unit;
-
+@SuppressWarnings("FieldCanBeLocal")
 public class TestKtScheduler extends LinearOpMode {
     private DriveMotors motors;
-    private Scheduler scheduler;
 
     /**
      * Override this method and place your code here.
@@ -22,22 +22,20 @@ public class TestKtScheduler extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         motors = DriveMotorsKt.initializedDriveMotorsV2(hardwareMap);
-        scheduler = Scheduler.INSTANCE;
 
         waitForStart();
 
-        ScheduledTask t1 = scheduler.schedule(this::drive10in);
-        scheduler.scheduleDuring(t1, this::openClaw);
+        ScheduledTask drive10in = Scheduler.scheduleNow(this::drive10in);
+        Scheduler.scheduleDuring(drive10in, this::openClaw);
 
-        scheduler.run(this);
+        Scheduler.run(this);
     }
 
-    private Unit drive10in(ScheduledTask scheduledTask) {
-        return null;
+    private void drive10in(ScheduledTask scheduledTask) {
+
     }
 
-    private Unit openClaw(ScheduledTask scheduledTask) {
-        return null;
-    }
+    private void openClaw(ScheduledTask scheduledTask) {
 
+    }
 }

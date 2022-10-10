@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import org.firstinspires.ftc.teamcode.opmodes.scheduler.ScheduledTask;
-import org.firstinspires.ftc.teamcode.opmodes.scheduler.Scheduler;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.ScheduledTask;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RobotCommon;
@@ -25,7 +25,7 @@ public class SchedulerRRPlusTest extends RobotCommon {
 
         initialize();
 
-        ScheduledTask t1 = scheduler.schedule(this::move);
+        ScheduledTask t1 = scheduler.scheduleNow(this::move);
         scheduler.scheduleDuring(t1, this::deployClaw);
 
         scheduler.run(this);

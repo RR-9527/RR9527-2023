@@ -5,7 +5,7 @@ import android.annotation.SuppressLint;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.opmodes.scheduler.Scheduler;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 import org.firstinspires.ftc.teamcode.pipelines.AprilTagDetectionPipeline;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
