@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcodekt.components.scheduler
 
 import org.firstinspires.ftc.teamcode.components.scheduler.Task
-import kotlin.properties.Delegates
+import kotlin.properties.Delegates.observable
 
 /**
  * Represents a [Task] that can be scheduled to run on the [Scheduler] at a given point in time. This
@@ -39,8 +39,6 @@ class ScheduledTask(val task: Task) {
      * val closeClaw = Scheduler.schedule(::closeClaw) during lowerLift
      *
      * fun setLiftHeight(task: ScheduledTask, height: Int) {
-     *     task.state = TaskState.RUNNING
-     *
      *     // Lift logic here
      *
      *     if (lift is at height) {
@@ -49,8 +47,6 @@ class ScheduledTask(val task: Task) {
      * }
      *
      * fun openClaw(task: ScheduledTask) {
-     *    task.state = TaskState.RUNNING
-     *
      *    // Claw logic here
      *
      *    if (claw is open) {
@@ -61,7 +57,7 @@ class ScheduledTask(val task: Task) {
      * // So let's see what's happened there:
      *
      * // When liftLift is first created, it's state is set to TaskState.PENDING, and then is
-     * // immediately set to TaskState.STARTING then TaskState.RUNNING.
+     * // immediately set to TaskState.STARTING, as it is immediately scheduled.
      *
      * // In the meantime, none of the other tasks are running as they are all dependent on
      * // liftLift to finish first. However, all of their stats are set to TaskState.PENDING
@@ -69,7 +65,7 @@ class ScheduledTask(val task: Task) {
      *
      * // When liftLift decides it's finished, it's state is set to TaskState.FINISHED, and
      * // then the openClaw task is scheduled to run, and it's state is set to
-     * // TaskState.STARTING, then immediately after, TaskState.RUNNING.
+     * // TaskState.STARTING.
      *
      * // The above process repeats for the openClaw, lowerLift, and closeClaw tasks.
      *
@@ -94,8 +90,6 @@ class ScheduledTask(val task: Task) {
      *
      *
      * void setLiftHeight(ScheduledTask task, int height) {
-     *    task.setState(TaskState.RUNNING);
-     *
      *    // Lift logic here
      *
      *    if (lift is at height) {
@@ -104,8 +98,6 @@ class ScheduledTask(val task: Task) {
      * }
      *
      * void openClaw(ScheduledTask task) {
-     *   task.setState(TaskState.RUNNING);
-     *
      *   // Claw logic here
      *
      *   if (claw is open) {
@@ -113,7 +105,7 @@ class ScheduledTask(val task: Task) {
      *   }
      * }
     */
-    var state: TaskState by Delegates.observable(TaskState.PENDING) { _, _, newState ->
+    var state: TaskState by observable(TaskState.PENDING) { _, _, newState ->
         // Every time state is changed, take the observers map,
         // Filter out the values who are not scheduled to run at the new state,
         // Then schedule the remaining tasks whose target state matches the new state to run
