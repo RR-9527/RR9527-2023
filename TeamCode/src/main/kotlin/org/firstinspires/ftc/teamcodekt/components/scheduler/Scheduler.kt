@@ -11,14 +11,14 @@ object Scheduler {
      *
      * Kotlin usage examples:
      * ```
-     * Scheduler.scheduleNow(::exampleTask)
-     * Scheduler.scheduleNow { exampleTask() }
+     * Scheduler.scheduleNow(::exampleTask1)
+     * Scheduler.scheduleNow { exampleTask2(it, 100) }
      * ```
      *
      * Java usage examples:
      * ```
-     * Scheduler.scheduleNow(this::exampleTask)
-     * Scheduler.scheduleNow(() -> exampleTask())
+     * Scheduler.scheduleNow(this::exampleTask1)
+     * Scheduler.scheduleNow(scheduledTask -> exampleTask2(scheduledTask, 100))
      * ```
      *
      * @param task The [ScheduledTask] to schedule
