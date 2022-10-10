@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.opmodes.scheduler.Scheduler;
 import org.firstinspires.ftc.teamcode.pipelines.AprilTagDetectionPipeline;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -19,6 +20,11 @@ abstract public class RobotCommon extends LinearOpMode {
      * Roadrunner wrapped object - only change the units here if something else is being used
      */
     protected RoadrunnerWrapper pathing;
+
+    /**
+     * Implements the CommandBased pattern
+     */
+    protected Scheduler scheduler;
 
     /**
      * Name object for the webcam

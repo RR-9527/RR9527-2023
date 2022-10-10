@@ -14,25 +14,9 @@ public class TestScheduler extends LinearOpModeScheduler {
     private DriveMotors motors;
     private Shooter shooter;
 
-    /**
-     * Override this method and place your code here.
-     * <p>
-     * Please do not swallow the InterruptedException, as it is used in cases
-     * where the op mode needs to be terminated early.
-     *
-     * @throws InterruptedException
-     */
-    @Override
-    public void runOpMode() throws InterruptedException {
-        motors = DriveMotorsKt.initializedDriveMotorsV2(hardwareMap);
-        shooter = ShooterKt.initializedShooter(hardwareMap);
-
-        waitForStart();
-
+    public void initialize(){
         scheduleCommand(this::drive);
         scheduleCommand(this::updateTelemetry);
-
-        run();
     }
 
     private void drive() {

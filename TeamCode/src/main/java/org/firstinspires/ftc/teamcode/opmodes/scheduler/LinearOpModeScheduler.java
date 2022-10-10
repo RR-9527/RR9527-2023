@@ -11,11 +11,14 @@ public abstract class LinearOpModeScheduler extends LinearOpMode {
         void execute();
     }
 
+    public abstract void initialize();
+
     public void scheduleCommand(Command command){
         methodsToRun.add(command);
     }
 
-    public void run(){
+    public void runOpMode() throws InterruptedException{
+        initialize();
         while(opModeIsActive() && !isStopRequested()){
             for(Command cmd: methodsToRun){
                 cmd.execute();
