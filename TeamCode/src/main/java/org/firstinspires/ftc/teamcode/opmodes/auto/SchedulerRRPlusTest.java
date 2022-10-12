@@ -1,16 +1,15 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import org.firstinspires.ftc.teamcode.opmodes.ScheduleSetup;
+import org.firstinspires.ftc.teamcode.opmodes.ScheduledOpMode;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.ScheduledTask;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerWrapper;
-import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RobotCommon;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.SequenceWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.WrapperBuilder;
 
 
-public class SchedulerRRPlusTest extends ScheduleSetup {
+public class SchedulerRRPlusTest extends ScheduledOpMode {
 
     @Override
     public void setupCommands() {

@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.components.scheduler.Task
 
 object Scheduler {
-    private val commands = mutableListOf<ScheduledTask>()
+    private val commands = mutableSetOf<ScheduledTask>()
 
     /**
      * Schedules a [Task] to run immediately.
@@ -34,8 +34,8 @@ object Scheduler {
      * @return The scheduled task
      */
     fun scheduleNow(task: ScheduledTask) = with(task) {
-        state = TaskState.STARTING
         commands.add(this)
+        state = TaskState.RUNNING
         this
     }
 
@@ -58,9 +58,13 @@ object Scheduler {
      * @param task The [Task] to schedule after the given [ScheduledTask]
      */
     @JvmStatic
-    fun scheduleAfter(scheduledTask: ScheduledTask, task: Task): ScheduledTask {
-        return scheduledTask.addObserver(task, TaskState.FINISHED)
+    fun scheduleAfter(scheduledTask: ScheduledTask, newTask: Task) = with(ScheduledTask(newTask)) {
+        commands.add(this)
+        commands.find { it == scheduledTask }?.addObserver(this, TaskState.FINISHED)
     }
+
+    @JvmStatic
+    fun scheduleAfter(task: Task, newTask: Task) = scheduleAfter(ScheduledTask(task), newTask)
 
     /**
      * Schedules a [Task] to run as soon as a [ScheduledTask] starts operation.
@@ -81,42 +85,44 @@ object Scheduler {
      * @param task The [Task] to schedule after the given [ScheduledTask]
      */
     @JvmStatic
-    fun scheduleDuring(scheduledTask: ScheduledTask, task: Task): ScheduledTask {
-        return scheduledTask.addObserver(task, TaskState.STARTING)
+    fun scheduleDuring(scheduledTask: ScheduledTask, newTask: Task) = with(ScheduledTask(newTask)) {
+        commands.add(this)
+        commands.find { it == scheduledTask }?.addObserver(this, TaskState.RUNNING)
     }
+
+    @JvmStatic
+    fun scheduleDuring(task: Task, newTask: Task) = scheduleAfter(ScheduledTask(task), newTask)
 
     /**
      * Syntactic sugar for relative scheduling. __Note: this is Kotlin only.__
      *
      * Kotlin usage examples:
      * ```
-     * val task1 = Scheduler.schedule(::task1) now please // The 'please' is important
-     *
-     * Scheduler.schedule(::task2) during task1
-     *
-     * Scheduler.schedule(::task3) after task1
+     * please schedule ::task1 right  now
+     * please schedule ::task2 after  ::task1
+     * please schedule ::task3 during ::task2
      * ```
      *
      * @param task The [Task] to schedule
      * @return The same [Task] object
      */
     @JvmSynthetic
-    fun schedule(task: Task): Task {
+    infix fun please.schedule(task: Task): Task {
         return task
     }
 
     @JvmSynthetic
-    infix fun Task.after(task: ScheduledTask): ScheduledTask {
+    infix fun Task.after(task: Task): ScheduledTask? {
         return scheduleAfter(task, this)
     }
 
     @JvmSynthetic
-    infix fun Task.during(task: ScheduledTask): ScheduledTask {
+    infix fun Task.during(task: Task): ScheduledTask? {
         return scheduleDuring(task, this)
     }
 
     @JvmSynthetic
-    infix fun Task.now(please: please): ScheduledTask {
+    infix fun Task.right(now: now): ScheduledTask {
         return scheduleNow(this)
     }
 
@@ -139,8 +145,7 @@ object Scheduler {
     @JvmStatic
     fun run(opmode: LinearOpMode) {
         while (opmode.opModeIsActive() && !opmode.isStopRequested) {
-            commands.forEach { scheduledTask -> scheduledTask.task(scheduledTask) }
+            commands.forEach { if (it.state == TaskState.RUNNING) it.task(it) }
         }
     }
 }
-

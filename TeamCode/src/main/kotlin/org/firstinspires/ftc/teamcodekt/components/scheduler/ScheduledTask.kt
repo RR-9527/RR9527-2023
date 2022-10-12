@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcodekt.components.scheduler
 
 import org.firstinspires.ftc.teamcode.components.scheduler.Task
+import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.after
+import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.during
+import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.right
+import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.schedule
 import kotlin.properties.Delegates.observable
 
 /**
@@ -33,10 +37,10 @@ class ScheduledTask(val task: Task) {
      * Kotlin demonstration:
      * ```
      * val liftLift  = Scheduler.schedule { setLiftHeight(it, 20) } now please
-     * val openClaw  = Scheduler.schedule(::openClaw) after liftLift
+     * please schedule ::openClaw after liftLift
      *
      * val lowerLift = Scheduler.schedule { setLiftHeight(it, 10) } after openClaw
-     * val closeClaw = Scheduler.schedule(::closeClaw) during lowerLift
+     * please schedule ::closeClaw during lowerLift
      *
      * fun setLiftHeight(task: ScheduledTask, height: Int) {
      *     // Lift logic here
@@ -118,7 +122,7 @@ class ScheduledTask(val task: Task) {
             .forEach { observer -> Scheduler.scheduleNow(observer.key) }
 
         // If the new state is TaskState.FINISHED, then the observers map is cleared,
-        // and the task unschedules itself so it stops running.
+        // and the task unschedules itself, so it stops running.
         if (newState == TaskState.FINISHED) {
             observers.clear()
             Scheduler.unschedule(this)
@@ -134,7 +138,13 @@ class ScheduledTask(val task: Task) {
      *
      * @return The [ScheduledTask] that was created to schedule the given [Task]
      */
-    fun addObserver(task: Task, targetSTate: TaskState): ScheduledTask {
-        return ScheduledTask(task).also { observers[it] = targetSTate }
+    fun addObserver(task: ScheduledTask, targetSTate: TaskState): ScheduledTask {
+        return task.also { observers[it] = targetSTate }
     }
+
+    override fun equals(other: Any?): Boolean {
+        return (other as? ScheduledTask)?.task == task
+    }
+
+    override fun hashCode() = task.hashCode()
 }
