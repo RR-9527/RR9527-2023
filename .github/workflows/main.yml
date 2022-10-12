@@ -5,6 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v3
-      
-      - name: test  
+
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
+
+      - name: Build  
         run: ./gradlew build
