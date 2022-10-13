@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcodekt.util.MU;
 import java.util.stream.Stream;
 
 @TeleOp(name = "TestOpJava")
-public class TestOp extends OpMode {
+public class OldTestOP extends OpMode {
     private DriveMotors motors;
     private Shooter shooter;
 
