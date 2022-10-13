@@ -64,6 +64,7 @@ public class TestOP extends OpMode{
         arm.setTargetPosition(armTarget);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(.5);
+        wrist.setPosition(.82);
     }
     @Override
     public void loop() {
@@ -149,6 +150,15 @@ public class TestOP extends OpMode{
         } else {
             liftA.setPower(0);
             liftB.setPower(0);
+        }
+    }
+
+    private void wrist(){
+        if(gamepad1.dpad_up){
+            wrist.setPosition(.23);
+        }
+        if(gamepad1.dpad_down){
+            wrist.setPosition(.82);
         }
     }
 
