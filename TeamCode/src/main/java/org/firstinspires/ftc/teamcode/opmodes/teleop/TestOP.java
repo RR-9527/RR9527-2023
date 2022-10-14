@@ -8,15 +8,28 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-// this is a test teleop class for testing. Do not use in competition. - Seb on may 7th, 2021.
+import org.firstinspires.ftc.teamcodekt.components.easytoggle.EasyToggle;
+
+/**
+ * This is a test teleop class for testing. Do not use in competition. - Seb on may 7th, 2021.
+ * Also Tiernan :)
+ *
+ * Needs to be converted to an actually good teleop using the RR+ architecture and commandbased API
+ */
 @TeleOp(name="TestOP")
 public class TestOP extends OpMode{
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotorEx leftFront, leftBack, rightFront, rightBack, liftA, liftB, arm;
     private Servo wrist, claw;
     private CRServo intake;
-    int armTarget = 0;
 
+    // stupid seb variable
+    private int armTarget = 0;
+    private double testNum = .36;
+
+    // Toggle objects for the A and B button respectively
+    private EasyToggle toggleA;
+    private EasyToggle toggleB;
 
 
     @Override
@@ -39,8 +52,6 @@ public class TestOP extends OpMode{
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftBack.setDirection(DcMotor.Direction.REVERSE);
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
 
         liftA = (DcMotorEx) hardwareMap.dcMotor.get("L1");
         liftB = (DcMotorEx) hardwareMap.dcMotor.get("L2");
@@ -59,19 +70,29 @@ public class TestOP extends OpMode{
         intake = hardwareMap.crservo.get("IN");
         claw = hardwareMap.servo.get("CL");
         wrist = hardwareMap.servo.get("WR");
+
+        toggleA = new EasyToggle(false);
+        toggleB = new EasyToggle(false);
     }
     public void start(){
         arm.setTargetPosition(armTarget);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setPower(.5);
-        wrist.setPosition(.82);
+        arm.setPower(.7);
+        wrist.setPosition(.83);
     }
     @Override
     public void loop() {
         drive();
+        wrist();
+        //servoTest();
         succ();
         armMove();
         lift();
+
+        telemetry.addData("servoPos", claw.getPosition());
+        telemetry.addData("armPos", arm.getCurrentPosition());
+        telemetry.update();
+
     }
 
     public void drive() {
@@ -112,41 +133,39 @@ public class TestOP extends OpMode{
 
     private void succ(){
         if (gamepad1.left_trigger > .5) {
-            claw.setPosition(.4);
+            claw.setPosition(.65);
         } else {
-            claw.setPosition(.36);
+            claw.setPosition(.52);
         }
 
         if (gamepad1.right_trigger > .5){
             intake.setPower(1);
-            armTarget = -498;
         } else {
             intake.setPower(0);
-            armTarget = 0;
         }
 
     }
 
     private void armMove(){
         if(gamepad1.x){
-            armTarget = -498;
+            armTarget = 480;
             arm.setTargetPosition(armTarget);
-            arm.setPower(.5);
+            arm.setPower(.7);
         } else if (gamepad1.y){
             armTarget = 0;
             arm.setTargetPosition(armTarget);
-            arm.setPower(.5);
+            arm.setPower(.7);
         } else if (gamepad1.b){
-            armTarget = 498;
+            armTarget = -480;
             arm.setTargetPosition(armTarget);
-            arm.setPower(.5);
+            arm.setPower(.7);
         }
     }
 
     private void lift(){
         if(gamepad1.right_bumper) {
-            liftA.setPower(.5);
-            liftB.setPower(.5);
+            liftA.setPower(.8);
+            liftB.setPower(.8);
         } else {
             liftA.setPower(0);
             liftB.setPower(0);
@@ -155,11 +174,22 @@ public class TestOP extends OpMode{
 
     private void wrist(){
         if(gamepad1.dpad_up){
-            wrist.setPosition(.23);
+            wrist.setPosition(.21);
         }
         if(gamepad1.dpad_down){
-            wrist.setPosition(.82);
+            wrist.setPosition(.84);
         }
+    }
+
+    private void servoTest(){
+        toggleA.setState(gamepad2.a);
+        toggleB.setState(gamepad2.b);
+        if(toggleB.nowTrue()){
+            testNum += .01;
+        } else if (toggleA.nowTrue()){
+            testNum -= .01;
+        }
+        claw.setPosition(testNum);
     }
 
 }
