@@ -1,41 +1,47 @@
 package org.firstinspires.ftc.teamcode.components.scheduler;
 
+import static org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.schedule;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotorsKt;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.ScheduledTask;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.TaskState;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class TestKtScheduler extends LinearOpMode {
     private DriveMotors motors;
 
-    /**
-     * Override this method and place your code here.
-     * <p>
-     * Please do not swallow the InterruptedException, as it is used in cases
-     * where the op mode needs to be terminated early.
-     *
-     * @throws InterruptedException
-     */
+    public static void main(String[] args) throws InterruptedException {
+        new TestKtScheduler().runOpMode();
+    }
+
     @Override
     public void runOpMode() throws InterruptedException {
         motors = DriveMotorsKt.initializedDriveMotorsV2(hardwareMap);
 
         waitForStart();
 
-        ScheduledTask drive10in = Scheduler.scheduleNow(this::drive10in);
-        Scheduler.scheduleDuring(drive10in, this::openClaw);
+        schedule(print_a_10_times).now();
+        schedule(print_done).after(print_a_10_times);
 
         Scheduler.run(this);
     }
 
-    private void drive10in(ScheduledTask scheduledTask) {
+    private int print_a_10_times_counter = 0;
 
-    }
+    private final Task print_a_10_times = (scheduledTask) -> {
+        System.out.println("a" + print_a_10_times_counter++);
 
-    private void openClaw(ScheduledTask scheduledTask) {
+        if (print_a_10_times_counter == 10) {
+            scheduledTask.setState(TaskState.FINISHED);
+            print_a_10_times_counter = 0;
+        }
+    };
 
-    }
+    private final Task print_done = (scheduledTask) -> {
+        System.out.println("done");
+        scheduledTask.setState(TaskState.FINISHED);
+    };
 }

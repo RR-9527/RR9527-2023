@@ -1,10 +1,6 @@
 package org.firstinspires.ftc.teamcodekt.components.scheduler
 
 import org.firstinspires.ftc.teamcode.components.scheduler.Task
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.after
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.during
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.right
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.schedule
 import kotlin.properties.Delegates.observable
 
 /**
@@ -21,8 +17,7 @@ import kotlin.properties.Delegates.observable
  */
 class ScheduledTask(val task: Task) {
     /**
-     * The map of [Tasks][Task] that are dependent on this task. The given [Tasks][Task] will scheduled when
-     * the [TaskState] of the [ScheduledTask] it is bound to is [TaskState.FINISHED].
+     * The map of [Tasks][Task] that are dependent on this task.
      */
     private val observers = mutableMapOf<ScheduledTask, TaskState>()
 
@@ -35,28 +30,32 @@ class ScheduledTask(val task: Task) {
      * scheduled to run on the [Scheduler].
      *
      * Kotlin demonstration:
-     * ```
-     * val liftLift  = Scheduler.schedule { setLiftHeight(it, 20) } now please
-     * please schedule ::openClaw after liftLift
+     * ```kotlin
+     * please schedule liftLiftTo20 right now
+     * please schedule openClaw after liftLiftTo20
      *
-     * val lowerLift = Scheduler.schedule { setLiftHeight(it, 10) } after openClaw
-     * please schedule ::closeClaw during lowerLift
+     * please schedule lowerLiftTo10 after liftLiftTo20
+     * please schedule closeClaw during lowerLiftTo10
      *
-     * fun setLiftHeight(task: ScheduledTask, height: Int) {
+     * //...
+     *
+     * private val liftLiftTo20 = { scheduledTask: ScheduledTask ->
      *     // Lift logic here
      *
-     *     if (lift is at height) {
-     *          task.state = TaskState.FINISHED
+     *     if (/* Lift is at height */) {
+     *        scheduledTask.flagAsDone()
+     *    }
+     * }
+     *
+     * private val openClaw = { scheduledTask: ScheduledTask ->
+     *     // Claw logic here
+     *
+     *     if (/* Claw is open */) {
+     *         scheduledTask.flagAsDone()
      *     }
      * }
      *
-     * fun openClaw(task: ScheduledTask) {
-     *    // Claw logic here
-     *
-     *    if (claw is open) {
-     *      task.state = TaskState.FINISHED
-     *    }
-     * }
+     * //...
      *
      * // So let's see what's happened there:
      *
@@ -73,41 +72,35 @@ class ScheduledTask(val task: Task) {
      *
      * // The above process repeats for the openClaw, lowerLift, and closeClaw tasks.
      *
-     * // Under the hood, when the state of a task is changed, the observers are checked to see
-     * // if any of the relative tasks are dependent on the new state to be scheduled. If so,
-     * // the dependent task is scheduled to run.
+     * // Under the hood, when the state of a task is changed, the observers are checked to
+     * // see if any of the relative tasks are dependent on the new state to be scheduled.
+     * // If so, the dependent task is scheduled to run.
      * ```
      *
      * Java demonstration:
      * ```java
-     * ScheduledTask liftLift =
-     *      Scheduler.scheduleNow((st) -> setLiftHeight(st, 20));
+     * Scheduler.schedule(liftLiftTo20).now();
+     * Scheduler.schedule(openClaw).after(liftLiftTo20);
      *
-     * ScheduledTask openClaw =
-     *      Scheduler.scheduleAfter(liftLift, this::openClaw);
-     *
-     * ScheduledTask lowerLift =
-     *      Scheduler.scheduleAfter(openClaw, (st) -> setLiftHeight(st, 10));
-     *
-     * ScheduledTask closeClaw =
-     *      Scheduler.scheduleDuring(lowerLift, this::closeClaw);
+     * Scheduler.schedule(lowerLiftTo10).after(liftLiftTo20);
+     * Scheduler.schedule(closeClaw).during(lowerLiftTo10);
      *
      *
-     * void setLiftHeight(ScheduledTask task, int height) {
-     *    // Lift logic here
+     * private final Task liftLiftTo20 = scheduledTask -> {
+     *     // Lift logic here
      *
-     *    if (lift is at height) {
-     *      task.setState(TaskState.FINISHED);
-     *    }
-     * }
+     *     if (/* Lift is at height */) {
+     *         scheduledTask.flagAsDone();
+     *     }
+     * };
      *
-     * void openClaw(ScheduledTask task) {
-     *   // Claw logic here
+     * private final Task openClaw = scheduledTask -> {
+     *     // Claw logic here
      *
-     *   if (claw is open) {
-     *      task.setState(TaskState.FINISHED);
-     *   }
-     * }
+     *     if (/* Claw is open */) {
+     *         scheduledTask.flagAsDone();
+     *     }
+     * };
     */
     var state: TaskState by observable(TaskState.PENDING) { _, _, newState ->
         // Every time state is changed, take the observers map,
@@ -117,33 +110,52 @@ class ScheduledTask(val task: Task) {
         // So if { ::task1, TaskState.FINISHED } is in the observers map, and the new state is
         // TaskState.FINISHED, then task1 will be scheduled to run.
         // If the new state is not TaskState.FINISHED, then task1 will not be scheduled to run.
+
         observers
             .filterValues { targetState -> targetState == newState }
             .forEach { observer -> Scheduler.scheduleNow(observer.key) }
-
-        // If the new state is TaskState.FINISHED, then the observers map is cleared,
-        // and the task unschedules itself, so it stops running.
-        if (newState == TaskState.FINISHED) {
-            observers.clear()
-            Scheduler.unschedule(this)
-        }
     }
 
     /**
      * Binds the given [Task] to this [ScheduledTask] to be scheduled when the [TaskState] of this
      * [ScheduledTask] is the same as the target state provided.
      *
-     * @param task The [Task] to be scheduled
-     * @param targetSTate The [TaskState] that the [Task] will be scheduled on
+     * @param newTask The [Task] to be scheduled
+     * @param targetState The [TaskState] that the [Task] will be scheduled on
      *
      * @return The [ScheduledTask] that was created to schedule the given [Task]
      */
-    fun addObserver(task: ScheduledTask, targetSTate: TaskState): ScheduledTask {
-        return task.also { observers[it] = targetSTate }
+    fun addObserver(newTask: ScheduledTask, targetState: TaskState): ScheduledTask {
+        return newTask.also { observers[it] = targetState }
     }
 
+    /**
+     * Sets this [ScheduledTask's][ScheduledTask] state to [TaskState.FINISHED].
+     */
+    fun flagAsDone() {
+        state = TaskState.FINISHED
+    }
+
+    /**
+     * See [Scheduler] for info about these methods' usage
+     */
+    infix fun after(task: Task) = after(ScheduledTask(task))
+    infix fun after(task: ScheduledTask) = Scheduler.scheduleAfter(task, this)
+
+    /**
+     * See [Scheduler] for info about these methods' usage
+     */
+    infix fun during(task: Task) = during(ScheduledTask(task))
+    infix fun during(task: ScheduledTask) = Scheduler.scheduleDuring(task, this)
+
+    /**
+     * See [Scheduler] for info about these methods' usage
+     */
+    infix fun right(now: now) = Scheduler.scheduleNow(this)
+    fun now() = Scheduler.scheduleNow(this)
+
     override fun equals(other: Any?): Boolean {
-        return (other as? ScheduledTask)?.task == task
+        return other === this || (other as? ScheduledTask)?.let { it.task == task } ?: false
     }
 
     override fun hashCode() = task.hashCode()
