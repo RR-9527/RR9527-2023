@@ -4,6 +4,6 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.ScheduledTask;
 
 import java.io.Serializable;
 
-public interface Task extends Serializable {
+public interface Task {
     void invoke(ScheduledTask s);
 }

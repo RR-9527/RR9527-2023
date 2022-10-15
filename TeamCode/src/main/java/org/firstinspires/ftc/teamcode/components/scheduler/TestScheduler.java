@@ -10,11 +10,11 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.TaskState;
 
 @SuppressWarnings("FieldCanBeLocal")
-public class TestKtScheduler extends LinearOpMode {
+public class TestScheduler extends LinearOpMode {
     private DriveMotors motors;
 
     public static void main(String[] args) throws InterruptedException {
-        new TestKtScheduler().runOpMode();
+        new TestScheduler().runOpMode();
     }
 
     @Override
