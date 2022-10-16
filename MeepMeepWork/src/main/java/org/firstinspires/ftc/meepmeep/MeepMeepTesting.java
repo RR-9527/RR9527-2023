@@ -21,6 +21,8 @@ public class MeepMeepTesting {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
 
+            .setDimensions(15.5, 15)
+
             .setConstraints(new Constraints(
                 DriveConstants.MAX_VEL,
                 DriveConstants.MAX_ACCEL,
