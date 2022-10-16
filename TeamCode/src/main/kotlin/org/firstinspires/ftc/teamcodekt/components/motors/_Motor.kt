@@ -4,12 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
-import org.firstinspires.ftc.teamcodekt.components.scheduler.ScheduledTask
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.after
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.during
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.now
-import org.firstinspires.ftc.teamcodekt.components.scheduler.please
 import org.firstinspires.ftc.teamcodekt.util._get
 
 typealias ZPB = DcMotor.ZeroPowerBehavior

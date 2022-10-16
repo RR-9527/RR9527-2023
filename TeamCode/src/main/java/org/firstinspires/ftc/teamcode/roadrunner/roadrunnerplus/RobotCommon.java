@@ -2,10 +2,13 @@ package org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus;
 
 import android.annotation.SuppressLint;
 
+import com.arcrobotics.ftclib.drivebase.MecanumDrive;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.hardware.RevIMU;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 import org.firstinspires.ftc.teamcode.pipelines.AprilTagDetectionPipeline;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -55,7 +58,12 @@ abstract public class RobotCommon extends LinearOpMode {
 
     protected int detectedNumber = 1;
 
+    protected MecanumDrive teleopDrivebase;
+    protected RevIMU imu;
+    protected GamepadEx game_pad1;
+    protected GamepadEx game_pad2;
 
+    protected boolean FIELD_CENTRIC = false;
 
     /**
      * Method to execute the init phase. Add vision code here
@@ -113,12 +121,48 @@ abstract public class RobotCommon extends LinearOpMode {
 
     }
 
+    /**
+     * Used for teleop to drive in robot-centric or field-centric mode (default is robot-centric)
+     */
+    protected void updateDrivetrain(){
+        if (!FIELD_CENTRIC) {
+            teleopDrivebase.driveRobotCentric(
+                    game_pad1.getLeftX(),
+                    game_pad1.getLeftY(),
+                    game_pad1.getRightX(),
+                    false
+            );
+        } else {
+            teleopDrivebase.driveFieldCentric(
+                    game_pad1.getLeftX(),
+                    game_pad1.getLeftY(),
+                    game_pad1.getRightX(),
+                    imu.getRotation2d().getDegrees(),   // gyro value passed in here must be in degrees
+                    false
+            );
+        }
+    }
+
 
     /**
      * Method to init non-drivetrain hardware before entering the init phase.
      */
     private void initHardware() {
-        // Add your hardware initialization here (arm motor, servos, etc.)
+        // constructor takes in frontLeft, frontRight, backLeft, backRight motors
+        // IN THAT ORDER
+        teleopDrivebase = new MecanumDrive(
+                new Motor(hardwareMap, "FL", Motor.GoBILDA.RPM_312),
+                new Motor(hardwareMap, "FR", Motor.GoBILDA.RPM_312),
+                new Motor(hardwareMap, "BL", Motor.GoBILDA.RPM_312),
+                new Motor(hardwareMap, "BR", Motor.GoBILDA.RPM_312)
+        );
+
+        imu = new RevIMU(hardwareMap);
+        imu.init();
+
+        // the extended gamepad object
+        game_pad1 = new GamepadEx(this.gamepad1);
+        game_pad2 = new GamepadEx(this.gamepad2);
 
     }
 

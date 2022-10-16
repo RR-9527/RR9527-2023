@@ -40,7 +40,6 @@ public class RoadrunnerWrapper {
      */
     private static final double METRIC_CONVERSION_FACTOR = 0.3937008;
 
-
     /**
      * Basic constructor in which only the hardwareMap is passed. Note that it <strong>MUST</strong>
      * be passed. Pose is set to 0, 0, 0, and the unit type is assigned to IN (default)

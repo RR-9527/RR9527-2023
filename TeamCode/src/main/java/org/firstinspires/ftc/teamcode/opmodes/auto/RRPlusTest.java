@@ -37,8 +37,6 @@ public class RRPlusTest extends RobotCommon {
         telemetry.addLine(String.format("\nFinal Detected tag ID=%d", detectedNumber));
         telemetry.update();
 
-
-
         run();
     }
 }
