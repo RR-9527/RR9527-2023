@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcodekt.components.scheduler
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.components.scheduler.Task
+import org.firstinspires.ftc.teamcodekt.components.scheduler.keywords.please
+import java.util.function.BooleanSupplier
+import java.util.function.Supplier
 
 /**
  * A utility class for scheduling tasks to run relative to one another in a [LinearOpMode].
@@ -14,6 +17,8 @@ import org.firstinspires.ftc.teamcode.components.scheduler.Task
  * please schedule task2 after task1
  * please schedule task3 during task2
  *
+ * please schedule task4 on Trigger { gamepad1.a }
+ *
  * Scheduler.run(this);
  * ```
  *
@@ -24,6 +29,10 @@ import org.firstinspires.ftc.teamcode.components.scheduler.Task
  * schedule(task2).after(task1);
  * schedule(task3).during(task2);
  *
+ * schedule(task4).when(new Trigger(() -> gamepad1.a));
+ * //or
+ * schedule(task4).on(new Trigger(() -> gamepad1.a));
+ *
  * Scheduler.run(this);
  * ```
  *
@@ -33,6 +42,8 @@ import org.firstinspires.ftc.teamcode.components.scheduler.Task
  * ScheduledTask task1 = schedule(this::task1).now();
  * ScheduledTask task2 = schedule(this::task2).after(task1);
  * ScheduledTask task3 = schedule(this::task3).during(task2);
+ *
+ * ScheduledTask task4 = schedule(this::task4).when(new Trigger(() -> gamepad1.a));
  *
  * Scheduler.run(this);
  * ```
@@ -91,90 +102,6 @@ object Scheduler {
     private val commands = mutableSetOf<ScheduledTask>()
 
     /**
-     * Schedules a [Task] to run immediately.
-     *
-     * Kotlin usage examples:
-     * ```
-     * Scheduler.scheduleNow(::exampleTask1)
-     * Scheduler.scheduleNow { exampleTask2(it, 100) }
-     * ```
-     *
-     * Java usage examples:
-     * ```
-     * Scheduler.scheduleNow(this::exampleTask1)
-     * Scheduler.scheduleNow(scheduledTask -> exampleTask2(scheduledTask, 100))
-     * ```
-     *
-     * @param task The [ScheduledTask] to schedule
-     * @return The scheduled task
-     */
-    @JvmStatic
-    fun scheduleNow(task: Task) = scheduleNow(ScheduledTask(task))
-
-    @JvmStatic
-    fun scheduleNow(task: ScheduledTask) = with(task) {
-        state = TaskState.RUNNING
-        commands.add(this)
-        this
-    }
-
-    /**
-     * Schedules a [Task] to run after a given [ScheduledTask] finishes operation.
-     *
-     * Kotlin usage examples:
-     * ```
-     * val task1 = Scheduler.scheduleNow(::task1)
-     * Scheduler.scheduleAfter(task1, ::task2)
-     * ```
-     *
-     * Java usage examples:
-     * ```
-     * ScheduledTask task1 = Scheduler.scheduleNow(this::task1);
-     * Scheduler.scheduleAfter(task1, this::task2);
-     * ```
-     *
-     * @param scheduledTask The [ScheduledTask] to run after
-     * @param task The [Task] to schedule after the given [ScheduledTask]
-     */
-    @JvmStatic
-    fun scheduleAfter(scheduledTask: ScheduledTask, newTask: Task) = scheduleAfter(scheduledTask, ScheduledTask(newTask))
-
-    @JvmStatic
-    fun scheduleAfter(scheduledTask: ScheduledTask, newTask: ScheduledTask): ScheduledTask? {
-        commands.add(newTask)
-        return commands.find { it == scheduledTask }
-            ?.addObserver(newTask, TaskState.FINISHED)
-    }
-
-    /**
-     * Schedules a [Task] to run as soon as a [ScheduledTask] starts operation.
-     *
-     * Kotlin usage examples:
-     * ```
-     * val task1 = Scheduler.scheduleNow(::task1)
-     * Scheduler.scheduleDuring(task1, ::task2)
-     * ```
-     *
-     * Java usage examples:
-     * ```
-     * ScheduledTask task1 = Scheduler.scheduleNow(this::task1);
-     * Scheduler.scheduleDuring(task1, this::task2);
-     * ```
-     *
-     * @param scheduledTask The [ScheduledTask] to run after
-     * @param task The [Task] to schedule after the given [ScheduledTask]
-     */
-    @JvmStatic
-    fun scheduleDuring(scheduledTask: ScheduledTask, newTask: Task) = scheduleDuring(scheduledTask, ScheduledTask(newTask))
-
-    @JvmStatic
-    fun scheduleDuring(scheduledTask: ScheduledTask, newTask: ScheduledTask): ScheduledTask? {
-        commands.add(newTask)
-        return commands.find { it == scheduledTask }
-            ?.addObserver(newTask, TaskState.RUNNING)
-    }
-
-    /**
      * Syntactic sugar for relative scheduling.
      *
      * Java usage examples:
@@ -226,6 +153,120 @@ object Scheduler {
     infix fun please.schedule(task: Task) = ScheduledTask(task)
 
     /**
+     * Schedules a [Task] to run immediately.
+     *
+     * Kotlin usage examples:
+     * ```
+     * Scheduler.scheduleNow(::exampleTask1)
+     * Scheduler.scheduleNow { exampleTask2(it, 100) }
+     * ```
+     *
+     * Java usage examples:
+     * ```
+     * Scheduler.scheduleNow(this::exampleTask1)
+     * Scheduler.scheduleNow(scheduledTask -> exampleTask2(scheduledTask, 100))
+     * ```
+     *
+     * @param task The [ScheduledTask] to schedule
+     * @return The scheduled task
+     */
+    fun scheduleNow(task: ScheduledTask) = with(task) {
+        state = TaskState.RUNNING
+        commands.add(this)
+        this
+    }
+
+    /**
+     * Schedules a [Task] to run after a given [ScheduledTask] finishes operation.
+     *
+     * Kotlin usage examples:
+     * ```
+     * val task1 = Scheduler.scheduleNow(::task1)
+     * Scheduler.scheduleAfter(task1, ::task2)
+     * ```
+     *
+     * Java usage examples:
+     * ```
+     * ScheduledTask task1 = Scheduler.scheduleNow(this::task1);
+     * Scheduler.scheduleAfter(task1, this::task2);
+     * ```
+     *
+     * @param scheduledTask The [ScheduledTask] to run after
+     * @param task The [Task] to schedule after the given [ScheduledTask]
+     */
+    fun scheduleAfter(scheduledTask: ScheduledTask, newTask: ScheduledTask): ScheduledTask? {
+        commands.add(newTask)
+
+        commands.find { it == scheduledTask }?.let {
+            newTask.predicateToScheduleOn = { it.state == TaskState.FINISHED }
+            return newTask
+        }
+        return null
+    }
+
+    /**
+     * Schedules a [Task] to run as soon as a [ScheduledTask] starts operation.
+     *
+     * Kotlin usage examples:
+     * ```
+     * val task1 = Scheduler.scheduleNow(::task1)
+     * Scheduler.scheduleDuring(task1, ::task2)
+     * ```
+     *
+     * Java usage examples:
+     * ```
+     * ScheduledTask task1 = Scheduler.scheduleNow(this::task1);
+     * Scheduler.scheduleDuring(task1, this::task2);
+     * ```
+     *
+     * @param scheduledTask The [ScheduledTask] to run after
+     * @param task The [Task] to schedule after the given [ScheduledTask]
+     */
+    fun scheduleDuring(scheduledTask: ScheduledTask, newTask: ScheduledTask): ScheduledTask? {
+        commands.add(newTask)
+
+        commands.find { it == scheduledTask }?.let {
+            newTask.predicateToScheduleOn = { it.state == TaskState.RUNNING }
+            return newTask
+        }
+        return null
+    }
+
+    /**
+     * Schedules a [Task] to run as soon as the given predicate is true.
+     *
+     * Kotlin usage example:
+     * ```kotlin
+     * val gamepad1_a = Trigger { gamepad1.a }
+     *
+     *
+     * please schedule task2 on gamepad1_a.risingEdge
+     *
+     * please schedule task3 on Trigger { gamepad1.right_stick_x > .3 }.fallingEdge
+     * ```
+     *
+     * Java usage example:
+     * ```java
+     * Trigger gamepad1_a = new Trigger(() -> gamepad.a);
+     *
+     * Scheduler.schedule(task2).on(gamepad1_a.risingEdge);
+     * //or
+     * Scheduler.schedule(task2).when(gamepad1_a.risingEdge);
+     *
+     * Scheduler.schedule(task3)
+     *     .on(new Trigger(() -> gamepad1.right_stick_x > .3).fallingEdge);
+     * ```
+     *
+     * @param scheduledTask The [ScheduledTask] to run after
+     * @param task The [Task] to schedule after the given [ScheduledTask]
+     */
+    fun scheduleOn(newTask: ScheduledTask, predicate: () -> Boolean): ScheduledTask {
+        commands.add(newTask)
+        newTask.predicateToScheduleOn = predicate
+        return newTask
+    }
+
+    /**
      * Runs all scheduled tasks while the [LinearOpMode] is in the main 'loop' phase.
      *
      * @param opmode The [LinearOpMode] to run the tasks in
@@ -233,8 +274,17 @@ object Scheduler {
     @JvmStatic
     fun run(opmode: LinearOpMode) {
         while (opmode.opModeIsActive() && !opmode.isStopRequested) {
-            commands.forEach { if (it.state == TaskState.RUNNING) it.task(it) }
+            commands.forEach {
+                if (it.state == TaskState.RUNNING)
+                    it.task(it)
+
+                else if (it.predicateToScheduleOn?.invoke() == true)
+                    it.state = TaskState.RUNNING
+            }
+
             commands.removeIf { it.state == TaskState.FINISHED }
+
+            Trigger.updateAll()
         }
     }
 }

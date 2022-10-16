@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotorsKt;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.TaskState;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.Trigger;
 
-@SuppressWarnings("FieldCanBeLocal")
 public class TestScheduler extends LinearOpMode {
     private DriveMotors motors;
 
@@ -19,11 +19,15 @@ public class TestScheduler extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        motors = DriveMotorsKt.initializedDriveMotorsV2(hardwareMap);
-
         waitForStart();
 
-        schedule(print_a_10_times).now();
+        Trigger gamepad_a = new Trigger(() -> gamepad1.a);
+
+        schedule(print_a_10_times).on(gamepad_a.risingEdge);
+
+        // or
+        // schedule(print_a_10_times).when(gamepad_a.risingEdge);
+
         schedule(print_done).after(print_a_10_times);
 
         Scheduler.run(this);
@@ -35,13 +39,13 @@ public class TestScheduler extends LinearOpMode {
         System.out.println("a" + print_a_10_times_counter++);
 
         if (print_a_10_times_counter == 10) {
-            scheduledTask.setState(TaskState.FINISHED);
-            print_a_10_times_counter = 0;
+            scheduledTask.flagAsDone();
         }
     };
 
     private final Task print_done = (scheduledTask) -> {
         System.out.println("done");
-        scheduledTask.setState(TaskState.FINISHED);
+        print_a_10_times_counter = 0;
+        scheduledTask.flagAsDone();
     };
 }

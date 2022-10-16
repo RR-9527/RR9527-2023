@@ -13,8 +13,7 @@ public class SchedulerRRPlusTest extends ScheduledOpMode {
 
     @Override
     public void setupCommands() {
-        ScheduledTask t1 = Scheduler.scheduleNow(this::move);
-        Scheduler.scheduleDuring(t1, this::deployClaw);
+
     }
 
     public void move(ScheduledTask scheduledTask){
