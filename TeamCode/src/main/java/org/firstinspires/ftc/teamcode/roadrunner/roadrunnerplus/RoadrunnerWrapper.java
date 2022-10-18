@@ -72,7 +72,7 @@ public class RoadrunnerWrapper {
     public RoadrunnerWrapper(HardwareMap hardwareMap, double x, double y, double heading) {
         drivetrain = new SampleMecanumDrive(hardwareMap);
         unit = RoadrunnerUnit.IN;
-        startPose = new Pose2d(toInches(x), toInches( y), Math.toRadians(heading));
+        startPose = new Pose2d(toInches(x), toInches(y), Math.toRadians(heading));
         drivetrain.setPoseEstimate(startPose);
     }
 

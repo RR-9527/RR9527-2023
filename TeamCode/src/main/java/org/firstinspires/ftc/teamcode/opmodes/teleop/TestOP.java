@@ -84,7 +84,7 @@ public class TestOP extends OpMode{
     public void loop() {
         drive();
         wrist();
-        //servoTest();
+        servoTest();
         succ();
         armMove();
         lift();

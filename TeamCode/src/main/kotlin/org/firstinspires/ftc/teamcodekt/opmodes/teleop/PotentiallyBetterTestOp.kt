@@ -1,61 +1,43 @@
 package org.firstinspires.ftc.teamcodekt.opmodes.teleop
 
 import com.acmerobotics.roadrunner.localization.Localizer
-import com.qualcomm.robotcore.eventloop.opmode.OpMode
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer
 import org.firstinspires.ftc.teamcodekt.components.gamepad.getDriveSticks
 import org.firstinspires.ftc.teamcodekt.components.gamepad.isJoystickTriggered
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors
 import org.firstinspires.ftc.teamcodekt.components.motors.initializedDriveMotorsV2
-import org.firstinspires.ftc.teamcodekt.components.shooter.Shooter
-import org.firstinspires.ftc.teamcodekt.components.shooter.initializedShooter
-import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer
+import org.firstinspires.ftc.teamcodekt.components.scheduler.ScheduledTask
+import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler
+import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.schedule
+import org.firstinspires.ftc.teamcodekt.components.scheduler.keywords.now
+import org.firstinspires.ftc.teamcodekt.components.scheduler.keywords.please
 import org.firstinspires.ftc.teamcodekt.util.LateInitVal
 import kotlin.math.*
 
-@TeleOp(name = "BetterTestOpKt")
-open class BetterTestOp : OpMode() {
+@TeleOp(name = "PotentiallyBetterTestOpKt")
+class PotentiallyBetterTestOp : LinearOpMode() {
     private var motors: DriveMotors by LateInitVal()
     private var localizer: Localizer by LateInitVal()
+    private var driveFunction: (ScheduledTask) -> Unit = ::driveNormal
 
-    private var driveFunction = ::driveNormal
-
-    override fun init() {
+    override fun runOpMode() {
         motors = initializedDriveMotorsV2(hardwareMap)
         localizer = StandardTrackingWheelLocalizer(hardwareMap)
+
+        waitForStart()
+
+        please schedule driveFunction right now
+
+        please schedule { driveFunction = ::driveNormal   } on { gamepad1.dpad_left  }
+        please schedule { driveFunction = ::driveImproved } on { gamepad1.dpad_up    }
+        please schedule { driveFunction = ::driveFc       } on { gamepad1.dpad_right }
+
+        Scheduler.run(this)
     }
 
-    override fun loop() {
-        measureLoopTime()
-
-        drive()
-
-        localizer.update()
-        telemetry.update()
-    }
-
-    private val loopTimes = mutableListOf(System.currentTimeMillis())
-
-    private fun measureLoopTime() {
-        loopTimes += System.currentTimeMillis() - loopTimes.last()
-        if (loopTimes.size > 50)
-            loopTimes.removeAt(1)
-
-        telemetry.addData("Avg. loop time", loopTimes.average())
-    }
-
-    private fun drive() {
-        if (gamepad1.dpad_left ) driveFunction = ::driveNormal
-        if (gamepad1.dpad_up   ) driveFunction = ::driveImproved
-        if (gamepad1.dpad_right) driveFunction = ::driveFc
-
-        driveFunction()
-
-        telemetry.addData("Drive Type", driveFunction::class.simpleName)
-        motors.logData(telemetry) { it.power }
-    }
-
-    private fun driveNormal() = with(gamepad1) {
+    private fun driveNormal(task: ScheduledTask) = with(gamepad1) {
         val (speed, strafe, rotation) = gamepad1.getDriveSticks()
 
         val flp = speed + strafe + rotation
@@ -77,7 +59,7 @@ open class BetterTestOp : OpMode() {
         motors.transformPowers { it * powerMulti / powerScale }
     }
 
-    private fun driveImproved() = with(gamepad1) {
+    private fun driveImproved(task: ScheduledTask) = with(gamepad1) {
         val (speed, strafe, rotation) = gamepad1.getDriveSticks()
 
         val direction = atan2(speed, strafe)
@@ -105,7 +87,7 @@ open class BetterTestOp : OpMode() {
         motors.transformPowers { it * powerMulti / powerScale }
     }
 
-    private fun driveFc() = with(gamepad1) {
+    private fun driveFc(task: ScheduledTask) = with(gamepad1) {
         val (speed, strafe, turn) = gamepad1.getDriveSticks()
 
         val heading = -localizer.poseEstimate.heading

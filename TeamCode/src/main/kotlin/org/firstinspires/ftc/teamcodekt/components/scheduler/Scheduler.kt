@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcodekt.components.scheduler
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.components.scheduler.Task
 import org.firstinspires.ftc.teamcodekt.components.scheduler.keywords.please
-import java.util.function.BooleanSupplier
-import java.util.function.Supplier
+
+//TODO: Make this shitty code less shitty holy shit
 
 /**
  * A utility class for scheduling tasks to run relative to one another in a [LinearOpMode].
@@ -99,7 +99,7 @@ import java.util.function.Supplier
  * @see [ScheduledTask]
  */
 object Scheduler {
-    private val commands = mutableSetOf<ScheduledTask>()
+    private val scheduledTasks = mutableSetOf<ScheduledTask>()
 
     /**
      * Syntactic sugar for relative scheduling.
@@ -172,7 +172,7 @@ object Scheduler {
      */
     fun scheduleNow(task: ScheduledTask) = with(task) {
         state = TaskState.RUNNING
-        commands.add(this)
+        scheduledTasks.add(this)
         this
     }
 
@@ -195,9 +195,9 @@ object Scheduler {
      * @param task The [Task] to schedule after the given [ScheduledTask]
      */
     fun scheduleAfter(scheduledTask: ScheduledTask, newTask: ScheduledTask): ScheduledTask? {
-        commands.add(newTask)
+        scheduledTasks.add(newTask)
 
-        commands.find { it == scheduledTask }?.let {
+        scheduledTasks.find { it == scheduledTask }?.let {
             newTask.predicateToScheduleOn = { it.state == TaskState.FINISHED }
             return newTask
         }
@@ -223,9 +223,9 @@ object Scheduler {
      * @param task The [Task] to schedule after the given [ScheduledTask]
      */
     fun scheduleDuring(scheduledTask: ScheduledTask, newTask: ScheduledTask): ScheduledTask? {
-        commands.add(newTask)
+        scheduledTasks.add(newTask)
 
-        commands.find { it == scheduledTask }?.let {
+        scheduledTasks.find { it == scheduledTask }?.let {
             newTask.predicateToScheduleOn = { it.state == TaskState.RUNNING }
             return newTask
         }
@@ -261,7 +261,7 @@ object Scheduler {
      * @param task The [Task] to schedule after the given [ScheduledTask]
      */
     fun scheduleOn(newTask: ScheduledTask, predicate: () -> Boolean): ScheduledTask {
-        commands.add(newTask)
+        scheduledTasks.add(newTask)
         newTask.predicateToScheduleOn = predicate
         return newTask
     }
@@ -274,7 +274,7 @@ object Scheduler {
     @JvmStatic
     fun run(opmode: LinearOpMode) {
         while (opmode.opModeIsActive() && !opmode.isStopRequested) {
-            commands.forEach {
+            scheduledTasks.forEach {
                 if (it.state == TaskState.RUNNING)
                     it.task(it)
 
@@ -282,7 +282,7 @@ object Scheduler {
                     it.state = TaskState.RUNNING
             }
 
-            commands.removeIf { it.state == TaskState.FINISHED }
+            scheduledTasks.removeIf { it.state == TaskState.FINISHED }
 
             Trigger.updateAll()
         }

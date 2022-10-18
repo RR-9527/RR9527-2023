@@ -178,6 +178,11 @@ public class WrapperBuilder {
         return this;
     }
 
+    public WrapperBuilder setReversed(boolean reversed) {
+        trajectorySequenceBuilder.setReversed(reversed);
+        return this;
+    }
+
     /**
      * Add a temporal marker for a given time into the whole path sequence
      * @param time the time to execute the temporal marker

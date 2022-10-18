@@ -19,13 +19,15 @@ import java.util.concurrent.TimeUnit
  *
  *
  *  Basic usage example:
- * <pre>`MeepMeep meepMeep = new MeepMeep(windowSize);
+ * ```java
+ * MeepMeep meepMeep = new MeepMeep(windowSize);
  *
  * // Create a persistence object linked to the MeepMeep instance
  * MeepMeepPersistence persistence = new MeepMeepPersistence(meepMeep);
  *
  * // Restore the settings from the persistence object to the MeepMeep instance
- * persistence.restore();`</pre>
+ * persistence.restore();
+ * ```
  *
  * **NOTE:** The settings autosave every 2 seconds, and when MeepMeep is closed from the 'X'.
  *
@@ -37,7 +39,8 @@ import java.util.concurrent.TimeUnit
 @Suppress("MemberVisibilityCanBePrivate")
 class MeepMeepPersistence @JvmOverloads constructor(
     private val meepMeep: MeepMeep,
-    val defaultFilePath: String = "./meepmeep.properties"
+    val defaultFilePath: String = "./meepmeep.properties",
+    val savePeriod: Long = 2L
 ) {
     /**
      * The [Properties] object used to save and interpret the settings.
@@ -49,22 +52,21 @@ class MeepMeepPersistence @JvmOverloads constructor(
      * the `MeepMeep` state every time it is called.
      */
     private fun startPersistenceThread() {
-        // Basically utilizes a ScheduledExecutorService which launches a new thread which
-        // can run a given piece of code at a fixed time.
+        // Utilizes a ScheduledExecutorService which launches a new thread which can run a given
+        // piece of code at a fixed time.
 
         // The "thread" takes in a Runnable object, which can be implemented as a simple lambda
         // expression, shorthand for:
         // new Runnable() { @Override public void run() { ... } }.
 
         // However, in this case, it can be shortened even further, using the Method Reference
-        // syntax, to 'this::save', casted to a Runnable. This is just referring to the save
+        // syntax, to '::save', casted to a Runnable. This is just referring to the save
         // function below.
 
-        // It is called every 2 seconds, specified by the TimeUnit.SECONDS parameter.
-        // It's automatically killed when the program is closed.
-        ScheduledMeepMeepExecutor.EXECUTOR.schedule(
-            { save() }, 2L, TimeUnit.SECONDS
-        )
+        // It is called every 'savePeriod' seconds (defaulting to 2 if unspecified),
+        // the time unit being specified by the TimeUnit.SECONDS parameter. It's automatically
+        // killed when the program is closed.
+        ScheduledMeepMeepExecutor.EXECUTOR.schedule(::save, savePeriod, TimeUnit.SECONDS)
     }
 
     /**
@@ -87,12 +89,8 @@ class MeepMeepPersistence @JvmOverloads constructor(
 
         // Persists the properties to a file, so that the state can be saved across
         // program restarts.
-        try {
-            BufferedWriter(FileWriter(path)).use { writer ->
-                properties.store(writer, null) // Null means no comments added to the file
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
+        BufferedWriter(FileWriter(path)).use { writer ->
+            properties.store(writer, null) // Null means no comments added to the file
         }
     }
 
@@ -110,11 +108,8 @@ class MeepMeepPersistence @JvmOverloads constructor(
         ensureFileExistence(path)
 
         // Loads in the properties from the given file
-        try {
-            BufferedReader(FileReader(path)).use { reader -> properties.load(reader) }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
+        BufferedReader(FileReader(path))
+            .use(properties::load)
     }
 
     /**
@@ -155,14 +150,9 @@ class MeepMeepPersistence @JvmOverloads constructor(
     }
 
     /**
-     * Constructor for the `MeepMeepPersistence` class.
-     *
-     *
-     * Starts an auto-save thread to save the settings every 2 seconds,
-     * as well as a shutdown hook to save the settings when the program is closed.
-     *
-     * @param meepMeep The linked [MeepMeep] instance
-     * @param defaultFilePath The file path to initially load state from
+     * Injects the `Properties` instance with the saved state, then starts an auto-save thread to
+     * save the settings every `savePeriod` seconds, as well as a shutdown hook to save the
+     * settings when the program is closed normally (via the X button, __not__ the red stop square.)
      */
     init {
         reload()
@@ -174,7 +164,7 @@ class MeepMeepPersistence @JvmOverloads constructor(
         // if the GUI is closed from the 'X' button, but it won't run if the code is killed
         // using the red 'stop' button from the IDE or something.
         Runtime.getRuntime().addShutdownHook(
-            Thread { save() }
+            Thread(::save)
         )
     }
 }
