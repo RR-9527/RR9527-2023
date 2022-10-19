@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode.opmodes.teleop;
+package org.firstinspires.ftc.teamcode.opmodes.teleop.deprecated;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcodekt.components.easytoggle.EasyToggle;
  *
  * Needs to be converted to an actually good teleop using the RR+ architecture and commandbased API
  */
+@Disabled
 @TeleOp(name="TestOP")
 public class TestOP extends OpMode{
     private ElapsedTime runtime = new ElapsedTime();
