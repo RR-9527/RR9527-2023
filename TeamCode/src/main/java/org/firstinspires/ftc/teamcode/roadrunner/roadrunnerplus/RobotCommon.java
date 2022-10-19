@@ -5,11 +5,14 @@ import android.annotation.SuppressLint;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.RevIMU;
+import com.arcrobotics.ftclib.hardware.ServoEx;
+import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.pipelines.AprilTagDetectionPipeline;
+import org.firstinspires.ftc.teamcodekt.components.easytoggle.EasyToggle;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -70,6 +73,25 @@ abstract public class RobotCommon extends LinearOpMode {
      */
     @SuppressLint("DefaultLocale")
     protected void initialize() {
+        // Drivetrain for teleop setup
+        // constructor takes in frontLeft, frontRight, backLeft, backRight motors
+        // IN THAT ORDER
+        teleopDrivebase = new MecanumDrive(
+            new Motor(hardwareMap, "FL", Motor.GoBILDA.RPM_312),
+            new Motor(hardwareMap, "FR", Motor.GoBILDA.RPM_312),
+            new Motor(hardwareMap, "BL", Motor.GoBILDA.RPM_312),
+            new Motor(hardwareMap, "BR", Motor.GoBILDA.RPM_312)
+        );
+
+        imu = new RevIMU(hardwareMap);
+        imu.init();
+
+        // the extended gamepad object
+        game_pad1 = new GamepadEx(this.gamepad1);
+        game_pad2 = new GamepadEx(this.gamepad2);
+
+
+        // Set up april tag detection
         pipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
         telemetry.setMsTransmissionInterval(50);
 
@@ -122,6 +144,11 @@ abstract public class RobotCommon extends LinearOpMode {
     }
 
     /**
+     * Method to init non-drivetrain hardware before entering the init phase.
+     */
+    protected abstract void initHardware();
+
+    /**
      * Used for teleop to drive in robot-centric or field-centric mode (default is robot-centric)
      */
     protected void updateDrivetrain(){
@@ -143,28 +170,6 @@ abstract public class RobotCommon extends LinearOpMode {
         }
     }
 
-
-    /**
-     * Method to init non-drivetrain hardware before entering the init phase.
-     */
-    private void initHardware() {
-        // constructor takes in frontLeft, frontRight, backLeft, backRight motors
-        // IN THAT ORDER
-        teleopDrivebase = new MecanumDrive(
-                new Motor(hardwareMap, "FL", Motor.GoBILDA.RPM_312),
-                new Motor(hardwareMap, "FR", Motor.GoBILDA.RPM_312),
-                new Motor(hardwareMap, "BL", Motor.GoBILDA.RPM_312),
-                new Motor(hardwareMap, "BR", Motor.GoBILDA.RPM_312)
-        );
-
-        imu = new RevIMU(hardwareMap);
-        imu.init();
-
-        // the extended gamepad object
-        game_pad1 = new GamepadEx(this.gamepad1);
-        game_pad2 = new GamepadEx(this.gamepad2);
-
-    }
 
     /**
      * Initialize the camera and set its properties.
