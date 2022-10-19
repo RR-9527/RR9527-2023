@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -20,6 +21,8 @@ public class BaseOp extends RobotCommon {
 
     private EasyToggle toggleA;
     private EasyToggle toggleB;
+
+    private PIDFController liftAPID, liftBPID, armPID;
 
     /**
      * Override this method and place your code here.
@@ -47,15 +50,15 @@ public class BaseOp extends RobotCommon {
     protected void initHardware() {
         arm = new Motor(hardwareMap, "AR", Motor.GoBILDA.RPM_84);
         arm.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        arm.setRunMode(Motor.RunMode.PositionControl);
+        arm.setRunMode(Motor.RunMode.VelocityControl);
 
         liftA = new Motor(hardwareMap, "L1", Motor.GoBILDA.RPM_1150);
         liftA.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        liftA.setRunMode(Motor.RunMode.PositionControl);
+        liftA.setRunMode(Motor.RunMode.VelocityControl);
 
         liftB = new Motor(hardwareMap, "L2", Motor.GoBILDA.RPM_1150);
         liftB.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        liftB.setRunMode(Motor.RunMode.PositionControl);
+        liftB.setRunMode(Motor.RunMode.VelocityControl);
         liftB.setInverted(true);
 
         wrist = new SimpleServo(hardwareMap, "WR", 0, 180, AngleUnit.DEGREES);
@@ -63,16 +66,21 @@ public class BaseOp extends RobotCommon {
         intake = new CRServo(hardwareMap, "IN");
         toggleA = new EasyToggle(false);
         toggleB = new EasyToggle(false);
+
+        // Lift PID's
+        liftAPID = new PIDFController(Lift.A_P, Lift.A_I, Lift.A_D, Lift.A_F);
+        liftBPID = new PIDFController(Lift.B_P, Lift.B_I, Lift.B_D, Lift.B_F);
+        armPID = new PIDFController(Arm.ARM_P, Arm.ARM_I, Arm.ARM_D, Arm.ARM_F);
     }
 
     private void intake(){
-        if (gamepad1.left_trigger > 0.5) {
+        if (game_pad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > TriggerData.TRIGGER_THRESHOLD) {
             claw.setPosition(Claw.OPEN);
         } else {
             claw.setPosition(Claw.CLOSE);
         }
 
-        if (gamepad1.right_trigger > 0.5){
+        if (game_pad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > TriggerData.TRIGGER_THRESHOLD){
             intake.set(1);
         } else {
             intake.set(0);
@@ -80,26 +88,30 @@ public class BaseOp extends RobotCommon {
     }
 
     private void updateArm(){
+        double correction = 0;
         if(game_pad1.getButton(GamepadKeys.Button.X)){
-            arm.setTargetPosition(Arm.INTAKE_POS);
-            arm.set(.7);
+            correction = armPID.calculate(arm.getCurrentPosition(), Arm.INTAKE_POS);
         } else if (game_pad1.getButton(GamepadKeys.Button.Y)){
-            arm.setTargetPosition(Arm.VERTICAL);
-            arm.set(.7);
+            correction = armPID.calculate(arm.getCurrentPosition(), Arm.VERTICAL);
         } else if (game_pad1.getButton(GamepadKeys.Button.B)){
-            arm.setTargetPosition(Arm.DEPOSIT_POS);
-            arm.set(.7);
+            correction = armPID.calculate(arm.getCurrentPosition(), Arm.DEPOSIT_POS);
         }
+        arm.set(correction);
     }
 
     private void updateLift(){
+        double correctionA = 0;
+        double correctionB = 0;
         if(game_pad1.getButton(GamepadKeys.Button.RIGHT_BUMPER)) {
-            liftA.set(Lift.UP);
-            liftB.set(Lift.UP);
+            correctionA = liftAPID.calculate(liftA.getCurrentPosition(), Lift.UP);
+            correctionB = liftBPID.calculate(liftB.getCurrentPosition(), Lift.UP);
+
         } else {
-            liftA.set(Lift.DOWN);
-            liftB.set(Lift.DOWN);
+            correctionA = liftAPID.calculate(liftA.getCurrentPosition(), Lift.DOWN);
+            correctionB = liftBPID.calculate(liftB.getCurrentPosition(), Lift.DOWN);
         }
+        liftA.set(correctionA);
+        liftB.set(correctionB);
     }
 
     private void updateWrist(){

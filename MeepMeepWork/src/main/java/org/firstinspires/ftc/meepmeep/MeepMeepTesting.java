@@ -8,29 +8,30 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 import org.firstinspires.ftc.meepmeepkt.MeepMeepPersistence;
-import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
+//import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 
 public class MeepMeepTesting {
-    static final String PERSISTENCE_FILE = "./MeepMeepWork/meepmeep.properties";
+//    static final String PERSISTENCE_FILE = "./MeepMeepWork/meepmeep.properties";
 
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
 
-        MeepMeepPersistence persistence = new MeepMeepPersistence(meepMeep, PERSISTENCE_FILE);
-        persistence.restore();
+//        MeepMeepPersistence persistence = new MeepMeepPersistence(meepMeep, PERSISTENCE_FILE);
+//        persistence.restore();
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
 
             .setDimensions(15.67, 15.17)
 
             .setConstraints(new Constraints(
-                DriveConstants.MAX_VEL,
-                DriveConstants.MAX_ACCEL,
-                DriveConstants.MAX_ANG_VEL,
-                DriveConstants.MAX_ANG_ACCEL,
-                DriveConstants.TRACK_WIDTH
+                49.396,
+                41.986335266644225,
+                Math.toRadians(612.2409366559378),
+                Math.toRadians(178.19554133333332),
+                12.7165
             ))
 
+// OPTION 1
             .followTrajectorySequence(drive ->
                 drive.trajectorySequenceBuilder(new Pose2d(toInches(91), toInches(-159), radians(90)))
                     // Deposit preload
