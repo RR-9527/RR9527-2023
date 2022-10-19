@@ -39,4 +39,9 @@ public class RRPlusTest extends RobotCommon {
 
         run();
     }
+
+    @Override
+    protected void initHardware() {
+
+    }
 }

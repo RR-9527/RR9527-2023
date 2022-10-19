@@ -2,14 +2,11 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.opmodes.ScheduledOpMode;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RobotCommon;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.SequenceWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.WrapperBuilder;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.ScheduledTask;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
 @Autonomous
 public class RedTestingAuto extends RobotCommon {
@@ -34,5 +31,10 @@ public class RedTestingAuto extends RobotCommon {
         );
         pathing.build();
         pathing.follow();
+    }
+
+    @Override
+    protected void initHardware() {
+
     }
 }

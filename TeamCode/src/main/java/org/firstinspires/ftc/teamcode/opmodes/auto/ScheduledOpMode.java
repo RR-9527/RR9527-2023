@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RobotCommon;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
@@ -10,16 +10,14 @@ public abstract class ScheduledOpMode extends RobotCommon {
     protected boolean runCommandWhileLoop;
 
     public abstract void setupCommands();
+
     @Override
     public void runOpMode() throws InterruptedException {
         initialize();
         setupCommands();
 
-        if(!runCommandWhileLoop)
+        do {
             Scheduler.run(this);
-        else if(runCommandWhileLoop)
-            while(opModeIsActive() && !isStopRequested()){
-                Scheduler.run(this);
-            }
+        } while (runCommandWhileLoop && opModeIsActive() && !isStopRequested());
     }
 }
