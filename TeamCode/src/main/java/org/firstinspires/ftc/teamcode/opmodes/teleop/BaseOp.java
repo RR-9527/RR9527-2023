@@ -10,12 +10,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RobotCommon;
-import org.firstinspires.ftc.teamcode.util.constants.Arm;
-import org.firstinspires.ftc.teamcode.util.constants.Claw;
-import org.firstinspires.ftc.teamcode.util.constants.Lift;
-import org.firstinspires.ftc.teamcode.util.constants.TriggerData;
-import org.firstinspires.ftc.teamcode.util.constants.Wrist;
-import org.firstinspires.ftc.teamcodekt.components.easytoggle.EasyToggle;
+import org.firstinspires.ftc.teamcodekt.util.Arm;
+import org.firstinspires.ftc.teamcodekt.util.Claw;
+import org.firstinspires.ftc.teamcodekt.util.Lift;
+import org.firstinspires.ftc.teamcodekt.util.Wrist;
+import org.firstinspires.ftc.teamcodekt.util.TriggerData;
 
 @TeleOp
 public class BaseOp extends RobotCommon {
@@ -67,9 +66,9 @@ public class BaseOp extends RobotCommon {
         intake = new CRServo(hardwareMap, "IN");
 
         // Lift PID's
-        liftAPID = new PIDFController(Lift.A_P, Lift.A_I, Lift.A_D, Lift.A_F);
-        liftBPID = new PIDFController(Lift.B_P, Lift.B_I, Lift.B_D, Lift.B_F);
-        armPID = new PIDFController(Arm.ARM_P, Arm.ARM_I, Arm.ARM_D, Arm.ARM_F);
+        liftAPID = new PIDFController(Lift.A.P, Lift.A.I, Lift.A.D, Lift.A.F);
+        liftBPID = new PIDFController(Lift.B.P, Lift.B.I, Lift.B.D, Lift.B.F);
+        armPID = new PIDFController(Arm.P, Arm.I, Arm.D, Arm.F);
     }
 
     private void intake() {

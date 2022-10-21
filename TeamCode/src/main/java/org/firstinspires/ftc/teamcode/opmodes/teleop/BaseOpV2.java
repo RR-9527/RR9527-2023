@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
@@ -11,12 +10,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.components.scheduler.Action;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RobotCommon;
-import org.firstinspires.ftc.teamcode.util.constants.Arm;
-import org.firstinspires.ftc.teamcode.util.constants.Claw;
-import org.firstinspires.ftc.teamcode.util.constants.Lift;
-import org.firstinspires.ftc.teamcode.util.constants.Wrist;
 import org.firstinspires.ftc.teamcodekt.components.schedulerv2.GamepadEx2;
 import org.firstinspires.ftc.teamcodekt.components.schedulerv2.Scheduler;
+import org.firstinspires.ftc.teamcodekt.util.Arm;
+import org.firstinspires.ftc.teamcodekt.util.Claw;
+import org.firstinspires.ftc.teamcodekt.util.Lift;
+import org.firstinspires.ftc.teamcodekt.util.Wrist;
 
 @TeleOp
 public class BaseOpV2 extends RobotCommon {
@@ -111,8 +110,8 @@ public class BaseOpV2 extends RobotCommon {
         claw = new SimpleServo(hardwareMap, "WR", 0, 180, AngleUnit.DEGREES);
         intake = new CRServo(hardwareMap, "IN");
 
-        liftAPID = new PIDFController(Lift.A_P, Lift.A_I, Lift.A_D, Lift.A_F);
-        liftBPID = new PIDFController(Lift.B_P, Lift.B_I, Lift.B_D, Lift.B_F);
-        armPID = new PIDFController(Arm.ARM_P, Arm.ARM_I, Arm.ARM_D, Arm.ARM_F);
+        liftAPID = new PIDFController(Lift.A.P, Lift.A.I, Lift.A.D, Lift.A.F);
+        liftBPID = new PIDFController(Lift.B.P, Lift.B.I, Lift.B.D, Lift.B.F);
+        armPID = new PIDFController(Arm.P, Arm.I, Arm.D, Arm.F);
     }
 }

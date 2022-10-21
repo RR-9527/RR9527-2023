@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode.opmodes.teleop;
+package org.firstinspires.ftc.teamcode.opmodes.teleop.deprecated;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcodekt.util.MU;
 
 import java.util.stream.Stream;
 
+@Disabled
 @TeleOp(name = "TestOpJava")
 public class OldTestOP extends OpMode {
     private DriveMotors motors;
