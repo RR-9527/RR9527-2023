@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcodekt.components.schedulerv2
 
-class SignalEdgeDetector(val condition: () -> Boolean) {
+import org.firstinspires.ftc.teamcodekt.util.Condition
+
+class SignalEdgeDetector(val condition: Condition) {
     private var state = false
     private var lastState = false
 

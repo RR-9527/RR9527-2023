@@ -8,7 +8,6 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.components.scheduler.Action;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RobotCommon;
 import org.firstinspires.ftc.teamcodekt.components.schedulerv2.GamepadEx2;
 import org.firstinspires.ftc.teamcodekt.components.schedulerv2.Scheduler;
@@ -27,26 +26,26 @@ public class BaseOpV2 extends RobotCommon {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        GamepadEx2 gamepad_x1 = new GamepadEx2(gamepad1);
+        GamepadEx2 gamepadx1 = new GamepadEx2(gamepad1);
 
         //Intake:
-        gamepad_x1.left_trigger.onTriggered(openClaw);
-        gamepad_x1.left_trigger.onUntriggered(closeClaw);
+        gamepadx1.left_trigger.onRise(openClaw)
+                              .onFall(closeClaw);
 
-        gamepad_x1.right_trigger.onTriggered(enableIntake);
-        gamepad_x1.right_trigger.onUntriggered(disableIntake);
+        gamepadx1.right_trigger.onRise(enableIntake)
+                               .onFall(disableIntake);
 
         //Arm:
-        gamepad_x1.x.whileTriggered(() -> armCorrection = Arm.INTAKE_POS );
-        gamepad_x1.y.whileTriggered(() -> armCorrection = Arm.VERTICAL   );
-        gamepad_x1.b.whileTriggered(() -> armCorrection = Arm.DEPOSIT_POS);
+        gamepadx1.x.onHigh(() -> armCorrection = Arm.INTAKE_POS );
+        gamepadx1.y.onHigh(() -> armCorrection = Arm.VERTICAL   );
+        gamepadx1.b.onHigh(() -> armCorrection = Arm.DEPOSIT_POS);
 
         //Lift:
-        gamepad_x1.right_bumper.whileTriggered(() -> liftCorrection = Lift.UP);
+        gamepadx1.right_bumper.onHigh(() -> liftCorrection = Lift.UP);
 
         //Wrist:
-        gamepad_x1.dpad_up  .onTriggered(() -> wristPosition = Wrist.INTAKE_POS );
-        gamepad_x1.dpad_down.onTriggered(() -> wristPosition = Wrist.DEPOSIT_POS);
+        gamepadx1.dpad_up  .onRise(() -> wristPosition = Wrist.INTAKE_POS );
+        gamepadx1.dpad_down.onRise(() -> wristPosition = Wrist.DEPOSIT_POS);
 
         Scheduler.start(this, () -> {
             updateArm();
@@ -56,12 +55,12 @@ public class BaseOpV2 extends RobotCommon {
     }
 
 
-    private final Action openClaw = () -> claw.setPosition(Claw.OPEN);
-    private final Action closeClaw = () -> claw.setPosition(Claw.CLOSE);
+    private final Runnable openClaw = () -> claw.setPosition(Claw.OPEN);
+    private final Runnable closeClaw = () -> claw.setPosition(Claw.CLOSE);
 
 
-    private final Action enableIntake = () -> intake.set(1);
-    private final Action disableIntake = () -> intake.set(0);
+    private final Runnable enableIntake = () -> intake.set(1);
+    private final Runnable disableIntake = () -> intake.set(0);
 
 
     private double armCorrection = 0;
