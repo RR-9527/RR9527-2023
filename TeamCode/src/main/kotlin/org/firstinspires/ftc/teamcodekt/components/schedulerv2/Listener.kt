@@ -4,17 +4,17 @@ import org.firstinspires.ftc.teamcodekt.util.Condition
 
 class Listener(val id: String, condition: Condition) {
     private val actions = mutableMapOf<Runnable, Condition>()
-    private val condition = SignalEdgeDetector(condition)
+    private val conditionSED = SignalEdgeDetector(condition)
 
     fun subscribe(action: Runnable, on: SignalTriggers) = when (on) {
-        SignalTriggers.RISING_EDGE  -> actions[action] = condition::risingEdge
-        SignalTriggers.FALLING_EDGE -> actions[action] = condition::fallingEdge
-        SignalTriggers.IS_HIGH      -> actions[action] = condition::isHigh
-        SignalTriggers.IS_LOW       -> actions[action] = condition::isLow
+        SignalTriggers.RISING_EDGE  -> actions[action] = conditionSED::risingEdge
+        SignalTriggers.FALLING_EDGE -> actions[action] = conditionSED::fallingEdge
+        SignalTriggers.IS_HIGH      -> actions[action] = conditionSED::isHigh
+        SignalTriggers.IS_LOW       -> actions[action] = conditionSED::isLow
     }
 
     fun update() {
-        condition.update()
+        conditionSED.update()
     }
 
     fun doActiveActions() {

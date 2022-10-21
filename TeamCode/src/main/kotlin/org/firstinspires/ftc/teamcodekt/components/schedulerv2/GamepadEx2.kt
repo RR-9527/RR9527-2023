@@ -6,8 +6,55 @@ import com.qualcomm.robotcore.hardware.Gamepad
 import org.firstinspires.ftc.teamcodekt.util.Condition
 import kotlin.math.abs
 
+/**
+ * A wrapper around the base [Gamepad] class that can create [Listeners][Listener] for each button.
+ * Listeners are only hooked when it's usage is required.
+ *
+ * Java usage example:
+ * ```java
+ * @Override
+ * public void runOpMode() throws InterruptedException {
+ *     GamepadEx2 gamepadx1 = new GamepadEx2(gamepad1);
+ *
+ *     // Use onRise and onFall to run the action once when the
+ *     // condition is first true or first false.
+ *     // (In this case, when the button is first pressed or released)
+ *     gamepadx1.a.onRise(this::openClaw)
+ *                .onFall(this::closeClaw);
+ *
+ *     // Use onHigh if the action should be run as long as
+ *     // the condition is true, and onLow for the opposite.
+ *     gamepadx1.left_trigger(.1).onHigh(this::driveSlow) // <- Notice method
+ *                               .onLow(this::driveFast); // chaining allowed
+ *
+ *     // Gamepad buttons returning a float can be passed an option deadzone.
+ *     // If called as a normal variable, it defaults to .5.
+ *     // e.g.
+ *     // `gamepadx1.left_trigger(.1)` triggers when abs(left_trigger) > .1
+ *     // `gamepadx1.left_trigger` triggers when abs(left_trigger) > .5
+ *
+ *     // Runs the code while the OpMode is active.
+ *     Scheduler.run(this, () -> {
+ *         // Optional block of code to be run after the above listeners
+ *         // This parameter may be omitted if unnecessary.
+ *         updateLift();
+ *     });
+ * }
+ *
+ * private void openClaw() {
+ *     claw.setPosition(Claw.OPEN);
+ * }
+ *
+ * //...
+ * ```
+ *
+ * @author KG
+ *
+ * @see Gamepad
+ * @see Scheduler
+ */
 class GamepadEx2(val gamepad: Gamepad) {
-    private val gamepadID = "gp${gamepad.user.id}"
+    private val userID = "gp${gamepad.user.id}"
 
 
     @JvmField
@@ -104,24 +151,8 @@ class GamepadEx2(val gamepad: Gamepad) {
     }
 
 
-    private fun gamepadTrigger(id: String, condition: Condition) = object : GamepadEx2Trigger {
-        private val _id = "${gamepadID}$id"
-
-        override fun onRise(action: Runnable) = this.also {
-            Scheduler.getOrCreateListener(_id, condition).subscribe(action, on = SignalTriggers.RISING_EDGE)
-        }
-
-        override fun onFall(action: Runnable) = this.also {
-            Scheduler.getOrCreateListener(_id, condition).subscribe(action, on = SignalTriggers.FALLING_EDGE)
-        }
-
-        override fun onHigh(action: Runnable) = this.also {
-            Scheduler.getOrCreateListener(_id, condition).subscribe(action, on = SignalTriggers.IS_HIGH)
-        }
-
-        override fun onLow(action: Runnable) = this.also {
-            Scheduler.getOrCreateListener(_id, condition).subscribe(action, on = SignalTriggers.IS_LOW)
-        }
+    private fun gamepadTrigger(id: String, condition: Condition): GamepadEx2Trigger {
+        return GamepadEx2Trigger("${userID}$id", condition)
     }
 }
 
