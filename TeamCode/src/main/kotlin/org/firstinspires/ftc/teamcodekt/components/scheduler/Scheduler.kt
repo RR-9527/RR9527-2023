@@ -98,6 +98,7 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.keywords.please
  * @see [Task]
  * @see [ScheduledTask]
  */
+@Deprecated("Use the other Scheduler implementation instead")
 object Scheduler {
     private val scheduledTasks = mutableSetOf<ScheduledTask>()
 

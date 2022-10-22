@@ -52,6 +52,7 @@ import kotlin.math.abs
  *
  * @see Gamepad
  * @see Scheduler
+ * @see Trigger
  */
 class GamepadEx2(val gamepad: Gamepad) {
     /**
@@ -110,7 +111,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * Allows client to perform an action when the gamepad's 'dpad_down' button's state is mutated.
      * ```java
      * //e.g:
-     * gamepad_x1.dpad_down.onRise(this::doSomething)
+     * gamepad_x1.dpad_down.onHigh(this::doSomething)
      */
     @JvmField
     val dpad_down = gamepadTrigger("dpad_down", gamepad::dpad_down)
@@ -119,7 +120,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * Allows client to perform an action when the gamepad's 'dpad_left' button's state is mutated.
      * ```java
      * //e.g:
-     * gamepad_x1.dpad_left.onRise(this::doSomething)
+     * gamepad_x1.dpad_left.onFall(this::doSomething)
      */
     @JvmField
     val dpad_left = gamepadTrigger("dpad_left", gamepad::dpad_left)
@@ -128,7 +129,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * Allows client to perform an action when the gamepad's 'dpad_right' button's state is mutated.
      * ```java
      * //e.g:
-     * gamepad_x1.dpad_right.onRise(this::doSomething)
+     * gamepad_x1.dpad_right.onLow(this::doSomething)
      */
     @JvmField
     val dpad_right = gamepadTrigger("dpad_right", gamepad::dpad_right)
@@ -147,7 +148,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * Allows client to perform an action when the gamepad's 'right_bumper' button's state is mutated.
      * ```java
      * //e.g:
-     * gamepad_x1.right_bumper.onRise(this::doSomething)
+     * gamepad_x1.right_bumper.onHigh(this::doSomething)
      */
     @JvmField
     val right_bumper = gamepadTrigger("right_bumper", gamepad::right_bumper)
@@ -157,7 +158,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * Allows client to perform an action when the gamepad's 'left_stick_x' button's state is mutated.
      * ```java
      * //e.g: (Triggers when abs(left_stick_x) > .5)
-     * gamepad_x1.left_stick_x.onRise(this::doSomething)
+     * gamepad_x1.left_stick_x.onFall(this::doSomething)
      */
     @JvmField
     val left_stick_x = left_stick_x(deadzone = .5)
@@ -166,9 +167,11 @@ class GamepadEx2(val gamepad: Gamepad) {
      * Allows client to perform an action when the gamepad's 'left_stick_x' button's state is mutated.
      * ```java
      * //e.g: (Triggers when abs(left_stick_x) > deadzone)
-     * gamepad_x1.left_stick_x.onRise(this::doSomething)
+     * gamepad_x1.left_stick_x.onFall(this::doSomething)
+     *```
+     * @param deadzone The minimum value that the left_stick_x must be above to trigger the event.
      */
-    fun left_stick_x(deadzone: Double): GamepadEx2Trigger {
+    fun left_stick_x(deadzone: Double): Trigger {
         return gamepadTrigger("left_stick$deadzone") { abs(gamepad.left_stick_x) > deadzone }
     }
 
@@ -177,18 +180,20 @@ class GamepadEx2(val gamepad: Gamepad) {
      * Allows client to perform an action when the gamepad's 'left_stick_y' button's state is mutated.
      * ```java
      * //e.g: (Triggers when abs(left_stick_y) > .5)
-     * gamepad_x1.left_stick_y.onRise(this::doSomething)
+     * gamepad_x1.left_stick_y.onLow(this::doSomething)
      */
     @JvmField
-    val left_stick_y = left_stick_x(deadzone = .5)
+    val left_stick_y = left_stick_y(deadzone = .5)
 
     /**
      * Allows client to perform an action when the gamepad's 'left_stick_y' button's state is mutated.
      * ```java
      * //e.g: (Triggers when abs(left_stick_y) > deadzone)
-     * gamepad_x1.left_stick_y.onRise(this::doSomething)
+     * gamepad_x1.left_stick_y.onLow(this::doSomething)
+     *```
+     * @param deadzone The minimum value that the left_stick_y must be above to trigger the event.
      */
-    fun left_stick_y(deadzone: Double): GamepadEx2Trigger {
+    fun left_stick_y(deadzone: Double): Trigger {
         return gamepadTrigger("left_stick$deadzone") { abs(gamepad.left_stick_y) > deadzone }
     }
 
@@ -207,8 +212,10 @@ class GamepadEx2(val gamepad: Gamepad) {
      * ```java
      * //e.g: (Triggers when abs(right_stick_x) > deadzone)
      * gamepad_x1.right_stick_x.onRise(this::doSomething)
+     *```
+     * @param deadzone The minimum value that the right_stick_x must be above to trigger the event.
      */
-    fun right_stick_x(deadzone: Double): GamepadEx2Trigger {
+    fun right_stick_x(deadzone: Double): Trigger {
         return gamepadTrigger("right_stick$deadzone") { abs(gamepad.right_stick_x) > deadzone }
     }
 
@@ -217,18 +224,20 @@ class GamepadEx2(val gamepad: Gamepad) {
      * Allows client to perform an action when the gamepad's 'right_stick_y' button's state is mutated.
      * ```java
      * //e.g: (Triggers when abs(right_stick_y) > .5)
-     * gamepad_x1.right_stick_y.onRise(this::doSomething)
+     * gamepad_x1.right_stick_y.onHigh(this::doSomething)
      */
     @JvmField
-    val right_stick_y = right_stick_x(deadzone = .5)
+    val right_stick_y = right_stick_y(deadzone = .5)
 
     /**
      * Allows client to perform an action when the gamepad's 'right_stick_y' button's state is mutated.
      * ```java
      * //e.g: (Triggers when abs(right_stick_y) > deadzone)
-     * gamepad_x1.right_stick_y.onRise(this::doSomething)
+     * gamepad_x1.right_stick_y.onHigh(this::doSomething)
+     *```
+     * @param deadzone The minimum value that the right_stick_y must be above to trigger the event.
      */
-    fun right_stick_y(deadzone: Double): GamepadEx2Trigger {
+    fun right_stick_y(deadzone: Double): Trigger {
         return gamepadTrigger("right_stick$deadzone") { abs(gamepad.right_stick_y) > deadzone }
     }
 
@@ -237,7 +246,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * Allows client to perform an action when the gamepad's 'left_trigger' button's state is mutated.
      * ```java
      * //e.g: (Triggers when abs(left_trigger) > .5)
-     * gamepad_x1.left_trigger.onRise(this::doSomething)
+     * gamepad_x1.left_trigger.onFall(this::doSomething)
      */
     @JvmField
     val left_trigger = left_trigger(deadzone = .5)
@@ -246,9 +255,11 @@ class GamepadEx2(val gamepad: Gamepad) {
      * Allows client to perform an action when the gamepad's 'left_trigger' button's state is mutated.
      * ```java
      * //e.g: (Triggers when abs(left_trigger) > deadzone)
-     * gamepad_x1.left_trigger.onRise(this::doSomething)
+     * gamepad_x1.left_trigger.onFall(this::doSomething)
+     *```
+     * @param deadzone The minimum value that the left_trigger must be above to trigger the event.
      */
-    fun left_trigger(deadzone: Double): GamepadEx2Trigger {
+    fun left_trigger(deadzone: Double): Trigger {
         return gamepadTrigger("left_trigger$deadzone") { gamepad.left_trigger > deadzone }
     }
 
@@ -257,7 +268,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * Allows client to perform an action when the gamepad's 'right_trigger' button's state is mutated.
      * ```java
      * //e.g: (Triggers when abs(right_trigger) > .5)
-     * gamepad_x1.right_trigger.onRise(this::doSomething)
+     * gamepad_x1.right_trigger.onLow(this::doSomething)
      */
     @JvmField
     val right_trigger = left_trigger(deadzone = .5)
@@ -266,9 +277,11 @@ class GamepadEx2(val gamepad: Gamepad) {
      * Allows client to perform an action when the gamepad's 'right_trigger' button's state is mutated.
      * ```java
      * //e.g: (Triggers when abs(right_trigger) > deadzone)
-     * gamepad_x1.right_trigger.onRise(this::doSomething)
+     * gamepad_x1.right_trigger.onLow(this::doSomething)
+     *```
+     * @param deadzone The minimum value that the right_trigger must be above to trigger the event.
      */
-    fun right_trigger(deadzone: Double): GamepadEx2Trigger {
+    fun right_trigger(deadzone: Double): Trigger {
         return gamepadTrigger("right_trigger$deadzone") { gamepad.right_trigger > deadzone }
     }
 
@@ -287,8 +300,10 @@ class GamepadEx2(val gamepad: Gamepad) {
      * ```java
      * //e.g: (Triggers when abs(any joystick) > deadzone)
      * gamepad_x1.joysticks.onRise(this::doSomething)
+     *```
+     * @param deadzone The minimum value that the joysticks must be above to trigger the event.
      */
-    fun joysticks(deadzone: Double): GamepadEx2Trigger {
+    fun joysticks(deadzone: Double): Trigger {
         return gamepadTrigger("joysticks$deadzone") {
             abs(gamepad.left_stick_x)  > deadzone ||
             abs(gamepad.left_stick_y)  > deadzone ||
@@ -297,9 +312,17 @@ class GamepadEx2(val gamepad: Gamepad) {
         }
     }
 
-
-    private fun gamepadTrigger(id: String, condition: Condition): GamepadEx2Trigger {
-        return GamepadEx2Trigger("${gamepadEx2ID}$id", condition)
+    /**
+     * Returns an instantiated [Trigger] with the listener ID prefixed with this
+     * GamepadEx2's ID.
+     *
+     * @param id The ID of the listener.
+     * @param condition The condition the listener will be triggered on.
+     *
+     * @return The said [Trigger]
+     */
+    private fun gamepadTrigger(id: String, condition: Condition): Trigger {
+        return Trigger("${gamepadEx2ID}$id", condition)
     }
 }
 

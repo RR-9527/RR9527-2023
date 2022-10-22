@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcodekt.components.scheduler
 
+@Deprecated("Use the other Scheduler implementation instead")
 class Trigger(private val trigger: () -> Boolean) {
     init {
         register(this)

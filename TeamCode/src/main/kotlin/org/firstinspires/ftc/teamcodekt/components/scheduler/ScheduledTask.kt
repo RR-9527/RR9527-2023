@@ -20,6 +20,7 @@ import kotlin.properties.Delegates.observable
  * @see Scheduler
  * @see Task
  */
+@Deprecated("Use the other Scheduler implementation instead")
 class ScheduledTask(val task: Task) {
     var predicateToScheduleOn: (() -> Boolean)? = null
 
