@@ -65,7 +65,7 @@ abstract public class RobotCommon extends LinearOpMode {
     protected GamepadEx game_pad1;
     protected GamepadEx game_pad2;
 
-    protected boolean FIELD_CENTRIC = false;
+    protected boolean FIELD_CENTRIC = true;
 
     /**
      * Method to execute the init phase. Add vision code here
@@ -97,39 +97,41 @@ abstract public class RobotCommon extends LinearOpMode {
         ArrayList<AprilTagDetection> detections = pipeline.getDetectionsUpdate();
 
         initHardware();
-        initCamera();
-        pathing.build();
+//        initCamera();
+        if(pathing != null){
+            pathing.build();
+        }
 
         // Add your custom initialization loop here
-        do {
-            if(detections != null) {
-                telemetry.addData("FPS", camera.getFps());
-                telemetry.addData("Overhead ms", camera.getOverheadTimeMs());
-                telemetry.addData("Pipeline ms", camera.getPipelineTimeMs());
-
-                if (detections.size() == 0) {
-                    numFramesWithoutDetection++;
-
-                    if (numFramesWithoutDetection >= THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION) {
-                        pipeline.setDecimation(DECIMATION_LOW);
-                    }
-                } else {
-                    numFramesWithoutDetection = 0;
-
-                    if (detections.get(0).pose.z < THRESHOLD_HIGH_DECIMATION_RANGE_METERS) {
-                        pipeline.setDecimation(DECIMATION_HIGH);
-                    }
-
-                    for (AprilTagDetection detection : detections) {
-                        detectedNumber = detection.id;
-                        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
-                    }
-                }
-                telemetry.update();
-            }
-
-        }
-        while(!opModeIsActive());
+//        do {
+//            if(detections != null) {
+//                telemetry.addData("FPS", camera.getFps());
+//                telemetry.addData("Overhead ms", camera.getOverheadTimeMs());
+//                telemetry.addData("Pipeline ms", camera.getPipelineTimeMs());
+//
+//                if (detections.size() == 0) {
+//                    numFramesWithoutDetection++;
+//
+//                    if (numFramesWithoutDetection >= THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION) {
+//                        pipeline.setDecimation(DECIMATION_LOW);
+//                    }
+//                } else {
+//                    numFramesWithoutDetection = 0;
+//
+//                    if (detections.get(0).pose.z < THRESHOLD_HIGH_DECIMATION_RANGE_METERS) {
+//                        pipeline.setDecimation(DECIMATION_HIGH);
+//                    }
+//
+//                    for (AprilTagDetection detection : detections) {
+//                        detectedNumber = detection.id;
+//                        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+//                    }
+//                }
+//                telemetry.update();
+//            }
+//
+//        }
+//        while(!opModeIsActive());
     }
 
     /**

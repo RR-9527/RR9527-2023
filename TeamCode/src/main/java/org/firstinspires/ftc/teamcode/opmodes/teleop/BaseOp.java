@@ -34,6 +34,8 @@ public class BaseOp extends RobotCommon {
      */
     @Override
     public void runOpMode() throws InterruptedException {
+        initialize();
+        waitForStart();
         while (!isStopRequested() && opModeIsActive()) {
             updateDrivetrain();
             intake();

@@ -40,6 +40,9 @@ public class BaseOpV2 extends RobotCommon {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        initHardware();
+        waitForStart();
+
         GamepadEx2 gamepadx1 = new GamepadEx2(gamepad1);
 
         //Intake:
