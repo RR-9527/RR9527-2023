@@ -7,8 +7,8 @@ import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcodekt.util.Claw;
-import org.firstinspires.ftc.teamcodekt.util.Wrist;
+import org.firstinspires.ftc.teamcode.util.RobotConstants.Claw;
+import org.firstinspires.ftc.teamcode.util.RobotConstants.Wrist;
 
 public class IntakeSubsystem extends SubsystemBase {
     private ServoEx wrist, claw;

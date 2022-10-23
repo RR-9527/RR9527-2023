@@ -11,11 +11,11 @@ class GamepadEx2Trigger(private val id: String, private val condition: Condition
         Scheduler.getOrCreateListener(id, condition).subscribe(action, on = SignalTriggers.FALLING_EDGE)
     }
 
-    fun onHigh(action: Runnable) = this.also {
+    fun whileHigh(action: Runnable) = this.also {
         Scheduler.getOrCreateListener(id, condition).subscribe(action, on = SignalTriggers.IS_HIGH)
     }
 
-    fun onLow(action: Runnable) = this.also {
+    fun whileLow(action: Runnable) = this.also {
         Scheduler.getOrCreateListener(id, condition).subscribe(action, on = SignalTriggers.IS_LOW)
     }
 }

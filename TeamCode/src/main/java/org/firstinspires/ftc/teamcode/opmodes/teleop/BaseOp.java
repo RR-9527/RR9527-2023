@@ -10,11 +10,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RobotCommon;
-import org.firstinspires.ftc.teamcodekt.util.Arm;
-import org.firstinspires.ftc.teamcodekt.util.Claw;
-import org.firstinspires.ftc.teamcodekt.util.Lift;
-import org.firstinspires.ftc.teamcodekt.util.Wrist;
-import org.firstinspires.ftc.teamcodekt.util.TriggerData;
+import org.firstinspires.ftc.teamcode.util.RobotConstants.Arm;
+import org.firstinspires.ftc.teamcode.util.RobotConstants.Claw;
+import org.firstinspires.ftc.teamcode.util.RobotConstants.Lift;
+import org.firstinspires.ftc.teamcode.util.RobotConstants.Wrist;
+import org.firstinspires.ftc.teamcode.util.RobotConstants.TriggerData;
+import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftA;
+import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftB;
 
 @TeleOp
 public class BaseOp extends RobotCommon {
@@ -39,8 +41,8 @@ public class BaseOp extends RobotCommon {
         while (!isStopRequested() && opModeIsActive()) {
             updateDrivetrain();
             intake();
-            updateArm();
-            updateLift();
+//            updateArm();
+//            updateLift();
             updateWrist();
         }
     }
@@ -68,8 +70,8 @@ public class BaseOp extends RobotCommon {
         intake = new CRServo(hardwareMap, "IN");
 
         // Lift PID's
-        liftAPID = new PIDFController(Lift.A.P, Lift.A.I, Lift.A.D, Lift.A.F);
-        liftBPID = new PIDFController(Lift.B.P, Lift.B.I, Lift.B.D, Lift.B.F);
+        liftAPID = new PIDFController(LiftA.P, LiftA.I, LiftA.D, LiftA.F);
+        liftBPID = new PIDFController(LiftB.P, LiftB.I, LiftB.D, LiftB.F);
         armPID = new PIDFController(Arm.P, Arm.I, Arm.D, Arm.F);
     }
 
@@ -115,11 +117,11 @@ public class BaseOp extends RobotCommon {
     }
 
     private void updateWrist() {
-        if (game_pad1.getButton(GamepadKeys.Button.DPAD_UP)) {
-            wrist.setPosition(Wrist.INTAKE_POS);
-        }
         if (game_pad1.getButton(GamepadKeys.Button.DPAD_DOWN)) {
             wrist.setPosition(Wrist.DEPOSIT_POS);
+        }
+        else{
+            wrist.setPosition(Wrist.INTAKE_POS);
         }
     }
 }
