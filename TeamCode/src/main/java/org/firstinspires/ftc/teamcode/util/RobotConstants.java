@@ -29,9 +29,6 @@ public class RobotConstants {
 
     @Config
     public static class Lift {
-    	public static double UP = 0.8;
-    	public static double DOWN = 0.0;
-
 		public static double ZERO = 0;
 		public static double GROUND = 100;
 		public static double LOW = 200;
@@ -54,10 +51,4 @@ public class RobotConstants {
 		public static double D = 0;
 		public static double F = 0;
 	}
-
-    @Config
-    public static class TriggerData {
-        // Minimum necessary trigger press before activating a function
-    	public static double TRIGGER_THRESHOLD = 0.5;
-    }
 }
