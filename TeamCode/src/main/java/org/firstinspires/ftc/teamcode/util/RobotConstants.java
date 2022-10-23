@@ -33,6 +33,12 @@ public class RobotConstants {
     	public static double DOWN = 0.0;
     	public static double INC_AMOUNT = 100;
     	public static double DEC_AMOUNT = 5;
+
+		public static double ZERO = 0;
+		public static double GROUND = 100;
+		public static double LOW = 200;
+		public static double MID = 300;
+		public static double HIGH = 400;
     }
 
 	@Config

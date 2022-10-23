@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.util.RobotConstants.Lift;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.Wrist;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftA;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftB;
+import org.firstinspires.ftc.teamcode.util.LiftState;
 import org.firstinspires.ftc.teamcodekt.components.schedulerv2.SignalTrigger;
 
 @TeleOp
@@ -37,19 +38,21 @@ public class BaseOpV2 extends RobotCommon {
     private Motor arm, liftA, liftB;
 
     private PIDFController liftAPID, liftBPID, armPID;
+    private LiftState liftState;
 
     @Override
     public void runOpMode() throws InterruptedException {
         initHardware();
+        GamepadEx2 gamepadx1 = new GamepadEx2(gamepad1);
+        liftState = new LiftState();
 
         waitForStart();
 
-        GamepadEx2 gamepadx1 = new GamepadEx2(gamepad1);
 
 
-        // Lift:
-        gamepadx1.dpad_up  .whileHigh(() -> heightCounter++);
-        gamepadx1.dpad_down.whileHigh(() -> heightCounter--);
+        // Lift: increment up and down with button presses
+        gamepadx1.dpad_up  .onRise(() -> liftState.inc());
+        gamepadx1.dpad_down.onRise(() -> liftState.dec());
 
 
         // Intake chain:
@@ -117,11 +120,12 @@ public class BaseOpV2 extends RobotCommon {
     private int heightCounter = 1;
 
     private void updateLift() {
-        double correctionA = liftAPID.calculate(liftA.getCurrentPosition(), -heightCounter * Lift.INC_AMOUNT);
-        double correctionB = liftBPID.calculate(liftA.getCurrentPosition(), -heightCounter * Lift.INC_AMOUNT);
+        double correctionA = liftAPID.calculate(liftA.getCurrentPosition(), liftState.get());
+        double correctionB = liftBPID.calculate(liftA.getCurrentPosition(), liftState.get());
         liftA.set(correctionA);
         liftB.set(correctionB);
         telemetry.addData("Correction A", correctionA);
+        telemetry.addData("Correction B", correctionB);
     }
 
 
@@ -161,25 +165,18 @@ public class BaseOpV2 extends RobotCommon {
         arm = new Motor(hardwareMap, "AR", Motor.GoBILDA.RPM_84);
         arm.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         arm.setRunMode(Motor.RunMode.VelocityControl);
-        arm.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         arm.resetEncoder();
-        arm.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         liftA = new Motor(hardwareMap, "L1", Motor.GoBILDA.RPM_1150);
         liftA.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         liftA.setRunMode(Motor.RunMode.VelocityControl);
         liftA.resetEncoder();
-        liftA.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        liftA.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         liftB = new Motor(hardwareMap, "L2", Motor.GoBILDA.RPM_1150);
         liftB.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         liftB.setRunMode(Motor.RunMode.VelocityControl);
         liftB.setInverted(true);
         liftB.resetEncoder();
-        liftB.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        liftB.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-
 
         wrist = new SimpleServo(hardwareMap, "WR", 0, 180, AngleUnit.DEGREES);
         claw = new SimpleServo(hardwareMap, "CL", 0, 180, AngleUnit.DEGREES);

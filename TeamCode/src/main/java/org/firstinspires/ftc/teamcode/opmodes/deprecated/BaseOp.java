@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.teleop;
+package org.firstinspires.ftc.teamcode.opmodes.deprecated;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.util.RobotConstants.TriggerData;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftA;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftB;
 
+@Disabled
 @TeleOp
 public class BaseOp extends RobotCommon {
     private ServoEx wrist, claw;
