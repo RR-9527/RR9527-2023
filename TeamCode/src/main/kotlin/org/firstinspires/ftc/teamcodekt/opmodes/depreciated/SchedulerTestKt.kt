@@ -1,15 +1,17 @@
 @file:Suppress("PrivatePropertyName", "LocalVariableName")
 
-package org.firstinspires.ftc.teamcodekt.components.scheduler
+package org.firstinspires.ftc.teamcodekt.opmodes.depreciated
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.components.scheduler.Task
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors
+import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.schedule
+import org.firstinspires.ftc.teamcodekt.components.scheduler.Trigger
 import org.firstinspires.ftc.teamcodekt.components.scheduler.keywords.please
 import org.firstinspires.ftc.teamcodekt.util.LateInitVal
 
-class TestScheduler : LinearOpMode() {
+class SchedulerTestKt : LinearOpMode() {
     private var driveMotors: DriveMotors by LateInitVal()
 
     override fun runOpMode() {
@@ -38,11 +40,6 @@ class TestScheduler : LinearOpMode() {
         scheduledTask.flagAsDone()
     }
 }
-
-fun main() {
-    TestScheduler().runOpMode()
-}
-
 
 
 

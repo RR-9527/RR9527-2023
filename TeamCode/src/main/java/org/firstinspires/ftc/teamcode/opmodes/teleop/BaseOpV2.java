@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.util.RobotConstants.Lift;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.Wrist;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftA;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftB;
-import org.firstinspires.ftc.teamcodekt.components.schedulerv2.SignalTriggers;
+import org.firstinspires.ftc.teamcodekt.components.schedulerv2.SignalTrigger;
 
 @TeleOp
 public class BaseOpV2 extends RobotCommon {
@@ -75,11 +75,11 @@ public class BaseOpV2 extends RobotCommon {
         Listener listener =
             Scheduler.getOrCreateListener("disableIntake", () -> elapsedTime.milliseconds() > 500);
 
-        listener.subscribe(disableIntake, SignalTriggers.RISING_EDGE);
-        listener.subscribe(closeClaw, SignalTriggers.RISING_EDGE);
+        listener.subscribe(disableIntake, SignalTrigger.RISING_EDGE);
+        listener.subscribe(closeClaw, SignalTrigger.RISING_EDGE);
 
-        listener.subscribe(() -> armCorrection = Arm.DEPOSIT_POS, SignalTriggers.IS_LOW  );
-        listener.subscribe(() -> wristPosition = Wrist.DEPOSIT_POS, SignalTriggers.IS_LOW);
+        listener.subscribe(() -> armCorrection = Arm.DEPOSIT_POS, SignalTrigger.IS_LOW  );
+        listener.subscribe(() -> wristPosition = Wrist.DEPOSIT_POS, SignalTrigger.IS_LOW);
 
 
         // Drive:

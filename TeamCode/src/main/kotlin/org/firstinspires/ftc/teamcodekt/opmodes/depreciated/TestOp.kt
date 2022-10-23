@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcodekt.opmodes.teleop
+package org.firstinspires.ftc.teamcodekt.opmodes.depreciated
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
