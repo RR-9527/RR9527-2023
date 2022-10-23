@@ -53,6 +53,8 @@ public class BaseOpV2 extends RobotCommon {
         // Lift: increment up and down with button presses
         gamepadx1.dpad_up  .onRise(() -> liftState.inc());
         gamepadx1.dpad_down.onRise(() -> liftState.dec());
+        gamepadx1.dpad_right  .onRise(() -> liftState.maximum());
+        gamepadx1.dpad_left.onRise(() -> liftState.minimum());
 
 
         // Intake chain:
