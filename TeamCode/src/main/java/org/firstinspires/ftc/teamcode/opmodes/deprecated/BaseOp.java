@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.teleop;
+package org.firstinspires.ftc.teamcode.opmodes.deprecated;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -18,7 +19,8 @@ import org.firstinspires.ftc.teamcode.util.RobotConstants.TriggerData;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftA;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftB;
 
-@TeleOp
+@Disabled
+@TeleOp(name = "BaseOp")
 public class BaseOp extends RobotCommon {
     private ServoEx wrist, claw;
     private CRServo intake;
@@ -77,7 +79,7 @@ public class BaseOp extends RobotCommon {
 
     private void intake() {
         if (game_pad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > TriggerData.TRIGGER_THRESHOLD) {
-            claw.setPosition(Claw.OPEN);
+            claw.setPosition(Claw.INTAKE);
         } else {
             claw.setPosition(Claw.CLOSE);
         }

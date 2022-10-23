@@ -1,16 +1,52 @@
+@file:Suppress("MemberVisibilityCanBePrivate", "unused")
+
 package org.firstinspires.ftc.teamcodekt.components.schedulerv2
 
 import org.firstinspires.ftc.teamcodekt.util.Condition
 
 /**
  * A component that  performs the set of subscribed [actions][Runnable] when the state of the
- * [condition][Condition] matches the [signal state][SignalTrigger] that the action was
- * subscribed with.
+ * [condition][Condition] matches the signal state that the action was
+ * subscribed on (e.g. `on rising edge` or `while low`).
  *
- * @param id The id of the listener.
+ * The listener is updated on every tick of the [Scheduler] when hooked.
+ *
+ * _The listener is not hooked by default; it is only hooked once it has actions subscribed to it._
+ * This means that it is safe to create excess unused [Listeners][Listener] without worrying about
+ * performance burdens.
+ *
+ * Java raw usage example:
+ * ```java
+ * @Override
+ * public void runOpMode() throws InterruptedException {
+ *     Listener listener = new Listener(() -> someCondition == true);
+ *
+ *     // Runs when the condition changes from false to true
+ *     listener.onRise(this::doSomething);
+ *
+ *     // Runs while the condition is true
+ *     listener.whileHigh(this::doSomethingElse);
+ *
+ *     // Runs when the condition changes from true to false
+ *     listener.onFall(this::doEomethingSlse);
+ *
+ *     // Runs while the condition is false
+ *     listener.whileLow(this::doElseSomething);
+ *
+ *     // Must be called to start the main loop.
+ *     Scheduler.start(this);
+ * }
+ * ```
+ *
  * @param condition The condition that must be met for the action to be performed.
+ *
+ * @author KG
+ *
+ * @see Scheduler
+ * @see GamepadEx2
+ * @see Timer
  */
-class Listener(val id: String, condition: Condition) {
+class Listener(private val condition: Condition) {
     /**
      * The subscribed set of [actions][Runnable] that are performed when the given
      * condition's state matches the given [SignalTrigger][SignalTrigger].
@@ -25,18 +61,57 @@ class Listener(val id: String, condition: Condition) {
     private val conditionSED = SignalEdgeDetector(condition)
 
     /**
-     * Subscribes the given [action][Runnable] to the given [SignalTrigger].
-     *
-     * @param action The action to be performed when the condition's state matches the given
-     * signal trigger.
-     * @param on The [SignalTrigger] that the condition's state must match in order
-     * for the action to be performed.
+     * Remembers whether or not this listener has been hooked.
      */
-    fun subscribe(action: Runnable, on: SignalTrigger) = when (on) {
-        SignalTrigger.RISING_EDGE  -> actions[action] = conditionSED::risingEdge
-        SignalTrigger.FALLING_EDGE -> actions[action] = conditionSED::fallingEdge
-        SignalTrigger.IS_HIGH      -> actions[action] = conditionSED::isHigh
-        SignalTrigger.IS_LOW       -> actions[action] = conditionSED::isLow
+    private val isHooked = false
+
+    /**
+     * Schedules the given action to run when the trigger [condition][Condition] changes from false to true.
+     * @param action The action to run.
+     * @return This [Listener] instance.
+     */
+    fun onRise(action: Runnable) = this.also {
+        hookIfNotHooked()
+        actions[action] = conditionSED::risingEdge
+    }
+
+    /**
+     * Schedules the given action to run while the trigger [condition][Condition] changes from true to false.
+     * @param action The action to run.
+     * @return This [Listener] instance.
+     */
+    fun onFall(action: Runnable) = this.also {
+        hookIfNotHooked()
+        actions[action] = conditionSED::fallingEdge
+    }
+
+    /**
+     * Schedules the given action to run when the trigger [condition][Condition] is true.
+     * @param action The action to run.
+     * @return This [Listener] instance.
+     */
+    fun whileHigh(action: Runnable) = this.also {
+        hookIfNotHooked()
+        actions[action] = conditionSED::isHigh
+    }
+
+    /**
+     * Schedules the given action to run while the trigger [condition][Condition] is false.
+     * @param action The action to run.
+     * @return This [Listener] instance.
+     */
+    fun whileLow(action: Runnable) = this.also {
+        hookIfNotHooked()
+        actions[action] = conditionSED::isLow
+    }
+
+    /**
+     * Hooks this listener to the [Scheduler] if it has not already been hooked.
+     */
+    private fun hookIfNotHooked() {
+        if (!isHooked) {
+            Scheduler.hookListener(this)
+        }
     }
 
     /**
@@ -53,24 +128,5 @@ class Listener(val id: String, condition: Condition) {
         actions.forEach { (action, condition) ->
             if (condition()) action.run()
         }
-    }
-
-    /**
-     * Equals method for the [Listener] class. Only takes into consideration the [id] of
-     * the [Listener].
-     * @param other The other [Listener] to compare to.
-     * @return Whether the two listeners are equal.
-     */
-    override fun equals(other: Any?): Boolean {
-        return other is Listener && other.id == id
-    }
-
-    /**
-     * Hashcode method for the [Listener] class. Only takes into consideration the [id] of
-     * the [Listener].
-     * @return The hashcode of the [Listener].
-     */
-    override fun hashCode(): Int {
-        return id.hashCode()
     }
 }

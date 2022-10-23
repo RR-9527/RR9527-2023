@@ -1,4 +1,4 @@
-@file:Suppress("PropertyName", "ObjectPropertyName", "FunctionName", "MemberVisibilityCanBePrivate")
+@file:Suppress("PropertyName", "ObjectPropertyName", "FunctionName", "MemberVisibilityCanBePrivate", "unused")
 
 package org.firstinspires.ftc.teamcodekt.components.schedulerv2
 
@@ -33,12 +33,7 @@ import kotlin.math.abs
  *     // `gamepadx1.left_trigger(.1)` triggers when abs(left_trigger) > .1
  *     // `gamepadx1.left_trigger` triggers when abs(left_trigger) > .5
  *
- *     // Runs the code while the OpMode is active.
- *     Scheduler.start(this, () -> {
- *         // Optional block of code to be run after the above listeners
- *         // This parameter may be omitted if unnecessary.
- *         updateLift();
- *     });
+ *     Scheduler.start(this);
  * }
  *
  * private void openClaw() {
@@ -52,7 +47,7 @@ import kotlin.math.abs
  *
  * @see Gamepad
  * @see Scheduler
- * @see Trigger
+ * @see Listener
  */
 class GamepadEx2(val gamepad: Gamepad) {
     /**
@@ -69,7 +64,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * gamepad_x1.a.onRise(this::doSomething)
      */
     @JvmField
-    val a = gamepadTrigger("a", gamepad::a)
+    val a = Listener(gamepad::a)
 
     /**
      * Allows client to perform an action when the gamepad's 'b' button's state is mutated.
@@ -78,7 +73,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * gamepad_x1.b.onHigh(this::doSomething)
      */
     @JvmField
-    val b = gamepadTrigger("b", gamepad::b)
+    val b = Listener(gamepad::b)
 
     /**
      * Allows client to perform an action when the gamepad's 'x' button's state is mutated.
@@ -87,7 +82,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * gamepad_x1.x.onFall(this::doSomething)
      */
     @JvmField
-    val x = gamepadTrigger("x", gamepad::x)
+    val x = Listener(gamepad::x)
 
     /**
      * Allows client to perform an action when the gamepad's 'y' button's state is mutated.
@@ -96,7 +91,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * gamepad_x1.y.onLow(this::doSomething)
      */
     @JvmField
-    val y = gamepadTrigger("y", gamepad::y)
+    val y = Listener(gamepad::y)
 
     /**
      * Allows client to perform an action when the gamepad's 'dpad_up' button's state is mutated.
@@ -105,7 +100,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * gamepad_x1.dpad_up.onRise(this::doSomething)
      */
     @JvmField
-    val dpad_up = gamepadTrigger("dpad_up", gamepad::dpad_up)
+    val dpad_up = Listener(gamepad::dpad_up)
 
     /**
      * Allows client to perform an action when the gamepad's 'dpad_down' button's state is mutated.
@@ -114,7 +109,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * gamepad_x1.dpad_down.onHigh(this::doSomething)
      */
     @JvmField
-    val dpad_down = gamepadTrigger("dpad_down", gamepad::dpad_down)
+    val dpad_down = Listener(gamepad::dpad_down)
 
     /**
      * Allows client to perform an action when the gamepad's 'dpad_left' button's state is mutated.
@@ -123,7 +118,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * gamepad_x1.dpad_left.onFall(this::doSomething)
      */
     @JvmField
-    val dpad_left = gamepadTrigger("dpad_left", gamepad::dpad_left)
+    val dpad_left = Listener(gamepad::dpad_left)
 
     /**
      * Allows client to perform an action when the gamepad's 'dpad_right' button's state is mutated.
@@ -132,7 +127,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * gamepad_x1.dpad_right.onLow(this::doSomething)
      */
     @JvmField
-    val dpad_right = gamepadTrigger("dpad_right", gamepad::dpad_right)
+    val dpad_right = Listener(gamepad::dpad_right)
 
 
     /**
@@ -142,7 +137,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * gamepad_x1.left_bumper.onRise(this::doSomething)
      */
     @JvmField
-    val left_bumper = gamepadTrigger("left_bumper", gamepad::left_bumper)
+    val left_bumper = Listener(gamepad::left_bumper)
 
     /**
      * Allows client to perform an action when the gamepad's 'right_bumper' button's state is mutated.
@@ -151,7 +146,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * gamepad_x1.right_bumper.onHigh(this::doSomething)
      */
     @JvmField
-    val right_bumper = gamepadTrigger("right_bumper", gamepad::right_bumper)
+    val right_bumper = Listener(gamepad::right_bumper)
 
 
     /**
@@ -171,8 +166,8 @@ class GamepadEx2(val gamepad: Gamepad) {
      *```
      * @param deadzone The minimum value that the left_stick_x must be above to trigger the event.
      */
-    fun left_stick_x(deadzone: Double): Trigger {
-        return gamepadTrigger("left_stick$deadzone") { abs(gamepad.left_stick_x) > deadzone }
+    fun left_stick_x(deadzone: Double): Listener {
+        return Listener { abs(gamepad.left_stick_x) > deadzone }
     }
 
 
@@ -193,8 +188,8 @@ class GamepadEx2(val gamepad: Gamepad) {
      *```
      * @param deadzone The minimum value that the left_stick_y must be above to trigger the event.
      */
-    fun left_stick_y(deadzone: Double): Trigger {
-        return gamepadTrigger("left_stick$deadzone") { abs(gamepad.left_stick_y) > deadzone }
+    fun left_stick_y(deadzone: Double): Listener {
+        return Listener { abs(gamepad.left_stick_y) > deadzone }
     }
 
 
@@ -215,8 +210,8 @@ class GamepadEx2(val gamepad: Gamepad) {
      *```
      * @param deadzone The minimum value that the right_stick_x must be above to trigger the event.
      */
-    fun right_stick_x(deadzone: Double): Trigger {
-        return gamepadTrigger("right_stick$deadzone") { abs(gamepad.right_stick_x) > deadzone }
+    fun right_stick_x(deadzone: Double): Listener {
+        return Listener { abs(gamepad.right_stick_x) > deadzone }
     }
 
 
@@ -237,8 +232,8 @@ class GamepadEx2(val gamepad: Gamepad) {
      *```
      * @param deadzone The minimum value that the right_stick_y must be above to trigger the event.
      */
-    fun right_stick_y(deadzone: Double): Trigger {
-        return gamepadTrigger("right_stick$deadzone") { abs(gamepad.right_stick_y) > deadzone }
+    fun right_stick_y(deadzone: Double): Listener {
+        return Listener { abs(gamepad.right_stick_y) > deadzone }
     }
 
 
@@ -259,8 +254,8 @@ class GamepadEx2(val gamepad: Gamepad) {
      *```
      * @param deadzone The minimum value that the left_trigger must be above to trigger the event.
      */
-    fun left_trigger(deadzone: Double): Trigger {
-        return gamepadTrigger("left_trigger$deadzone") { gamepad.left_trigger > deadzone }
+    fun left_trigger(deadzone: Double): Listener {
+        return Listener { gamepad.left_trigger > deadzone }
     }
 
 
@@ -281,8 +276,8 @@ class GamepadEx2(val gamepad: Gamepad) {
      *```
      * @param deadzone The minimum value that the right_trigger must be above to trigger the event.
      */
-    fun right_trigger(deadzone: Double): Trigger {
-        return gamepadTrigger("right_trigger$deadzone") { gamepad.right_trigger > deadzone }
+    fun right_trigger(deadzone: Double): Listener {
+        return Listener { gamepad.right_trigger > deadzone }
     }
 
 
@@ -303,26 +298,13 @@ class GamepadEx2(val gamepad: Gamepad) {
      *```
      * @param deadzone The minimum value that the joysticks must be above to trigger the event.
      */
-    fun joysticks(deadzone: Double): Trigger {
-        return gamepadTrigger("joysticks$deadzone") {
-            abs(gamepad.left_stick_x)  > deadzone ||
+    fun joysticks(deadzone: Double): Listener {
+        return Listener {
             abs(gamepad.left_stick_y)  > deadzone ||
-            abs(gamepad.right_stick_x) > deadzone ||
-            abs(gamepad.right_stick_y) > deadzone
+            abs(gamepad.left_stick_x)  > deadzone ||
+            abs(gamepad.right_stick_y) > deadzone ||
+            abs(gamepad.right_stick_x) > deadzone
         }
-    }
-
-    /**
-     * Returns an instantiated [Trigger] with the listener ID prefixed with this
-     * GamepadEx2's ID.
-     *
-     * @param id The ID of the listener.
-     * @param condition The condition the listener will be triggered on.
-     *
-     * @return The said [Trigger]
-     */
-    private fun gamepadTrigger(id: String, condition: Condition): Trigger {
-        return Trigger("${gamepadEx2ID}$id", condition)
     }
 }
 
