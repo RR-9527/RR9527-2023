@@ -43,8 +43,6 @@ public class BaseOp extends RobotCommon {
         while (!isStopRequested() && opModeIsActive()) {
             updateDrivetrain();
             intake();
-//            updateArm();
-//            updateLift();
             updateWrist();
         }
     }

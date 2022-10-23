@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
+import org.firstinspires.ftc.teamcode.util.LiftState;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotorsKt;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveType;
@@ -18,12 +19,10 @@ import org.firstinspires.ftc.teamcodekt.components.schedulerv2.GamepadEx2;
 import org.firstinspires.ftc.teamcodekt.components.schedulerv2.Scheduler;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.Arm;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.Claw;
-import org.firstinspires.ftc.teamcode.util.RobotConstants.Lift;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.Wrist;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftA;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftB;
 import org.firstinspires.ftc.teamcodekt.components.schedulerv2.Timer;
-
 @TeleOp
 public class BaseOpV2 extends LinearOpMode {
     private DriveMotors driveMotors;
@@ -34,17 +33,22 @@ public class BaseOpV2 extends LinearOpMode {
     private Motor arm, liftA, liftB;
 
     private PIDFController liftAPID, liftBPID, armPID;
+    private LiftState liftState;
 
     @Override
     public void runOpMode() throws InterruptedException {
         initHardware();
+        GamepadEx2 gamepadx1 = new GamepadEx2(gamepad1);
+        liftState = new LiftState();
+
         waitForStart();
 
-        GamepadEx2 gamepadx1 = new GamepadEx2(gamepad1);
 
-        // Lift:
-        gamepadx1.dpad_up  .whileHigh(() -> heightCounter++);
-        gamepadx1.dpad_down.whileHigh(() -> heightCounter--);
+        // Lift: increment up and down with button presses
+        gamepadx1.dpad_up  .onRise(() -> liftState.inc());
+        gamepadx1.dpad_down.onRise(() -> liftState.dec());
+        gamepadx1.dpad_right  .onRise(() -> liftState.maximum());
+        gamepadx1.dpad_left.onRise(() -> liftState.minimum());
 
 
         // Intake chain:
@@ -109,11 +113,12 @@ public class BaseOpV2 extends LinearOpMode {
     private int heightCounter = 1;
 
     private void updateLift() {
-        double correctionA = liftAPID.calculate(liftA.getCurrentPosition(), -heightCounter * Lift.INC_AMOUNT);
-        double correctionB = liftBPID.calculate(liftA.getCurrentPosition(), -heightCounter * Lift.INC_AMOUNT);
+        double correctionA = liftAPID.calculate(liftA.getCurrentPosition(), liftState.get());
+        double correctionB = liftBPID.calculate(liftA.getCurrentPosition(), liftState.get());
         liftA.set(correctionA);
         liftB.set(correctionB);
         telemetry.addData("Correction A", correctionA);
+        telemetry.addData("Correction B", correctionB);
     }
 
 
@@ -158,7 +163,6 @@ public class BaseOpV2 extends LinearOpMode {
         liftB.setRunMode(Motor.RunMode.VelocityControl);
         liftB.setInverted(true);
         liftB.resetEncoder();
-
 
         wrist = new SimpleServo(hardwareMap, "WR", 0, 180, AngleUnit.DEGREES);
         claw = new SimpleServo(hardwareMap, "CL", 0, 180, AngleUnit.DEGREES);
