@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.components.lift;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -9,13 +10,23 @@ import org.firstinspires.ftc.teamcode.util.RobotConstants;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftA;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftB;
 
-public class Lift {
+@Config
+public class LiftComponent {
     private final Motor liftA, liftB;
-    private final PIDFController liftAPID, liftBPID;
+//    private final PIDFController liftAPID, liftBPID;
+    public static double kP;
+    public static double kI;
+    public static double kD;
+
+    public static double setVal;
 
     private double liftHeight;
 
-    public Lift(HardwareMap hwMap) {
+    private PIDFController liftAPID, liftBPID;
+
+    public LiftComponent(HardwareMap hwMap) {
+        setVal = 0.3;
+
         liftA = new Motor(hwMap, "L1", Motor.GoBILDA.RPM_1150);
         liftA.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         liftA.setRunMode(Motor.RunMode.VelocityControl);
@@ -27,8 +38,8 @@ public class Lift {
         liftB.setInverted(true);
         liftB.resetEncoder();
 
-        liftAPID = new PIDFController(LiftA.P, LiftA.I, LiftA.D, LiftA.F);
         liftBPID = new PIDFController(LiftB.P, LiftB.I, LiftB.D, LiftB.F);
+        liftAPID = new PIDFController(LiftA.P, LiftA.I, LiftA.D, LiftA.F);
     }
 
     public void goToZero() {
@@ -56,7 +67,8 @@ public class Lift {
         double correctionB = liftBPID.calculate(liftA.getCurrentPosition(), liftHeight);
         liftA.set(correctionA);
         liftB.set(correctionB);
-        telemetry.addData("Correction A", correctionA);
-        telemetry.addData("Correction B", correctionB);
+
+        telemetry.addData("Lift Height", liftHeight);
+        telemetry.update();
     }
 }

@@ -135,6 +135,7 @@ object Scheduler {
     @JvmOverloads
     fun start(opmode: LinearOpMode, block: Runnable? = null) {
         while (opmode.opModeIsActive() && !opmode.isStopRequested) {
+            beforeEach?.run()
             tick()
             block?.run()
         }
@@ -184,12 +185,13 @@ object Scheduler {
         while (opmode.opModeIsActive() && !opmode.isStopRequested) {
             val startTime = System.currentTimeMillis()
 
+            beforeEach?.run()
             tick()
             block?.run()
 
             val endTime = System.currentTimeMillis()
             telemetry.addData("Loop time (ms)", endTime - startTime)
-            telemetry.update()
+//            telemetry.update()
         }
     }
 

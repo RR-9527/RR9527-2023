@@ -1,15 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.acmerobotics.roadrunner.localization.Localizer;
-import com.arcrobotics.ftclib.controller.PIDFController;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.components.arm.Arm;
 import org.firstinspires.ftc.teamcode.components.claw.Claw;
 import org.firstinspires.ftc.teamcode.components.intake.Intake;
-import org.firstinspires.ftc.teamcode.components.lift.Lift;
+import org.firstinspires.ftc.teamcode.components.lift.LiftComponent;
 import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
@@ -29,7 +27,7 @@ public class BaseOpV2 extends LinearOpMode {
     private Arm arm;
     private Wrist wrist;
 
-    private Lift lift;
+    private LiftComponent lift;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -51,7 +49,7 @@ public class BaseOpV2 extends LinearOpMode {
         gamepadx1.dpad_left .onRise(lift::goToLow);
 
         // Intake chain:
-        intakeChain(gamepadx1.right_bumper);
+        intakeChain(gamepadx1.right_bumper, new Timer(200));
 
         // Deposit chain:
         depositChain(gamepadx1.left_bumper, new Timer(500));
@@ -68,7 +66,7 @@ public class BaseOpV2 extends LinearOpMode {
         });
     }
 
-    private void intakeChain(Listener listener) {
+    private void intakeChain(Listener listener, Timer timer) {
         listener
             .onRise(intake::enable)
             .onRise(claw::openForIntake)
@@ -77,9 +75,15 @@ public class BaseOpV2 extends LinearOpMode {
             .whileHigh(arm::setToIntakePos)
             .whileHigh(wrist::setToIntakePos)
 
-            .onFall(intake::disable)
+            .onFall(timer::reset)
             .onFall(claw::close)
-            .onRise(lift::goToGround);
+            .onFall(intake::disable);
+
+        timer
+            .whileWaiting(arm::setToIntakePos)
+            .whileWaiting(wrist::setToIntakePos)
+
+            .onDone(lift::goToGround);
     }
 
     private void depositChain(Listener listener, Timer timer) {
@@ -124,6 +128,6 @@ public class BaseOpV2 extends LinearOpMode {
         arm = new Arm(hardwareMap);
         wrist = new Wrist(hardwareMap);
 
-        lift = new Lift(hardwareMap);
+        lift = new LiftComponent(hardwareMap);
     }
 }
