@@ -21,23 +21,23 @@ class Timer @JvmOverloads constructor(length: Long, unit: TimeUnit = TimeUnit.MI
     /**
      * Schedules the given action to run while the timer is running and not yet finsihed.
      * @param action The action to run.
-     * @return The trigger instance.
+     * @return The timer instance.
      */
-    fun whileWaiting(action: Runnable) = listener.whileLow(action)
+    fun whileWaiting(action: Runnable) = this.also { listener.whileLow(action) }
 
     /**
      * Schedules the given action to run while the timer is done.
      * @param action The action to run.
-     * @return The trigger instance.
+     * @return The timer instance.
      */
-    fun whileDone(action: Runnable) = listener.whileHigh(action)
+    fun whileDone(action: Runnable) = this.also { listener.whileHigh(action) }
 
     /**
      * Schedules the given action to run once when the timer is finished.
      * @param action The action to run.
-     * @return The trigger instance.
+     * @return The timer instance.
      */
-    fun onDone(action: Runnable) = listener.onRise(action)
+    fun onDone(action: Runnable) = this.also { listener.onRise(action) }
 
     /**
      * Resets the timer.

@@ -24,6 +24,7 @@ public class RobotConstants {
     @Config
     public static class Wrist {
     	public static double INTAKE_POS = .835;
+		public static double REST = .5;
     	public static double DEPOSIT_POS = .185;
     }
 

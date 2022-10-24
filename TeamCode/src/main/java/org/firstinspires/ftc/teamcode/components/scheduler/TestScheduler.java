@@ -5,9 +5,7 @@ import static org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.sc
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
-import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotorsKt;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.TaskState;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Trigger;
 
 public class TestScheduler extends LinearOpMode {

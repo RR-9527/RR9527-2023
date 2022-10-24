@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLoca
 import org.firstinspires.ftc.teamcodekt.components.gamepad.getDriveSticks
 import org.firstinspires.ftc.teamcodekt.components.gamepad.isJoystickTriggered
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors
-import org.firstinspires.ftc.teamcodekt.components.motors.initializedDriveMotorsV2
 import org.firstinspires.ftc.teamcodekt.components.scheduler.ScheduledTask
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler.schedule
@@ -23,7 +22,7 @@ class PotentiallyBetterTestOp : LinearOpMode() {
     private var driveFunction: (ScheduledTask) -> Unit = ::driveNormal
 
     override fun runOpMode() {
-        motors = initializedDriveMotorsV2(hardwareMap)
+        motors = DriveMotors(hardwareMap)
         localizer = StandardTrackingWheelLocalizer(hardwareMap)
 
         waitForStart()

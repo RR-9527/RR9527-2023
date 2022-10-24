@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcodekt.components.gamepad._GamepadKt;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
-import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotorsKt;
 import org.firstinspires.ftc.teamcodekt.components.shooter.Shooter;
 import org.firstinspires.ftc.teamcodekt.components.shooter.ShooterKt;
 import org.firstinspires.ftc.teamcodekt.util.MU;
@@ -21,7 +20,7 @@ public class OldTestOP extends OpMode {
 
     @Override
     public void init() {
-        motors = DriveMotorsKt.initializedDriveMotorsV2(hardwareMap);
+        motors = new DriveMotors(hardwareMap);
         shooter = ShooterKt.initializedShooter(hardwareMap);
     }
 

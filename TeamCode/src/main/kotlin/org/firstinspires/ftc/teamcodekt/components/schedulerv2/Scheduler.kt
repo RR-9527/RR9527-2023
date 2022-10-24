@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcodekt.util.Condition
  *     openClaw();  // ?? When is this used and how do I use it ??
  * }
  *
- * // 300 lines later...
+ * // 300 billion lines later...
  *
  * private boolean gamepad1aWasFalseBefore = //...;
  *
@@ -39,13 +39,20 @@ import org.firstinspires.ftc.teamcodekt.util.Condition
  * The performance impact of this component is minimal, with [Listeners][Listener] being lazily
  * hooked only when required, and each tick barely encumbering the stack.
  *
- * All tasks are guaranteed to run in the order that they are scheduled. The methods in the `block`
- * parameter of [start] and [time] are called after the scheduled [actions][Runnable]
+ * All tasks are guaranteed to run in the order that they are scheduled. The code blocks run in
+ * the following order: `beforeEach` -> `scheduled tasks` -> `block of code provided in start`
  *
  * Java usage example:
  * ```java
  * @Override
  * public void runOpMode() throws InterruptedException {
+ *
+ *     // Runs this block of code while the OpMode is active,
+ *     // and before each tick
+ *     Scheduler.beforeEach(() -> {
+ *         something = 0;
+ *         doSomethingBefore();
+ *     });
  *
  *     // Usage of scheduler through a more convenient method
  *     GamepadEx2 gamepadx1 = new GamepadEx2(gamepad1);
@@ -79,6 +86,19 @@ object Scheduler {
      * The [Listeners][Listener] subscribed to this [Scheduler]. Updated on every tick.
      */
     private val listeners = mutableSetOf<Listener>()
+
+    /**
+     * A block of code to run before each tick.
+     */
+    private var beforeEach: Runnable? = null
+
+    /**
+     * Sets a block of code to run before each tick.
+     */
+    @JvmStatic
+    fun beforeEach(runnable: Runnable) {
+        beforeEach = runnable
+    }
 
     /**
      * Starts the [Scheduler], and runs the program in the given [block] until the [LinearOpMode]

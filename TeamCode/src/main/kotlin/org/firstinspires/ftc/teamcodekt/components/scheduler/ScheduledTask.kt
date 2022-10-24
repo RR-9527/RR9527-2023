@@ -2,6 +2,7 @@
 
 package org.firstinspires.ftc.teamcodekt.components.scheduler
 
+import TaskState
 import org.firstinspires.ftc.teamcode.components.scheduler.Task
 import org.firstinspires.ftc.teamcodekt.components.scheduler.keywords.now
 import java.util.function.BooleanSupplier

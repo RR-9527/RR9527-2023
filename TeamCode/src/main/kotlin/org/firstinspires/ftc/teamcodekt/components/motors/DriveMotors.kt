@@ -8,7 +8,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcodekt.components.gamepad.getDriveSticks
 import org.firstinspires.ftc.teamcodekt.components.gamepad.isJoystickTriggered
 import org.firstinspires.ftc.teamcodekt.util.DataSupplier
-import org.firstinspires.ftc.teamcodekt.util.LateInitVal
 import kotlin.math.*
 
 /**
@@ -42,11 +41,11 @@ import kotlin.math.*
  *
  * @author KG
  */
-class DriveMotors {
-    var frontLeft:  DcMotorEx by LateInitVal()
-    var frontRight: DcMotorEx by LateInitVal()
-    var backLeft:   DcMotorEx by LateInitVal()
-    var backRight:  DcMotorEx by LateInitVal()
+class DriveMotors(hwMap: HardwareMap) {
+    val frontLeft  = initializedMotor("FL", hwMap, reversed = true)
+    val frontRight = initializedMotor("FR", hwMap)
+    val backLeft   = initializedMotor("BL", hwMap, reversed = true)
+    val backRight  = initializedMotor("BR", hwMap)
 
     fun setPowers(flp: Number, frp: Number, blp: Number, brp: Number) {
         frontLeft.power   =   flp.toDouble()
@@ -151,47 +150,3 @@ class DriveMotors {
     }
 }
 
-enum class DriveType {
-    NORMAL, IMPROVED, FIELD_CENTRIC
-}
-
-/**
- * Initializes a [DriveMotors] object with the default configurations.
- *
- * Kotlin usage example:
- * ```
- * val motors = initializedDriveMotors(hardwareMap)
- * ```
- *
- * Java usage example:
- * ```
- * DriveMotors motors = DriveMotorsKt.initializedDriveMotors(hardwareMap)
- * ```
- *
- * @param hwMap The [HardwareMap]
- * @return A [DriveMotors] object with the motors initialized initialized.`
- *
- * @author KG
- */
-fun initializedDriveMotors(hwMap: HardwareMap) = DriveMotors().apply {
-    frontLeft   =   initializedMotor("FL", hwMap)
-    frontRight  =   initializedMotor("FR", hwMap)
-    backLeft    =   initializedMotor("BL", hwMap)
-    backRight   =   initializedMotor("BR", hwMap)
-}
-
-/**
- * Initializes a [DriveMotors] object with the default configurations 2.0.
- * Just the same as the above, except the left motors are reversed
- *
- * @param hwMap The [HardwareMap]
- * @return A [DriveMotors] object with the motors initialized initialized.`
- *
- * @author KG
- */
-fun initializedDriveMotorsV2(hwMap: HardwareMap) = DriveMotors().apply {
-    frontLeft   =   initializedMotor("FL", hwMap, reversed = true)
-    frontRight  =   initializedMotor("FR", hwMap)
-    backLeft    =   initializedMotor("BL", hwMap, reversed = true)
-    backRight   =   initializedMotor("BR", hwMap)
-}

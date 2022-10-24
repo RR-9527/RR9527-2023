@@ -3,7 +3,6 @@
 package org.firstinspires.ftc.teamcodekt.components.schedulerv2
 
 import com.qualcomm.robotcore.hardware.Gamepad
-import org.firstinspires.ftc.teamcodekt.util.Condition
 import kotlin.math.abs
 
 /**
