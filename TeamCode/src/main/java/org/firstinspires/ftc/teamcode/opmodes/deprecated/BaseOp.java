@@ -12,12 +12,15 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RobotCommon;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.Arm;
+import org.firstinspires.ftc.teamcode.util.RobotConstants.Claw;
+import org.firstinspires.ftc.teamcode.util.RobotConstants.Lift;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.Wrist;
+import org.firstinspires.ftc.teamcode.util.RobotConstants.TriggerData;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftA;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftB;
 
 @Disabled
-@TeleOp
+@TeleOp(name = "BaseOp")
 public class BaseOp extends RobotCommon {
     private ServoEx wrist, claw;
     private CRServo intake;
@@ -40,8 +43,6 @@ public class BaseOp extends RobotCommon {
         while (!isStopRequested() && opModeIsActive()) {
             updateDrivetrain();
             intake();
-//            updateArm();
-//            updateLift();
             updateWrist();
         }
     }
@@ -75,17 +76,17 @@ public class BaseOp extends RobotCommon {
     }
 
     private void intake() {
-//        if (game_pad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > TriggerData.TRIGGER_THRESHOLD) {
-//            claw.setPosition(Claw.OPEN);
-//        } else {
-//            claw.setPosition(Claw.CLOSE);
-//        }
-//
-//        if (game_pad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > TriggerData.TRIGGER_THRESHOLD) {
-//            intake.set(1);
-//        } else {
-//            intake.set(0);
-//        }
+        if (game_pad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > TriggerData.TRIGGER_THRESHOLD) {
+            claw.setPosition(Claw.INTAKE);
+        } else {
+            claw.setPosition(Claw.CLOSE);
+        }
+
+        if (game_pad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > TriggerData.TRIGGER_THRESHOLD) {
+            intake.set(1);
+        } else {
+            intake.set(0);
+        }
     }
 
     private void updateArm() {
@@ -100,20 +101,20 @@ public class BaseOp extends RobotCommon {
         arm.set(correction);
     }
 
-//    private void updateLift() {
-//        double correctionA;
-//        double correctionB;
-//        if (game_pad1.getButton(GamepadKeys.Button.RIGHT_BUMPER)) {
-//            correctionA = liftAPID.calculate(liftA.getCurrentPosition(), Lift.UP);
-//            correctionB = liftBPID.calculate(liftB.getCurrentPosition(), Lift.UP);
-//
-//        } else {
-//            correctionA = liftAPID.calculate(liftA.getCurrentPosition(), Lift.DOWN);
-//            correctionB = liftBPID.calculate(liftB.getCurrentPosition(), Lift.DOWN);
-//        }
-//        liftA.set(correctionA);
-//        liftB.set(correctionB);
-//    }
+    private void updateLift() {
+        double correctionA;
+        double correctionB;
+        if (game_pad1.getButton(GamepadKeys.Button.RIGHT_BUMPER)) {
+            correctionA = liftAPID.calculate(liftA.getCurrentPosition(), Lift.UP);
+            correctionB = liftBPID.calculate(liftB.getCurrentPosition(), Lift.UP);
+
+        } else {
+            correctionA = liftAPID.calculate(liftA.getCurrentPosition(), Lift.DOWN);
+            correctionB = liftBPID.calculate(liftB.getCurrentPosition(), Lift.DOWN);
+        }
+        liftA.set(correctionA);
+        liftB.set(correctionB);
+    }
 
     private void updateWrist() {
         if (game_pad1.getButton(GamepadKeys.Button.DPAD_DOWN)) {

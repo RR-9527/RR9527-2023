@@ -1,18 +1,17 @@
 package org.firstinspires.ftc.teamcodekt.opmodes.teleop
 
 import com.acmerobotics.roadrunner.localization.Localizer
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer
 import org.firstinspires.ftc.teamcodekt.components.gamepad.getDriveSticks
 import org.firstinspires.ftc.teamcodekt.components.gamepad.isJoystickTriggered
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors
-import org.firstinspires.ftc.teamcodekt.components.motors.initializedDriveMotorsV2
-import org.firstinspires.ftc.teamcodekt.components.shooter.Shooter
-import org.firstinspires.ftc.teamcodekt.components.shooter.initializedShooter
-import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer
 import org.firstinspires.ftc.teamcodekt.util.LateInitVal
 import kotlin.math.*
 
+@Disabled
 @TeleOp(name = "BetterTestOpKt")
 open class BetterTestOp : OpMode() {
     private var motors: DriveMotors by LateInitVal()
@@ -21,7 +20,7 @@ open class BetterTestOp : OpMode() {
     private var driveFunction = ::driveNormal
 
     override fun init() {
-        motors = initializedDriveMotorsV2(hardwareMap)
+        motors = DriveMotors(hardwareMap)
         localizer = StandardTrackingWheelLocalizer(hardwareMap)
     }
 

@@ -5,25 +5,68 @@ import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcodekt.util.Condition
 
 /**
- * Schedules tasks to run when their given conditions are met in a [LinearOpMode].
+ * A component that simplifies the process of scheduling actions to be performed at a
+ * specific time or condition, for use in a [LinearOpMode]. It seeks to transform teleop code
+ * into a declarative haven, where the robot's actions are defined in a set of [actions][Runnable]
+ * bound to a [condition][Condition] on which to perform it.
  *
- * __NOTE:__ While the methods in the `block` parameter of [start] and [time] are called in the
- * order they were written, and are guaranteed to be called after the scheduled [actions][Runnable],
- * ___the order in which the scheduled actions are called is not guaranteed___.
+ * Usage of this component groups all mutation of state into once central location, making it
+ * infinitely easier to debug and maintain.
+ *
+ * For example:
+ * ```java
+ * while (opmode.opModeIsActive() && !opmode.isStopRequested) {
+ *     openClaw();  // ?? When is this used and how do I use it ??
+ * }
+ *
+ * // 300 billion lines later...
+ *
+ * private boolean gamepad1aWasFalseBefore = //...;
+ *
+ * private void checkIfShouldDoSomething() {
+ *    if (gamepad1.a && gamepad1aWasFalseBefore) {
+ *        claw.open();
+ *    }
+ *    gamepad1aWasFalseBefore = //...
+ * } // ugh imperative hell
+ *
+ * // --- VS: ---
+ *
+ * gamepadx1.a.onRise(claw::open); // So clean and cool wow the person who made
+ * Scheduler.start(this);  // this was probably so smart and a genius I'm so jealous!!
+ * ```
+ *
+ * The performance impact of this component is minimal, with [Listeners][Listener] being lazily
+ * hooked only when required, and each tick barely encumbering the stack.
+ *
+ * All tasks are guaranteed to run in the order that they are scheduled. The code blocks run in
+ * the following order: `beforeEach` -> `scheduled tasks` -> `block of code provided in start`
  *
  * Java usage example:
  * ```java
  * @Override
  * public void runOpMode() throws InterruptedException {
- *     GamepadEx2 gamepadx1 = new GamepadEx2(gamepad1);
  *
+ *     // Runs this block of code while the OpMode is active,
+ *     // and before each tick
+ *     Scheduler.beforeEach(() -> {
+ *         something = 0;
+ *         doSomethingBefore();
+ *     });
+ *
+ *     // Usage of scheduler through a more convenient method
+ *     GamepadEx2 gamepadx1 = new GamepadEx2(gamepad1);
  *     gamepadx1.a.onHigh(this::doSomething);
  *
+ *     // Usage of scheduler through the raw API
  *     Scheduler.getOrCreateListener("someCondition", someCondition == true)
  *         .onRise(this::doSomethingElse)
  *         .onFall(this::doYetAnotherThing);
  *
+ *     // Runs the code while the OpMode is active.
  *     Scheduler.start(this, () -> {
+ *         // Optional block of code to be run after the above listeners
+ *         // This parameter may be omitted if unnecessary.
  *         updateSomething();
  *         doSomethingElse();
  *         blahBlahBlah();
@@ -36,12 +79,26 @@ import org.firstinspires.ftc.teamcodekt.util.Condition
  * @see Listener
  * @see Condition
  * @see GamepadEx2
+ * @see Timer
  */
 object Scheduler {
     /**
      * The [Listeners][Listener] subscribed to this [Scheduler]. Updated on every tick.
      */
-    private val listeners = mutableMapOf<String, Listener>()
+    private val listeners = mutableSetOf<Listener>()
+
+    /**
+     * A block of code to run before each tick.
+     */
+    private var beforeEach: Runnable? = null
+
+    /**
+     * Sets a block of code to run before each tick.
+     */
+    @JvmStatic
+    fun beforeEach(runnable: Runnable) {
+        beforeEach = runnable
+    }
 
     /**
      * Starts the [Scheduler], and runs the program in the given [block] until the [LinearOpMode]
@@ -78,6 +135,7 @@ object Scheduler {
     @JvmOverloads
     fun start(opmode: LinearOpMode, block: Runnable? = null) {
         while (opmode.opModeIsActive() && !opmode.isStopRequested) {
+            beforeEach?.run()
             tick()
             block?.run()
         }
@@ -127,19 +185,20 @@ object Scheduler {
         while (opmode.opModeIsActive() && !opmode.isStopRequested) {
             val startTime = System.currentTimeMillis()
 
+            beforeEach?.run()
             tick()
             block?.run()
 
             val endTime = System.currentTimeMillis()
             telemetry.addData("Loop time (ms)", endTime - startTime)
-            telemetry.update()
+//            telemetry.update()
         }
     }
 
     /**
      * Updates the listeners and runs their actions if their conditions are met.
      */
-    private fun tick() = listeners.forEach { (_, listener) ->
+    private fun tick() = listeners.forEach { listener ->
         listener.update()
         listener.doActiveActions()
     }
@@ -151,7 +210,7 @@ object Scheduler {
      * @return The [Listener] with the given [id] and [condition].
      */
     @JvmStatic
-    fun getOrCreateListener(id: String, condition: Condition): Listener {
-        return listeners.getOrPut(id) { Listener(id, condition) }
+    fun hookListener(listener: Listener) = listener.also {
+        listeners += listener
     }
 }

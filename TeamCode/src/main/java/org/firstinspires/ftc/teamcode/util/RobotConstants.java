@@ -5,8 +5,8 @@ import com.acmerobotics.dashboard.config.Config;
 public class RobotConstants {
     @Config
     public static class Claw {
-    	public static double OPEN = 0.2;
-    	public static double OPEN_DEPOSIT = 0.1;
+    	public static double INTAKE = 0.2;
+    	public static double DEPOSIT = 0.1;
     	public static double CLOSE = 0.4;
     }
 
@@ -24,6 +24,7 @@ public class RobotConstants {
     @Config
     public static class Wrist {
     	public static double INTAKE_POS = .835;
+		public static double REST = .5;
     	public static double DEPOSIT_POS = .185;
     }
 

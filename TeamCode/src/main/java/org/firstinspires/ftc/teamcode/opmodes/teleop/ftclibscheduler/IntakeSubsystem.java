@@ -29,7 +29,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void openClaw(){
-        claw.setPosition(Claw.OPEN);
+        claw.setPosition(Claw.INTAKE);
     }
 
     public void closeClaw(){

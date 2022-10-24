@@ -1,22 +1,23 @@
 package org.firstinspires.ftc.teamcodekt.opmodes.depreciated
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors
-import org.firstinspires.ftc.teamcodekt.components.motors.initializedDriveMotors
 import org.firstinspires.ftc.teamcodekt.components.shooter.Shooter
 import org.firstinspires.ftc.teamcodekt.components.shooter.initializedShooter
 import org.firstinspires.ftc.teamcodekt.util.LateInitVal
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 
+@Disabled
 @TeleOp(name = "TestOpKt")
 class TestOp : OpMode() {
     private var motors: DriveMotors by LateInitVal()
     private var shooter: Shooter by LateInitVal()
 
     override fun init() {
-        motors = initializedDriveMotors(hardwareMap)
+//        motors = initializedDriveMotors(hardwareMap)
         shooter = initializedShooter(hardwareMap)
     }
 
