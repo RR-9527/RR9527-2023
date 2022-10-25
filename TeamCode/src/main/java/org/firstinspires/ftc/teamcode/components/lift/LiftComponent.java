@@ -32,7 +32,7 @@ public class LiftComponent {
         liftB.setInverted(true);
         liftB.resetEncoder();
 
-        liftBPID = new PIDFController(Lift.P, Lift.I, Lift.D, Lift.F);
+//        liftBPID = new PIDFController(Lift.P, Lift.I, Lift.D, Lift.F);
         liftAPID = new PIDFController(Lift.P, Lift.I, Lift.D, Lift.F);
     }
 
@@ -60,14 +60,14 @@ public class LiftComponent {
         // Allows hot reloading for PIDF and outputs some telemetry
         if(debugMode){
             liftAPID.setPIDF(Lift.P, Lift.I, Lift.D, Lift.F);
-            liftBPID.setPIDF(Lift.P, Lift.I, Lift.D, Lift.F);
+//            liftBPID.setPIDF(Lift.P, Lift.I, Lift.D, Lift.F);
 
             telemetry.addData("Motor position", liftA.getCurrentPosition());
         }
 
         double correctionA = liftAPID.calculate(liftA.getCurrentPosition(), liftHeight);
-        double correctionB = liftBPID.calculate(liftA.getCurrentPosition(), liftHeight);
+//        double correctionB = liftABPID.calculate(liftA.getCurrentPosition(), liftHeight);
         liftA.set(correctionA);
-        liftB.set(correctionB);
+        liftB.set(correctionA);
     }
 }
