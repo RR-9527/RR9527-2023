@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.components.lift;
 
+import static org.firstinspires.ftc.teamcode.components.DebugMode.debugMode;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -55,13 +57,17 @@ public class LiftComponent {
     }
 
     public void update(Telemetry telemetry) {
+        // Allows hot reloading for PIDF and outputs some telemetry
+        if(debugMode){
+            liftAPID.setPIDF(Lift.P, Lift.I, Lift.D, Lift.F);
+            liftBPID.setPIDF(Lift.P, Lift.I, Lift.D, Lift.F);
+
+            telemetry.addData("Motor position", liftA.getCurrentPosition());
+        }
+
         double correctionA = liftAPID.calculate(liftA.getCurrentPosition(), liftHeight);
         double correctionB = liftBPID.calculate(liftA.getCurrentPosition(), liftHeight);
         liftA.set(correctionA);
         liftB.set(correctionB);
-
-        telemetry.addData("Lift Height", liftHeight);
-        telemetry.addData("Motor position", liftA.getCurrentPosition());
-        telemetry.update();
     }
 }

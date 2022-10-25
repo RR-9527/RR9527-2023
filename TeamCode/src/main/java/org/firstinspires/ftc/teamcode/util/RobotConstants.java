@@ -15,6 +15,7 @@ public class RobotConstants {
     	public static double INTAKE_POS = 480;
     	public static double VERTICAL = 0;
     	public static double DEPOSIT_POS = -480;
+
     	public static double P = 0.0015;
     	public static double I = 0.1;
     	public static double D = 0.00001;

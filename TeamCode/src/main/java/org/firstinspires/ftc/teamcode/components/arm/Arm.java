@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.components.arm;
 
+import static org.firstinspires.ftc.teamcode.components.DebugMode.debugMode;
+
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
 
 public class Arm {
@@ -38,7 +41,17 @@ public class Arm {
         armCorrection = RobotConstants.Arm.DEPOSIT_POS;
     }
 
-    public void update() {
+    public void update(Telemetry telemetry) {
+        if(debugMode){
+            // Constantly set PIDF to allow for hot reloading, also some telemetry
+            armPID.setPIDF(
+                RobotConstants.Arm.P,
+                RobotConstants.Arm.I,
+                RobotConstants.Arm.D,
+                RobotConstants.Arm.F);
+            telemetry.addData("Arm position", armMotor.getCurrentPosition());
+        }
+
         double correction = armPID.calculate(armMotor.getCurrentPosition(), armCorrection);
         armMotor.set(correction);
     }

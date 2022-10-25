@@ -65,7 +65,7 @@ public class RogueOp extends LinearOpMode {
 
         // Start:
         Scheduler.time(this, telemetry, () -> {
-            arm.update();
+            arm.update(telemetry);
             lift.update(telemetry);
             wrist.update();
             drive();
