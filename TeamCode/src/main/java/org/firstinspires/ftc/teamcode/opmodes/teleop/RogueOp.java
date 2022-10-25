@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.components.intake.Intake;
 import org.firstinspires.ftc.teamcode.components.lift.LiftComponent;
 import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
+import org.firstinspires.ftc.teamcode.util.MultiStateToggle;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveType;
 import org.firstinspires.ftc.teamcodekt.components.schedulerv2.GamepadEx2;
@@ -18,7 +19,7 @@ import org.firstinspires.ftc.teamcodekt.components.schedulerv2.Scheduler;
 import org.firstinspires.ftc.teamcodekt.components.schedulerv2.Timer;
 
 @TeleOp
-public class BaseOpV2 extends LinearOpMode {
+public class RogueOp extends LinearOpMode {
     private DriveMotors driveMotors;
     private Localizer localizer;
 
@@ -28,13 +29,17 @@ public class BaseOpV2 extends LinearOpMode {
     private Wrist wrist;
 
     private LiftComponent lift;
+    private MultiStateToggle depositToggle;
+
+    private GamepadEx2 gamepadx1;
+    // TODO: After VRHS Trunk or Treat, implement two-driver control using gamepadx2
+    private GamepadEx2 gamepadx2;
 
     @Override
     public void runOpMode() throws InterruptedException {
         initHardware();
         waitForStart();
 
-        GamepadEx2 gamepadx1 = new GamepadEx2(gamepad1);
 
         // Before each tick:
         Scheduler.beforeEach(() -> {
@@ -53,6 +58,7 @@ public class BaseOpV2 extends LinearOpMode {
 
         // Deposit chain:
         depositChain(gamepadx1.left_bumper, new Timer(500));
+//        gamepadx1.right_bumper.onRise()
 
         // Drive:
         gamepadx1.a.onRise(rotateDriveType);
@@ -103,6 +109,24 @@ public class BaseOpV2 extends LinearOpMode {
             .onDone(claw::close);
     }
 
+    private void depositChainedToggle(Listener listener, Timer timer) {
+        // TODO: Implement 3-way toggle between not depositing, depositing out, and actively releasing
+        listener
+            .whileHigh(arm::setToDepositPos)
+            .whileHigh(wrist::setToDepositPos)
+
+            .onFall(timer::reset)
+            .onFall(intake::reverse)
+            .onFall(claw::openForDeposit);
+
+        timer
+            .whileWaiting(arm::setToDepositPos)
+            .whileWaiting(wrist::setToDepositPos)
+
+            .onDone(intake::disable)
+            .onDone(claw::close);
+    }
+
     private DriveType driveType = DriveType.NORMAL;
 
     private final Runnable rotateDriveType = () -> {
@@ -120,6 +144,9 @@ public class BaseOpV2 extends LinearOpMode {
     }
 
     private void initHardware() {
+        gamepadx1 = new GamepadEx2(gamepad1);
+        gamepadx2 = new GamepadEx2(gamepad2);
+
         driveMotors = new DriveMotors(hardwareMap);
         localizer = new StandardTrackingWheelLocalizer(hardwareMap);
 
@@ -129,5 +156,7 @@ public class BaseOpV2 extends LinearOpMode {
         wrist = new Wrist(hardwareMap);
 
         lift = new LiftComponent(hardwareMap);
+
+        depositToggle = new MultiStateToggle(3, 0);
     }
 }

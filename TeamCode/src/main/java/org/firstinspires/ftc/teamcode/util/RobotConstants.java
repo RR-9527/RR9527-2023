@@ -31,25 +31,14 @@ public class RobotConstants {
     @Config
     public static class Lift {
 		public static double ZERO = 0;
-		public static double GROUND = 100;
-		public static double LOW = 200;
-		public static double MID = 300;
-		public static double HIGH = 400;
+		public static double GROUND = 400;
+		public static double LOW = 800;
+		public static double MID = 1200;
+		public static double HIGH = 1600;
+
+		public static double P = 0.002;
+		public static double I = 0;
+		public static double D = 0.00005;
+		public static double F = 0.00001;
     }
-
-	@Config
-	public static class LiftA {
-		public static double P = 0.002;
-		public static double I = 0;
-		public static double D = 0;
-		public static double F = 0;
-	}
-
-	@Config
-	public static class LiftB {
-		public static double P = 0.002;
-		public static double I = 0;
-		public static double D = 0;
-		public static double F = 0;
-	}
 }

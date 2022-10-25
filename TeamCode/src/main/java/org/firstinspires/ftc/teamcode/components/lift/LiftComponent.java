@@ -7,25 +7,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
-import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftA;
-import org.firstinspires.ftc.teamcode.util.RobotConstants.LiftB;
+import org.firstinspires.ftc.teamcode.util.RobotConstants.Lift;
 
 @Config
 public class LiftComponent {
     private final Motor liftA, liftB;
-//    private final PIDFController liftAPID, liftBPID;
-    public static double kP;
-    public static double kI;
-    public static double kD;
-
-    public static double setVal;
 
     private double liftHeight;
 
     private PIDFController liftAPID, liftBPID;
 
     public LiftComponent(HardwareMap hwMap) {
-        setVal = 0.3;
 
         liftA = new Motor(hwMap, "L1", Motor.GoBILDA.RPM_1150);
         liftA.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -38,8 +30,8 @@ public class LiftComponent {
         liftB.setInverted(true);
         liftB.resetEncoder();
 
-        liftBPID = new PIDFController(LiftB.P, LiftB.I, LiftB.D, LiftB.F);
-        liftAPID = new PIDFController(LiftA.P, LiftA.I, LiftA.D, LiftA.F);
+        liftBPID = new PIDFController(Lift.P, Lift.I, Lift.D, Lift.F);
+        liftAPID = new PIDFController(Lift.P, Lift.I, Lift.D, Lift.F);
     }
 
     public void goToZero() {
@@ -69,6 +61,7 @@ public class LiftComponent {
         liftB.set(correctionB);
 
         telemetry.addData("Lift Height", liftHeight);
+        telemetry.addData("Motor position", liftA.getCurrentPosition());
         telemetry.update();
     }
 }
