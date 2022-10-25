@@ -29,7 +29,6 @@ public class RogueOp extends LinearOpMode {
     private Wrist wrist;
 
     private LiftComponent lift;
-    private MultiStateToggle depositToggle;
 
     private GamepadEx2 gamepadx1;
     // TODO: After VRHS Trunk or Treat, implement two-driver control using gamepadx2
@@ -69,6 +68,7 @@ public class RogueOp extends LinearOpMode {
             lift.update(telemetry);
             wrist.update();
             drive();
+
         });
     }
 
@@ -93,24 +93,6 @@ public class RogueOp extends LinearOpMode {
     }
 
     private void depositChain(Listener listener, Timer timer) {
-        listener
-            .whileHigh(arm::setToDepositPos)
-            .whileHigh(wrist::setToDepositPos)
-
-            .onFall(timer::reset)
-            .onFall(intake::reverse)
-            .onFall(claw::openForDeposit);
-
-        timer
-            .whileWaiting(arm::setToDepositPos)
-            .whileWaiting(wrist::setToDepositPos)
-
-            .onDone(intake::disable)
-            .onDone(claw::close);
-    }
-
-    private void depositChainedToggle(Listener listener, Timer timer) {
-        // TODO: Implement 3-way toggle between not depositing, depositing out, and actively releasing
         listener
             .whileHigh(arm::setToDepositPos)
             .whileHigh(wrist::setToDepositPos)
@@ -156,7 +138,7 @@ public class RogueOp extends LinearOpMode {
         wrist = new Wrist(hardwareMap);
 
         lift = new LiftComponent(hardwareMap);
-
-        depositToggle = new MultiStateToggle(3, 0);
     }
+
+    
 }

@@ -191,7 +191,7 @@ object Scheduler {
 
             val endTime = System.currentTimeMillis()
             telemetry.addData("Loop time (ms)", endTime - startTime)
-//            telemetry.update()
+            telemetry.update()
         }
     }
 

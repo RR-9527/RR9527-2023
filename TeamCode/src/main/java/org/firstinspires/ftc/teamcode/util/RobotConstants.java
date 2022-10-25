@@ -37,9 +37,9 @@ public class RobotConstants {
 		public static double MID = 1200;
 		public static double HIGH = 1600;
 
-		public static double P = 0.002;
-		public static double I = 0;
-		public static double D = 0.00005;
+		public static double P = 0.0008;
+		public static double I = 0.3;
+		public static double D = 0.00015;
 		public static double F = 0.00001;
     }
 }

@@ -305,5 +305,23 @@ class GamepadEx2(val gamepad: Gamepad) {
             abs(gamepad.right_stick_x) > deadzone
         }
     }
+
+    // Functions to get gamepad data
+
+    fun getLeftX(): Float {
+        return gamepad.left_stick_x
+    }
+
+    fun getLeftY(): Float {
+        return gamepad.left_stick_y
+    }
+
+    fun getRightX(): Float {
+        return gamepad.right_stick_x
+    }
+
+    fun getRightY(): Float {
+        return gamepad.right_stick_y
+    }
 }
 
