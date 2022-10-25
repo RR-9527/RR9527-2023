@@ -1,6 +1,6 @@
 @file:Suppress("MemberVisibilityCanBePrivate", "unused")
 
-package org.firstinspires.ftc.teamcodekt.components.schedulerv2
+package org.firstinspires.ftc.teamcodekt.components.scheduler
 
 import org.firstinspires.ftc.teamcodekt.util.Condition
 
