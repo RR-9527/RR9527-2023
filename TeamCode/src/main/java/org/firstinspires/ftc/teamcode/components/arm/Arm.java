@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.components.arm;
 
-import static org.firstinspires.ftc.teamcode.components.DebugMode.debugMode;
+import static org.firstinspires.ftc.teamcode.util.RuntimeMode.DEBUG;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -42,7 +42,7 @@ public class Arm {
     }
 
     public void update(Telemetry telemetry) {
-        if (debugMode) {
+        if (DEBUG) {
             // Constantly set PIDF to allow for hot reloading, also some telemetry
             armPID.setPIDF(
                 RobotConstants.Arm.P,

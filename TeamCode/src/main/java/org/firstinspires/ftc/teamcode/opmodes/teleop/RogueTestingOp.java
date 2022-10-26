@@ -1,131 +1,41 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
-import com.acmerobotics.roadrunner.localization.Localizer;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.components.arm.Arm;
-import org.firstinspires.ftc.teamcode.components.claw.Claw;
-import org.firstinspires.ftc.teamcode.components.intake.Intake;
-import org.firstinspires.ftc.teamcode.components.lift.LiftComponent;
-import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
-import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.util.StateRotator;
-import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveType;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.GamepadEx2;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Listener;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Timer;
 
 @TeleOp
-public class RogueTestingOp extends LinearOpMode {
-    private DriveMotors driveMotors;
-    private Localizer localizer;
+public class RogueTestingOp extends RougeBaseOp {
     StateRotator<DriveType> driveTypes;
 
-    private Claw claw;
-    private Intake intake;
-    private Arm arm;
-    private Wrist wrist;
-    private LiftComponent lift;
-
-    private GamepadEx2 gamepadx1;
-
     @Override
-    public void runOpMode() throws InterruptedException {
-        initHardware();
-        waitForStart();
-
-        // Before each tick:
-        Scheduler.beforeEach(() -> {
-            arm.setToDefaultPos();
-            wrist.setToRestingPos();
-        });
-
+    public void scheduleTasks() {
         // Lift: increment up and down with button presses
-        gamepadx1.dpad_up   .onRise(lift::goToHigh);
-        gamepadx1.dpad_down .onRise(lift::goToRest);
-        gamepadx1.dpad_right.onRise(lift::goToMid);
-        gamepadx1.dpad_left .onRise(lift::goToLow);
+        driver.dpad_up   .onRise(lift::goToHigh);
+        driver.dpad_down .onRise(lift::goToRest);
+        driver.dpad_right.onRise(lift::goToMid);
+        driver.dpad_left .onRise(lift::goToLow);
 
         // Intake chain:
-        intakeChain(gamepadx1.left_bumper, new Timer(200));
+        intakeChain(driver.left_bumper, 200);
 
         // Deposit chain:
-        depositChain(gamepadx1.right_bumper, new Timer(500));
+        depositChain(driver.right_bumper, 400);
 
         // Drive:
-        gamepadx1.a.onRise(rotateDriveType);
+        driver.a.onRise(rotateDriveType);
 
-        // Start:
-        Scheduler.time(this, telemetry, () -> {
-            arm.update(telemetry);
-            lift.update(telemetry);
-            wrist.update();
-            drive();
-        });
+        driver.joysticks(.1).whileHigh(this::drive);
     }
 
-    private void intakeChain(Listener listener, Timer timer) {
-        listener
-            .onRise(intake::enable)
-            .onRise(claw::openForIntake)
-            .onRise(lift::goToZero)
-
-            .whileHigh(arm::setToIntakePos)
-            .whileHigh(wrist::setToIntakePos)
-
-            .onFall(timer::reset)
-            .onFall(claw::close)
-            .onFall(intake::disable);
-
-        timer
-            .whileWaiting(arm::setToIntakePos)
-            .whileWaiting(wrist::setToIntakePos)
-
-            .onDone(lift::goToRest);
-    }
-
-    private void depositChain(Listener listener, Timer timer) {
-        listener
-            .whileHigh(arm::setToDepositPos)
-            .whileHigh(wrist::setToDepositPos)
-
-            .onFall(timer::reset)
-            .onFall(intake::reverse)
-            .onFall(claw::openForDeposit);
-
-        timer
-            .whileWaiting(arm::setToDepositPos)
-            .whileWaiting(wrist::setToDepositPos)
-
-            .onDone(intake::disable)
-            .onDone(claw::close);
-    }
-
-    private DriveType driveType = DriveType.NORMAL;
-
-    private final Runnable rotateDriveType = () -> {
+    protected final Runnable rotateDriveType = () -> {
         driveType = driveTypes.next();
     };
 
-    private void drive() {
-        driveMotors.drive(gamepad1, localizer, driveType);
-    }
-
-    private void initHardware() {
-        gamepadx1 = new GamepadEx2(gamepad1);
-
-        driveMotors = new DriveMotors(hardwareMap);
-        localizer = new StandardTrackingWheelLocalizer(hardwareMap);
+    @Override
+    protected void initHardware() {
+        super.initHardware();
         driveTypes = new StateRotator<>(DriveType.NORMAL, DriveType.IMPROVED, DriveType.FIELD_CENTRIC);
-
-        claw = new Claw(hardwareMap);
-        intake = new Intake(hardwareMap);
-        arm = new Arm(hardwareMap);
-        wrist = new Wrist(hardwareMap);
-
-        lift = new LiftComponent(hardwareMap);
     }
 }

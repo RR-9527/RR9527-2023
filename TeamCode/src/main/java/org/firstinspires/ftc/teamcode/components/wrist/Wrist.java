@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.components.wrist;
 
-import static org.firstinspires.ftc.teamcode.components.DebugMode.debugMode;
-
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;

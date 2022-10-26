@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.util;
 @SuppressWarnings("unchecked")
 public class StateRotator<T> {
     T[] states;
-    int currentState;
+    int currentStatePos;
 
     public StateRotator(T ...states) {
         this.states = states;
-        this.currentState = 0;
+        this.currentStatePos = 0;
 
         ensureStatesValidity();
     }
@@ -21,29 +21,25 @@ public class StateRotator<T> {
         for(T ignored : states)
             this.states[--totalStates] = ignored;
 
-        this.currentState = 0;
+        this.currentStatePos = 0;
 
         ensureStatesValidity();
     }
 
     public T next() {
-        return states[currentState = ++currentState % states.length];
+        return states[currentStatePos = ++currentStatePos % states.length];
     }
 
     public T prev() {
-        return states[currentState = --currentState % states.length];
+        return states[currentStatePos = --currentStatePos % states.length];
     }
 
     public T get() {
-        return states[currentState];
+        return states[currentStatePos];
     }
 
-    public void setCurrentState(int newState) {
-        currentState = newState;
-    }
-
-    public int getCurrentState() {
-        return currentState;
+    public void setCurrentStatePos(int newState) {
+        currentStatePos = newState;
     }
 
     public int length() {
@@ -51,7 +47,7 @@ public class StateRotator<T> {
     }
 
     private void ensureStatesValidity() {
-        if (currentState >= states.length) {
+        if (currentStatePos >= states.length) {
             throw new IllegalArgumentException("Current state is out of bounds");
         }
 

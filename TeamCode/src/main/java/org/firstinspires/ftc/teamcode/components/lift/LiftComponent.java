@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.components.lift;
 
-import static org.firstinspires.ftc.teamcode.components.DebugMode.debugMode;
+import static org.firstinspires.ftc.teamcode.util.RuntimeMode.DEBUG;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDFController;
@@ -58,7 +58,7 @@ public class LiftComponent {
 
     public void update(Telemetry telemetry) {
         // Allows hot reloading for PIDF and outputs some telemetry
-        if(debugMode){
+        if(DEBUG){
             liftAPID.setPIDF(Lift.P, Lift.I, Lift.D, Lift.F);
 //            liftBPID.setPIDF(Lift.P, Lift.I, Lift.D, Lift.F);
 

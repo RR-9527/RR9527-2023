@@ -73,7 +73,5 @@
         <action android:name="android.intent.action.QUICKBOOT_POWERON" />
       </intent-filter>
     </receiver>
-
   </application>
-
 </manifest>

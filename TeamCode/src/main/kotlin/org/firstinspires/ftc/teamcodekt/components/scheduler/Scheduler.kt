@@ -101,7 +101,7 @@ object Scheduler {
     }
 
     /**
-     * Starts the [Scheduler], and runs the program in the given [block] until the [LinearOpMode]
+     * Starts the [Scheduler], and runs the program in the given [afterEach] until the [LinearOpMode]
      * is no longer active.
      * Java usage example:
      * ```java
@@ -129,20 +129,20 @@ object Scheduler {
      * }
      * ```
      * @param opmode The [LinearOpMode] to run the [Scheduler] in.
-     * @param block An optional block of code to run every tick, after the listeners have ran.
+     * @param afterEach An optional block of code to run every tick, after the listeners have ran.
      */
     @JvmStatic
     @JvmOverloads
-    fun start(opmode: LinearOpMode, block: Runnable? = null) {
+    fun start(opmode: LinearOpMode, afterEach: Runnable? = null) {
         while (opmode.opModeIsActive() && !opmode.isStopRequested) {
             beforeEach?.run()
             tick()
-            block?.run()
+            afterEach?.run()
         }
     }
 
     /**
-     * Starts the [Scheduler], and runs the program in the given [block] until the [LinearOpMode]
+     * Starts the [Scheduler], and runs the program in the given [afterEach] until the [LinearOpMode]
      * is no longer active. The loop time is then calculated, and send to the [Telemetry] object.
      *
      * __Note 1:__ this method is for development and optimization purposes only, _and should not
@@ -177,17 +177,17 @@ object Scheduler {
      * }
      * ```
      * @param opmode The [LinearOpMode] to run the [Scheduler] in.
-     * @param block An optional block of code to run every tick, after the listeners have ran.
+     * @param afterEach An optional block of code to run every tick, after the listeners have ran.
      */
     @JvmStatic
     @JvmOverloads
-    fun time(opmode: LinearOpMode, telemetry: Telemetry, block: Runnable? = null) {
+    fun time(opmode: LinearOpMode, telemetry: Telemetry, afterEach: Runnable? = null) {
         while (opmode.opModeIsActive() && !opmode.isStopRequested) {
             val startTime = System.currentTimeMillis()
 
             beforeEach?.run()
             tick()
-            block?.run()
+            afterEach?.run()
 
             val endTime = System.currentTimeMillis()
             telemetry.addData("Loop time (ms)", endTime - startTime)
