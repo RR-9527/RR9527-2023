@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.components.intake.Intake;
 import org.firstinspires.ftc.teamcode.components.lift.LiftComponent;
 import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.util.MultiStateToggle;
+import org.firstinspires.ftc.teamcode.util.StateRotator;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveType;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.GamepadEx2;
@@ -19,9 +19,10 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Timer;
 
 @TeleOp
-public class RogueOp extends LinearOpMode {
+public class RogueCompOp extends LinearOpMode {
     private DriveMotors driveMotors;
     private Localizer localizer;
+    StateRotator<DriveType> driveTypes;
 
     private Claw claw;
     private Intake intake;
@@ -31,14 +32,12 @@ public class RogueOp extends LinearOpMode {
     private LiftComponent lift;
 
     private GamepadEx2 gamepadx1;
-    // TODO: After VRHS Trunk or Treat, implement two-driver control using gamepadx2
     private GamepadEx2 gamepadx2;
 
     @Override
     public void runOpMode() throws InterruptedException {
         initHardware();
         waitForStart();
-
 
         // Before each tick:
         Scheduler.beforeEach(() -> {
@@ -47,17 +46,16 @@ public class RogueOp extends LinearOpMode {
         });
 
         // Lift: increment up and down with button presses
-        gamepadx1.dpad_up   .onRise(lift::goToHigh);
-        gamepadx1.dpad_down .onRise(lift::goToGround);
-        gamepadx1.dpad_right.onRise(lift::goToMid);
-        gamepadx1.dpad_left .onRise(lift::goToLow);
+        gamepadx2.dpad_up   .onRise(lift::goToHigh);
+        gamepadx2.dpad_down .onRise(lift::goToRest);
+        gamepadx2.dpad_right.onRise(lift::goToMid);
+        gamepadx2.dpad_left .onRise(lift::goToLow);
 
         // Intake chain:
-        intakeChain(gamepadx1.right_bumper, new Timer(200));
+        intakeChain(gamepadx2.left_bumper, new Timer(200));
 
         // Deposit chain:
-        depositChain(gamepadx1.left_bumper, new Timer(500));
-//        gamepadx1.right_bumper.onRise()
+        depositChain(gamepadx2.right_bumper, new Timer(500));
 
         // Drive:
         gamepadx1.a.onRise(rotateDriveType);
@@ -68,7 +66,6 @@ public class RogueOp extends LinearOpMode {
             lift.update(telemetry);
             wrist.update();
             drive();
-
         });
     }
 
@@ -89,7 +86,7 @@ public class RogueOp extends LinearOpMode {
             .whileWaiting(arm::setToIntakePos)
             .whileWaiting(wrist::setToIntakePos)
 
-            .onDone(lift::goToGround);
+            .onDone(lift::goToRest);
     }
 
     private void depositChain(Listener listener, Timer timer) {
@@ -112,13 +109,7 @@ public class RogueOp extends LinearOpMode {
     private DriveType driveType = DriveType.NORMAL;
 
     private final Runnable rotateDriveType = () -> {
-        if (driveType == DriveType.NORMAL) {
-            driveType = DriveType.IMPROVED;
-        } else if (driveType == DriveType.IMPROVED) {
-            driveType = DriveType.FIELD_CENTRIC;
-        } else {
-            driveType = DriveType.NORMAL;
-        }
+        driveType = driveTypes.next();
     };
 
     private void drive() {
@@ -131,6 +122,7 @@ public class RogueOp extends LinearOpMode {
 
         driveMotors = new DriveMotors(hardwareMap);
         localizer = new StandardTrackingWheelLocalizer(hardwareMap);
+        driveTypes = new StateRotator<>(DriveType.NORMAL, DriveType.IMPROVED, DriveType.FIELD_CENTRIC);
 
         claw = new Claw(hardwareMap);
         intake = new Intake(hardwareMap);
@@ -139,6 +131,4 @@ public class RogueOp extends LinearOpMode {
 
         lift = new LiftComponent(hardwareMap);
     }
-
-    
 }

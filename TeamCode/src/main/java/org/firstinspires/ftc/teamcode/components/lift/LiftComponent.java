@@ -40,8 +40,8 @@ public class LiftComponent {
         liftHeight = RobotConstants.Lift.ZERO;
     }
 
-    public void goToGround() {
-        liftHeight = RobotConstants.Lift.GROUND;
+    public void goToRest() {
+        liftHeight = RobotConstants.Lift.REST;
     }
 
     public void goToLow() {

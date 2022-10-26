@@ -42,7 +42,7 @@ public class Arm {
     }
 
     public void update(Telemetry telemetry) {
-        if(debugMode){
+        if (debugMode) {
             // Constantly set PIDF to allow for hot reloading, also some telemetry
             armPID.setPIDF(
                 RobotConstants.Arm.P,
