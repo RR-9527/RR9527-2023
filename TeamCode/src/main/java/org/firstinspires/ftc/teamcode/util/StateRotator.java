@@ -6,21 +6,13 @@ public class StateRotator<T> {
     int currentState;
 
     public StateRotator(T ...states) {
-        this(0, states);
-    }
-
-    public StateRotator(int currentState, T ...states) {
         this.states = states;
-        this.currentState = currentState;
+        this.currentState = 0;
 
         ensureStatesValidity();
     }
 
     public StateRotator(Iterable<? extends T> states) {
-        this(states, 0);
-    }
-
-    public StateRotator(Iterable<? extends T> states, int currentState) {
         int totalStates = 0;
         for(T ignored : states)
             totalStates++;
@@ -29,7 +21,7 @@ public class StateRotator<T> {
         for(T ignored : states)
             this.states[--totalStates] = ignored;
 
-        this.currentState = currentState;
+        this.currentState = 0;
 
         ensureStatesValidity();
     }
@@ -46,7 +38,11 @@ public class StateRotator<T> {
         return states[currentState];
     }
 
-    public int getIndex() {
+    public void setCurrentState(int newState) {
+        currentState = newState;
+    }
+
+    public int getCurrentState() {
         return currentState;
     }
 
