@@ -20,7 +20,6 @@ public class LiftComponent {
     private PIDFController liftAPID, liftBPID;
 
     public LiftComponent(HardwareMap hwMap) {
-
         liftA = new Motor(hwMap, "L1", Motor.GoBILDA.RPM_1150);
         liftA.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         liftA.setRunMode(Motor.RunMode.VelocityControl);
@@ -58,7 +57,7 @@ public class LiftComponent {
 
     public void update(Telemetry telemetry) {
         // Allows hot reloading for PIDF and outputs some telemetry
-        if(DEBUG){
+        if(DEBUG) {
             liftAPID.setPIDF(Lift.P, Lift.I, Lift.D, Lift.F);
 //            liftBPID.setPIDF(Lift.P, Lift.I, Lift.D, Lift.F);
 

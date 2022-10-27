@@ -50,13 +50,6 @@ import kotlin.math.abs
  */
 class GamepadEx2(val gamepad: Gamepad) {
     /**
-     * An ID which prefixes both gamepads' triggers' listeners to allow separate listeners for
-     * both gamepads.
-     */
-    private val gamepadEx2ID = "gp"
-
-
-    /**
      * Allows client to perform an action when the gamepad's 'a' button's state is mutated.
      * ```java
      * //e.g:
@@ -305,23 +298,4 @@ class GamepadEx2(val gamepad: Gamepad) {
             abs(gamepad.right_stick_x) > deadzone
         }
     }
-
-    // Functions to get gamepad data
-
-    fun getLeftX(): Float {
-        return gamepad.left_stick_x
-    }
-
-    fun getLeftY(): Float {
-        return gamepad.left_stick_y
-    }
-
-    fun getRightX(): Float {
-        return gamepad.right_stick_x
-    }
-
-    fun getRightY(): Float {
-        return gamepad.right_stick_y
-    }
 }
-

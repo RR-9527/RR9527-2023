@@ -17,7 +17,7 @@ public class RobotConstants {
     	public static double DEPOSIT_POS = -480;
 
     	public static double P = 0.0015;
-    	public static double I = 0.1;
+    	public static double I = 0.085;
     	public static double D = 0.00001;
     	public static double F = 0;
     }
@@ -32,14 +32,14 @@ public class RobotConstants {
     @Config
     public static class Lift {
 		public static double ZERO = 0;
-		public static double REST = 400;
-		public static double LOW = 800;
-		public static double MID = 1200;
-		public static double HIGH = 1600;
+		public static double REST = 500;
+		public static double LOW = 1500;
+		public static double MID = 2250;
+		public static double HIGH = 3000;
 
-		public static double P = 0.0008;
-		public static double I = 0.3;
-		public static double D = 0.00015;
+		public static double P = 0.0015;
+		public static double I = 0.1;
+		public static double D = 0.0001;
 		public static double F = 0.00001;
     }
 }

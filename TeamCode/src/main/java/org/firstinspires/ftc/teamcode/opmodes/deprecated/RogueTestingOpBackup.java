@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.teleop;
+package org.firstinspires.ftc.teamcode.opmodes.deprecated;
 
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Timer;
 
 @TeleOp
-public class RogueTestingOp2 extends LinearOpMode {
+public class RogueTestingOpBackup extends LinearOpMode {
     private DriveMotors driveMotors;
     private Localizer localizer;
     StateRotator<DriveType> driveTypes;

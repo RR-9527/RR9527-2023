@@ -2,22 +2,29 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.components.taskchains.DepositChain;
+import org.firstinspires.ftc.teamcode.components.taskchains.IntakeChain;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.TaskChain;
+
 @TeleOp
 public class RogueCompOp extends RougeBaseOp {
+    TaskChain intakeChain, depositChain;
+
     @Override
     public void scheduleTasks() {
-        // Lift: increment up and down with button presses
         codriver.dpad_up   .onRise(lift::goToHigh);
         codriver.dpad_down .onRise(lift::goToRest);
         codriver.dpad_right.onRise(lift::goToMid);
         codriver.dpad_left .onRise(lift::goToLow);
 
-        // Intake chain:
-        intakeChain(codriver.left_bumper, 200);
+        intakeChain.invokeOn(codriver.left_bumper);
 
-        // Deposit chain:
-        depositChain(codriver.right_bumper, 400);
+        depositChain.invokeOn(codriver.right_bumper);
+    }
 
-        driver.joysticks(.1).whileHigh(this::drive);
+    @Override
+    protected void initAdditionalHardware() {
+        intakeChain = new IntakeChain(bot, 200);
+        depositChain = new DepositChain(bot, 500);
     }
 }

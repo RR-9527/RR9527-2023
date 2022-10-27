@@ -2,31 +2,30 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.components.taskchains.DepositChain;
+import org.firstinspires.ftc.teamcode.components.taskchains.IntakeChain;
 import org.firstinspires.ftc.teamcode.util.StateRotator;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveType;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.TaskChain;
 
 @TeleOp
 public class RogueTestingOp extends RougeBaseOp {
     StateRotator<DriveType> driveTypes;
 
+    TaskChain intakeChain, depositChain;
+
     @Override
     public void scheduleTasks() {
-        // Lift: increment up and down with button presses
         driver.dpad_up   .onRise(lift::goToHigh);
         driver.dpad_down .onRise(lift::goToRest);
         driver.dpad_right.onRise(lift::goToMid);
         driver.dpad_left .onRise(lift::goToLow);
 
-        // Intake chain:
-        intakeChain(driver.left_bumper, 200);
+        intakeChain.invokeOn(driver.left_bumper);
 
-        // Deposit chain:
-        depositChain(driver.right_bumper, 400);
+        depositChain.invokeOn(driver.right_bumper);
 
-        // Drive:
         driver.a.onRise(rotateDriveType);
-
-        driver.joysticks(.1).whileHigh(this::drive);
     }
 
     protected final Runnable rotateDriveType = () -> {
@@ -34,8 +33,9 @@ public class RogueTestingOp extends RougeBaseOp {
     };
 
     @Override
-    protected void initHardware() {
-        super.initHardware();
+    protected void initAdditionalHardware() {
         driveTypes = new StateRotator<>(DriveType.NORMAL, DriveType.IMPROVED, DriveType.FIELD_CENTRIC);
+        intakeChain = new IntakeChain(bot, 200);
+        depositChain = new DepositChain(bot, 500);
     }
 }
