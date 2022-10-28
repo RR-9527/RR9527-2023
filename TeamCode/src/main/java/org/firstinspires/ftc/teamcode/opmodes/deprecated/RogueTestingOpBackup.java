@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.components.arm.Arm;
 import org.firstinspires.ftc.teamcode.components.claw.Claw;
 import org.firstinspires.ftc.teamcode.components.intake.Intake;
-import org.firstinspires.ftc.teamcode.components.lift.LiftComponent;
+import org.firstinspires.ftc.teamcode.components.lift.Lift;
 import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.util.StateRotator;
@@ -28,7 +28,7 @@ public class RogueTestingOpBackup extends LinearOpMode {
     private Intake intake;
     private Arm arm;
     private Wrist wrist;
-    private LiftComponent lift;
+    private Lift lift;
 
     private GamepadEx2 driver;
 
@@ -126,6 +126,6 @@ public class RogueTestingOpBackup extends LinearOpMode {
         arm = new Arm(hardwareMap);
         wrist = new Wrist(hardwareMap);
 
-        lift = new LiftComponent(hardwareMap);
+        lift = new Lift(hardwareMap);
     }
 }

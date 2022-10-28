@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.TaskChain;
 @TeleOp
 public class RogueTestingOp extends RougeBaseOp {
     StateRotator<DriveType> driveTypes;
-
     TaskChain intakeChain, depositChain;
 
     @Override
@@ -22,15 +21,14 @@ public class RogueTestingOp extends RougeBaseOp {
         driver.dpad_left .onRise(lift::goToLow);
 
         intakeChain.invokeOn(driver.left_bumper);
-
         depositChain.invokeOn(driver.right_bumper);
 
-        driver.a.onRise(rotateDriveType);
+        driver.a.onRise(this::rotateDriveType);
     }
 
-    protected final Runnable rotateDriveType = () -> {
+    private void rotateDriveType() {
         driveType = driveTypes.next();
-    };
+    }
 
     @Override
     protected void initAdditionalHardware() {

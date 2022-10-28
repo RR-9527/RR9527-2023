@@ -19,10 +19,9 @@ public class DepositChain implements TaskChain {
     @Override
     public void invokeOn(@NonNull Listener button) {
         button
-            .whileHigh(bot.arm()::setToDepositPos)
-            .whileHigh(bot.wrist()::setToDepositPos)
+            .onRise(depositTimer::setPending)
 
-            .onFall(depositTimer::reset)
+            .onFall(depositTimer::start)
             .onFall(bot.claw()::openForDeposit);
 
         depositTimer

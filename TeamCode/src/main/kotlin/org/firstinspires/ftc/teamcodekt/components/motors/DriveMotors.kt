@@ -102,8 +102,8 @@ class DriveMotors(hwMap: HardwareMap) {
         val direction = atan2(speed, strafe)
         val power = sqrt(speed * speed + strafe * strafe)
 
-        val xComponent = sin(direction - kotlin.math.PI / 4) * power
-        val yComponent = cos(direction - kotlin.math.PI / 4) * power
+        val xComponent = sin(direction - PI / 4) * power
+        val yComponent = cos(direction - PI / 4) * power
 
         val max = max(abs(xComponent), abs(yComponent))
 

@@ -18,7 +18,6 @@ public class RogueCompOp extends RougeBaseOp {
         codriver.dpad_left .onRise(lift::goToLow);
 
         intakeChain.invokeOn(codriver.left_bumper);
-
         depositChain.invokeOn(codriver.right_bumper);
     }
 

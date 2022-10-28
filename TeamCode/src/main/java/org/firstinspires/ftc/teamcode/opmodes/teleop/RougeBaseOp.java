@@ -7,10 +7,9 @@ import org.firstinspires.ftc.teamcode.components.arm.Arm;
 import org.firstinspires.ftc.teamcode.components.bot.Bot;
 import org.firstinspires.ftc.teamcode.components.claw.Claw;
 import org.firstinspires.ftc.teamcode.components.intake.Intake;
-import org.firstinspires.ftc.teamcode.components.lift.LiftComponent;
+import org.firstinspires.ftc.teamcode.components.lift.Lift;
 import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.util.RuntimeMode;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveType;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.GamepadEx2;
@@ -18,6 +17,7 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
 @SuppressWarnings("SameParameterValue")
 public abstract class RougeBaseOp extends LinearOpMode {
+    protected DriveType driveType;
     protected DriveMotors driveMotors;
     protected Localizer localizer;
 
@@ -25,8 +25,7 @@ public abstract class RougeBaseOp extends LinearOpMode {
     protected Intake intake;
     protected Arm arm;
     protected Wrist wrist;
-    protected LiftComponent lift;
-
+    protected Lift lift;
     protected Bot bot;
 
     protected GamepadEx2 driver;
@@ -46,24 +45,12 @@ public abstract class RougeBaseOp extends LinearOpMode {
 
         scheduleTasks();
 
-        Runnable afterEach = () -> {
+        Scheduler.start(this, () -> {
             arm.update(telemetry);
             lift.update(telemetry);
             wrist.update();
-            drive();
-        };
-
-        if (RuntimeMode.TIME_LOOP) {
-            Scheduler.time(this, telemetry, afterEach);
-        } else {
-            Scheduler.start(this, afterEach);
-        }
-    }
-
-    protected DriveType driveType = DriveType.NORMAL;
-
-    protected void drive() {
-        driveMotors.drive(gamepad1, localizer, driveType);
+            driveMotors.drive(gamepad1, localizer, driveType);
+        });
     }
 
     protected abstract void initAdditionalHardware();
@@ -72,6 +59,7 @@ public abstract class RougeBaseOp extends LinearOpMode {
         driver = new GamepadEx2(gamepad1);
         codriver = new GamepadEx2(gamepad2);
 
+        driveType = DriveType.NORMAL;
         driveMotors = new DriveMotors(hardwareMap);
         localizer = new StandardTrackingWheelLocalizer(hardwareMap);
 
@@ -79,8 +67,7 @@ public abstract class RougeBaseOp extends LinearOpMode {
         intake = new Intake(hardwareMap);
         arm = new Arm(hardwareMap);
         wrist = new Wrist(hardwareMap);
-
-        lift = new LiftComponent(hardwareMap);
+        lift = new Lift(hardwareMap);
 
         bot = new Bot(driveMotors, localizer, claw, intake, arm, wrist, lift);
 

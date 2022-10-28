@@ -19,14 +19,12 @@ public class IntakeChain implements TaskChain {
     @Override
     public void invokeOn(@NonNull Listener button) {
         button
+            .onRise(clawTimer::setPending)
             .onRise(bot.intake()::enable)
             .onRise(bot.claw()::openForIntake)
             .onRise(bot.lift()::goToZero)
 
-            .whileHigh(bot.arm()::setToIntakePos)
-            .whileHigh(bot.wrist()::setToIntakePos)
-
-            .onFall(clawTimer::reset)
+            .onFall(clawTimer::start)
             .onFall(bot.claw()::close)
             .onFall(bot.intake()::disable);
 

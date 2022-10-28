@@ -5,7 +5,7 @@ import com.acmerobotics.roadrunner.localization.Localizer;
 import org.firstinspires.ftc.teamcode.components.arm.Arm;
 import org.firstinspires.ftc.teamcode.components.claw.Claw;
 import org.firstinspires.ftc.teamcode.components.intake.Intake;
-import org.firstinspires.ftc.teamcode.components.lift.LiftComponent;
+import org.firstinspires.ftc.teamcode.components.lift.Lift;
 import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
 
@@ -16,9 +16,9 @@ public class Bot {
     private final Intake intake;
     private final Arm arm;
     private final Wrist wrist;
-    private final LiftComponent lift;
+    private final Lift lift;
 
-    public Bot(DriveMotors driveMotors, Localizer localizer, Claw claw, Intake intake, Arm arm, Wrist wrist, LiftComponent lift) {
+    public Bot(DriveMotors driveMotors, Localizer localizer, Claw claw, Intake intake, Arm arm, Wrist wrist, Lift lift) {
         this.driveMotors = driveMotors;
         this.localizer = localizer;
         this.claw = claw;
@@ -52,7 +52,7 @@ public class Bot {
         return wrist;
     }
 
-    public LiftComponent lift() {
+    public Lift lift() {
         return lift;
     }
 }
