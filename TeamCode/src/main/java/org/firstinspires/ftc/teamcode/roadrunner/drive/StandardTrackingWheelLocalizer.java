@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.roadrunner.util.Encoder;
+import org.firstinspires.ftc.teamcode.util.ReverseDeadwheels;
 
 import java.util.Arrays;
 import java.util.List;
@@ -50,9 +51,9 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "FL"));
         rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "BR"));
         frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "BL"));
-
-        leftEncoder.setDirection(Encoder.Direction.REVERSE);
-        rightEncoder.setDirection(Encoder.Direction.REVERSE);
+//
+//        leftEncoder.setDirection(Encoder.Direction.REVERSE);
+//        rightEncoder.setDirection(Encoder.Direction.REVERSE);
 //        frontEncoder.setDirection(Encoder.Direction.REVERSE);
 
         // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
@@ -62,9 +63,19 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
     }
 
+    private void updateInversion(){
+        if(ReverseDeadwheels.frontReversed)
+            frontEncoder.setDirection(Encoder.Direction.REVERSE);
+        if(ReverseDeadwheels.rightReversed)
+            rightEncoder.setDirection(Encoder.Direction.REVERSE);
+        if(ReverseDeadwheels.leftReversed)
+            leftEncoder.setDirection(Encoder.Direction.REVERSE);
+    }
+
     @NonNull
     @Override
     public List<Double> getWheelPositions() {
+        updateInversion();
         return Arrays.asList(
                 encoderTicksToInches(leftEncoder.getCurrentPosition()) * X_MULTIPLIER,
                 encoderTicksToInches(rightEncoder.getCurrentPosition()) * X_MULTIPLIER,
@@ -78,6 +89,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         // TODO: If your encoder velocity can exceed 32767 counts / second (such as the REV Through Bore and other
         //  competing magnetic encoders), change Encoder.getRawVelocity() to Encoder.getCorrectedVelocity() to enable a
         //  compensation method
+        updateInversion();
 
         return Arrays.asList(
                 encoderTicksToInches(leftEncoder.getCorrectedVelocity()) * X_MULTIPLIER,
@@ -311,10 +323,10 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 
 
 
-    @NonNull
-    @Override
-    public Pose2d getPoseEstimate() {
-        Pose2d pose = super.getPoseEstimate();
-        return new Pose2d(pose.getX(), pose.getY(), 2 * Math.PI - pose.getHeading());
-    }
+//    @NonNull
+//    @Override
+//    public Pose2d getPoseEstimate() {
+//        Pose2d pose = super.getPoseEstimate();
+//        return new Pose2d(pose.getX(), pose.getY(), 2 * Math.PI - pose.getHeading());
+//    }
 }
