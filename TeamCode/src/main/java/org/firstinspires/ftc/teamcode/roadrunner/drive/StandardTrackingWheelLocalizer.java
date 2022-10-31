@@ -29,15 +29,15 @@ import java.util.List;
  */
 @Config
 public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
-    public static double X_MULTIPLIER = -((72 / 71.05925) + (72 / 71.31266) + (72 / 71.26539)) / 3;
-    public static double Y_MULTIPLIER = -((72 / 70.62737) + (72 / 70.54758) + (72 / 70.00001)) / 3;
+    public static double X_MULTIPLIER = ((72 / 71.05925) + (72 / 71.31266) + (72 / 71.26539)) / 3;
+    public static double Y_MULTIPLIER = ((72 / 70.62737) + (72 / 70.54758) + (72 / 70.00001)) / 3;
 
     public static double TICKS_PER_REV = 8192;
     public static double WHEEL_RADIUS = .688975; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
     public static double LATERAL_DISTANCE = 12.37001; // in; distance between the left and right wheels
-    public static double FORWARD_OFFSET = -((15.25 / 2) - 3); // in; offset of the lateral wheel
+    public static double FORWARD_OFFSET = ((15.25 / 2) - 3); // in; offset of the lateral wheel
 
     private final Encoder leftEncoder, rightEncoder, frontEncoder;
 
@@ -54,7 +54,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 //
 //        leftEncoder.setDirection(Encoder.Direction.REVERSE);
 //        rightEncoder.setDirection(Encoder.Direction.REVERSE);
-//        frontEncoder.setDirection(Encoder.Direction.REVERSE);
+        frontEncoder.setDirection(Encoder.Direction.REVERSE);
 
         // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
     }
@@ -98,9 +98,105 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         );
     }
 
-    /**
+    /*
      * Warning, adventurer. It is advised never to scroll past this point.
      */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -329,4 +425,185 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 //        Pose2d pose = super.getPoseEstimate();
 //        return new Pose2d(pose.getX(), pose.getY(), 2 * Math.PI - pose.getHeading());
 //    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
