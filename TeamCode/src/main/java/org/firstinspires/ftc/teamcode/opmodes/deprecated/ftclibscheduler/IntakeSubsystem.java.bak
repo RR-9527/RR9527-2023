@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.teleop.ftclibscheduler;
+package org.firstinspires.ftc.teamcode.opmodes.deprecated.ftclibscheduler;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;

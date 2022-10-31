@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.opmodes.teleop.ftclibscheduler;
+package org.firstinspires.ftc.teamcode.opmodes.deprecated.ftclibscheduler;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-public class IntakeCommand extends CommandBase {
+public class DepositCommand extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final IntakeSubsystem m_subsystem;
 
@@ -11,7 +11,7 @@ public class IntakeCommand extends CommandBase {
      *
      * @param subsystem The subsystem used by this command.
      */
-    public IntakeCommand(IntakeSubsystem subsystem) {
+    public DepositCommand(IntakeSubsystem subsystem) {
         m_subsystem = subsystem;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(subsystem);
@@ -19,9 +19,9 @@ public class IntakeCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        m_subsystem.rollWheels();
-        m_subsystem.openClaw();
-        m_subsystem.setWristIntakePos();
+        m_subsystem.stopWheels();
+        m_subsystem.closeClaw();
+        m_subsystem.setWristDepositPos();
     }
 
     @Override
