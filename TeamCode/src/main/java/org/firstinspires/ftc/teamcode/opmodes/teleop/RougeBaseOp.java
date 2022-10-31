@@ -40,6 +40,7 @@ public abstract class RougeBaseOp extends LinearOpMode {
         Scheduler.beforeEach(() -> {
             arm.setToRestingPos();
             wrist.setToRestingPos();
+            powerMulti = 1.0;
         });
 
         scheduleTasks();
@@ -55,18 +56,17 @@ public abstract class RougeBaseOp extends LinearOpMode {
     protected void initAdditionalHardware() {}
 
     private void initHardware() {
-        driver = new GamepadEx2(gamepad1);
+        driver   = new GamepadEx2(gamepad1);
         codriver = new GamepadEx2(gamepad2);
 
         driveMotors = new DriveMotors(hardwareMap);
-        localizer = new StandardTrackingWheelLocalizer(hardwareMap);
-        powerMulti = 1.0;
+        localizer   = new StandardTrackingWheelLocalizer(hardwareMap);
 
-        claw = new Claw(hardwareMap);
+        claw   = new Claw(hardwareMap);
         intake = new Intake(hardwareMap);
-        arm = new Arm(hardwareMap);
-        wrist = new Wrist(hardwareMap);
-        lift = new Lift(hardwareMap);
+        arm    = new Arm(hardwareMap);
+        wrist  = new Wrist(hardwareMap);
+        lift   = new Lift(hardwareMap);
 
         bot = new Bot(driveMotors, localizer, claw, intake, arm, wrist, lift);
 
