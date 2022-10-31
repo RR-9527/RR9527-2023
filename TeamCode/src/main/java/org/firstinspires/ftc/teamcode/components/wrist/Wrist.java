@@ -13,20 +13,19 @@ public class Wrist {
     private double wristPosition;
 
     public Wrist(HardwareMap hardwareMap) {
-        wristServo =
-            new SimpleServo(hardwareMap, "WR", 0, 180, AngleUnit.DEGREES);
+        wristServo = new SimpleServo(hardwareMap, "WR", 0, 180, AngleUnit.DEGREES);
     }
 
     public void setToRestingPos() {
         wristPosition = RobotConstants.Wrist.REST;
     }
 
-    public void setToIntakePos() {
-        wristPosition = RobotConstants.Wrist.INTAKE_POS;
+    public void setToBackwardsPos() {
+        wristPosition = RobotConstants.Wrist.FORWARDS;
     }
 
-    public void setToDepositPos() {
-        wristPosition = RobotConstants.Wrist.DEPOSIT_POS;
+    public void setToForwardsPos() {
+        wristPosition = RobotConstants.Wrist.BACKWARDS;
     }
 
     public void update() {

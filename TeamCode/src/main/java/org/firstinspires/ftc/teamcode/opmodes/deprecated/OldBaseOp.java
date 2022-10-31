@@ -12,10 +12,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RobotCommon;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.Arm;
-import org.firstinspires.ftc.teamcode.util.RobotConstants.Claw;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.Lift;
 import org.firstinspires.ftc.teamcode.util.RobotConstants.Wrist;
-import org.firstinspires.ftc.teamcode.util.RobotConstants.Lift;
 
 @Disabled
 @TeleOp(name = "BaseOp")
@@ -91,11 +89,11 @@ public class OldBaseOp extends RobotCommon {
     private void updateArm() {
         double correction = 0;
         if (game_pad1.getButton(GamepadKeys.Button.X)) {
-            correction = armPID.calculate(arm.getCurrentPosition(), Arm.INTAKE_POS);
+            correction = armPID.calculate(arm.getCurrentPosition(), Arm.BACKWARDS);
         } else if (game_pad1.getButton(GamepadKeys.Button.Y)) {
             correction = armPID.calculate(arm.getCurrentPosition(), Arm.VERTICAL);
         } else if (game_pad1.getButton(GamepadKeys.Button.B)) {
-            correction = armPID.calculate(arm.getCurrentPosition(), Arm.DEPOSIT_POS);
+            correction = armPID.calculate(arm.getCurrentPosition(), Arm.FORWARDS);
         }
         arm.set(correction);
     }
@@ -117,10 +115,10 @@ public class OldBaseOp extends RobotCommon {
 
     private void updateWrist() {
         if (game_pad1.getButton(GamepadKeys.Button.DPAD_DOWN)) {
-            wrist.setPosition(Wrist.DEPOSIT_POS);
+            wrist.setPosition(Wrist.BACKWARDS);
         }
         else{
-            wrist.setPosition(Wrist.INTAKE_POS);
+            wrist.setPosition(Wrist.FORWARDS);
         }
     }
 }

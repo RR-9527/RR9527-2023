@@ -46,7 +46,7 @@ import org.firstinspires.ftc.teamcodekt.util.Condition
  * @see GamepadEx2
  * @see Timer
  */
-class Listener(private val condition: Condition) {
+class Listener(val condition: Condition) {
     /**
      * The subscribed set of [actions][Runnable] that are performed when the given
      * condition's state matches the given [SignalTrigger][SignalTrigger].
@@ -129,4 +129,35 @@ class Listener(private val condition: Condition) {
             if (condition()) action.run()
         }
     }
+
+    // -----------------------------------------------------------------
+    // Listener builders
+    // -----------------------------------------------------------------
+
+    fun and(other: Condition) = Listener { condition() && other() }
+
+    fun or(other: Condition) = Listener { condition() || other() }
+
+    fun not() = Listener { !condition() }
+
+    fun xor(other: Condition) = Listener { condition() xor other() }
+
+    fun nand(other: Condition) = Listener { !(condition() && other()) }
+
+    fun nor(other: Condition) = Listener { !(condition() || other()) }
+
+    fun xnor(other: Condition) = Listener { condition() == other() }
+
+
+    fun and(other: Listener) = Listener { condition() && other.condition() }
+
+    fun or(other: Listener) = Listener { condition() || other.condition() }
+
+    fun xor(other: Listener) = Listener { condition() xor other.condition() }
+
+    fun nand(other: Listener) = Listener { !(condition() && other.condition()) }
+
+    fun nor(other: Listener) = Listener { !(condition() || other.condition()) }
+
+    fun xnor(other: Listener) = Listener { condition() == other.condition() }
 }

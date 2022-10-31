@@ -29,16 +29,16 @@ public class Arm {
         );
     }
 
-    public void setToDefaultPos() {
+    public void setToRestingPos() {
         armCorrection = RobotConstants.Arm.VERTICAL;
     }
 
-    public void setToIntakePos() {
-        armCorrection = RobotConstants.Arm.INTAKE_POS;
+    public void setToBackwardsPos() {
+        armCorrection = RobotConstants.Arm.BACKWARDS;
     }
 
-    public void setToDepositPos() {
-        armCorrection = RobotConstants.Arm.DEPOSIT_POS;
+    public void setToForwardsPos() {
+        armCorrection = RobotConstants.Arm.FORWARDS;
     }
 
     public void update(Telemetry telemetry) {

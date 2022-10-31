@@ -12,9 +12,9 @@ public class RobotConstants {
 
     @Config
     public static class Arm {
-    	public static double INTAKE_POS = 480;
+    	public static double BACKWARDS = 480;
     	public static double VERTICAL = 0;
-    	public static double DEPOSIT_POS = -480;
+    	public static double FORWARDS = -480;
 
     	public static double P = 0.002;
     	public static double I = 0.085;
@@ -24,18 +24,18 @@ public class RobotConstants {
 
     @Config
     public static class Wrist {
-    	public static double INTAKE_POS = .835;
+    	public static double FORWARDS = .835;
 		public static double REST = .5;
-    	public static double DEPOSIT_POS = .185;
+    	public static double BACKWARDS = .185;
     }
 
     @Config
     public static class Lift {
-		public static double ZERO = 0;
-		public static double REST = 0;
-		public static double LOW = 1500;
-		public static double MID = 2250;
-		public static double HIGH = 3000;
+		public static int ZERO = 0;
+		public static int REST = 0;
+		public static int LOW = 1500;
+		public static int MID = 2250;
+		public static int HIGH = 3000;
 
 		public static double P = 0.0015;
 		public static double I = 0.1;

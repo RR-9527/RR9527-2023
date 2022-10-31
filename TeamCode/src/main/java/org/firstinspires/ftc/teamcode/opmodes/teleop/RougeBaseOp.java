@@ -11,13 +11,12 @@ import org.firstinspires.ftc.teamcode.components.lift.Lift;
 import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
-import org.firstinspires.ftc.teamcodekt.components.motors.DriveType;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.GamepadEx2;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
 @SuppressWarnings("SameParameterValue")
 public abstract class RougeBaseOp extends LinearOpMode {
-    protected DriveType driveType;
+    protected double powerMulti;
     protected DriveMotors driveMotors;
     protected Localizer localizer;
 
@@ -32,14 +31,14 @@ public abstract class RougeBaseOp extends LinearOpMode {
     protected GamepadEx2 codriver;
 
     protected abstract void scheduleTasks();
-    
+
     @Override
     public void runOpMode() throws InterruptedException {
         initHardware();
         waitForStart();
 
         Scheduler.beforeEach(() -> {
-            arm.setToDefaultPos();
+            arm.setToRestingPos();
             wrist.setToRestingPos();
         });
 
@@ -49,19 +48,19 @@ public abstract class RougeBaseOp extends LinearOpMode {
             arm.update(telemetry);
             lift.update(telemetry);
             wrist.update();
-            driveMotors.drive(gamepad1, localizer, driveType);
+            driveMotors.drive(gamepad1, localizer, powerMulti);
         });
     }
 
-    protected abstract void initAdditionalHardware();
+    protected void initAdditionalHardware() {}
 
     private void initHardware() {
         driver = new GamepadEx2(gamepad1);
         codriver = new GamepadEx2(gamepad2);
 
-        driveType = DriveType.NORMAL;
         driveMotors = new DriveMotors(hardwareMap);
         localizer = new StandardTrackingWheelLocalizer(hardwareMap);
+        powerMulti = 1.0;
 
         claw = new Claw(hardwareMap);
         intake = new Intake(hardwareMap);

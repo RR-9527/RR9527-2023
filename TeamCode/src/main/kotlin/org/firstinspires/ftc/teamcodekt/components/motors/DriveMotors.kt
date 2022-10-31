@@ -42,10 +42,12 @@ import kotlin.math.*
  * @author KG
  */
 class DriveMotors(hwMap: HardwareMap) {
-    val frontLeft  = initializedMotor("FL", hwMap, reversed = true)
-    val frontRight = initializedMotor("FR", hwMap)
-    val backLeft   = initializedMotor("BL", hwMap, reversed = true)
-    val backRight  = initializedMotor("BR", hwMap)
+    private val frontLeft  = initializedMotor("FL", hwMap, reversed = true)
+    private val frontRight = initializedMotor("FR", hwMap)
+    private val backLeft   = initializedMotor("BL", hwMap, reversed = true)
+    private val backRight  = initializedMotor("BR", hwMap)
+
+    var driveType = DriveType.IMPROVED
 
     fun setPowers(flp: Number, frp: Number, blp: Number, brp: Number) {
         frontLeft.power   =   flp.toDouble()
@@ -68,13 +70,13 @@ class DriveMotors(hwMap: HardwareMap) {
         telemetry.addData("Back-right motor:",  dataSupplier(backRight))
     }
 
-    fun drive(gamepad: Gamepad, localizer: Localizer, type: DriveType) = when (type) {
-        DriveType.NORMAL -> driveNormal(gamepad)
-        DriveType.IMPROVED -> driveImproved(gamepad)
-        DriveType.FIELD_CENTRIC -> driveFc(gamepad, localizer)
+    fun drive(gamepad: Gamepad, localizer: Localizer, powerMulti: Double) = when (driveType) {
+        DriveType.NORMAL -> driveNormal(gamepad, powerMulti)
+        DriveType.IMPROVED -> driveImproved(gamepad, powerMulti)
+        DriveType.FIELD_CENTRIC -> driveFc(gamepad, localizer, powerMulti)
     }
 
-    private fun driveNormal(gamepad: Gamepad) = with(gamepad) {
+    private fun driveNormal(gamepad: Gamepad, _powerMulti: Double) = with(gamepad) {
         val (speed, strafe, rotation) = gamepad.getDriveSticks()
 
         val flp = speed + strafe + rotation
@@ -86,17 +88,13 @@ class DriveMotors(hwMap: HardwareMap) {
             .maxByOrNull(kotlin.Float::absoluteValue)!!
             .coerceAtLeast(1f)
 
-        val powerMulti = when {
-            !gamepad.isJoystickTriggered() -> 0.0
-            left_trigger > 0.8 -> (1.0 - left_trigger).coerceAtLeast(.1)
-            else -> 1.0
-        }
+        val powerMulti = if (!isJoystickTriggered()) 0.0 else _powerMulti
 
         setPowers(flp, frp, blp, brp)
         transformPowers { it * powerMulti / powerScale }
     }
 
-    private fun driveImproved(gamepad: Gamepad) = with(gamepad) {
+    private fun driveImproved(gamepad: Gamepad, _powerMulti: Double) = with(gamepad) {
         val (speed, strafe, rotation) = gamepad.getDriveSticks()
 
         val direction = atan2(speed, strafe)
@@ -114,17 +112,13 @@ class DriveMotors(hwMap: HardwareMap) {
 
         val powerScale = listOf(flp, frp, blp, brp, 1.0).maxOf { abs(it) }
 
-        val powerMulti = when {
-            !gamepad.isJoystickTriggered() -> 0.0
-            left_trigger > 0.8 -> (1.0 - left_trigger).coerceAtLeast(.1)
-            else -> 1.0
-        }
+        val powerMulti = if (!isJoystickTriggered()) 0.0 else _powerMulti
 
         setPowers(flp, frp, blp, brp)
         transformPowers { it * powerMulti / powerScale }
     }
 
-    private fun driveFc(gamepad: Gamepad, localizer: Localizer) = with(gamepad) {
+    private fun driveFc(gamepad: Gamepad, localizer: Localizer, _powerMulti: Double) = with(gamepad) {
         val (speed, strafe, turn) = gamepad.getDriveSticks()
 
         val heading = -localizer.poseEstimate.heading
@@ -139,11 +133,7 @@ class DriveMotors(hwMap: HardwareMap) {
         val powerScale = listOf(flp, frp, blp, brp).maxOf { abs(it) }
             .coerceAtLeast(1.0)
 
-        val powerMulti = when {
-            !gamepad.isJoystickTriggered() -> 0.0
-            left_trigger > 0.8 -> 1.0 - left_trigger
-            else -> 1.0
-        }
+        val powerMulti = if (!isJoystickTriggered()) 0.0 else _powerMulti
 
         setPowers(flp, frp, blp, brp)
         transformPowers { it * powerMulti / powerScale }

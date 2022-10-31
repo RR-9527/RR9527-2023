@@ -39,7 +39,7 @@ public class RogueTestingOpBackup extends LinearOpMode {
 
         // Before each tick:
         Scheduler.beforeEach(() -> {
-            arm.setToDefaultPos();
+            arm.setToRestingPos();
             wrist.setToRestingPos();
         });
 
@@ -73,32 +73,32 @@ public class RogueTestingOpBackup extends LinearOpMode {
             .onRise(claw::openForIntake)
             .onRise(lift::goToZero)
 
-            .whileHigh(arm::setToIntakePos)
-            .whileHigh(wrist::setToIntakePos)
+            .whileHigh(arm::setToBackwardsPos)
+            .whileHigh(wrist::setToBackwardsPos)
 
             .onFall(timer::reset)
             .onFall(claw::close)
             .onFall(intake::disable);
 
         timer
-            .whileWaiting(arm::setToIntakePos)
-            .whileWaiting(wrist::setToIntakePos)
+            .whileWaiting(arm::setToBackwardsPos)
+            .whileWaiting(wrist::setToBackwardsPos)
 
             .onDone(lift::goToRest);
     }
 
     private void depositChain(Listener listener, Timer timer) {
         listener
-            .whileHigh(arm::setToDepositPos)
-            .whileHigh(wrist::setToDepositPos)
+            .whileHigh(arm::setToForwardsPos)
+            .whileHigh(wrist::setToForwardsPos)
 
             .onFall(timer::reset)
             .onFall(intake::reverse)
             .onFall(claw::openForDeposit);
 
         timer
-            .whileWaiting(arm::setToDepositPos)
-            .whileWaiting(wrist::setToDepositPos)
+            .whileWaiting(arm::setToForwardsPos)
+            .whileWaiting(wrist::setToForwardsPos)
 
             .onDone(intake::disable)
             .onDone(claw::close);

@@ -37,10 +37,10 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setWristIntakePos(){
-        wrist.setPosition(Wrist.INTAKE_POS);
+        wrist.setPosition(Wrist.FORWARDS);
     }
 
     public void setWristDepositPos(){
-        wrist.setPosition(Wrist.DEPOSIT_POS);
+        wrist.setPosition(Wrist.BACKWARDS);
     }
 }

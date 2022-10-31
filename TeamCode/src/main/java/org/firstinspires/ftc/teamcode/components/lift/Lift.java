@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.util.RobotConstants;
 public class Lift {
     private final Motor liftA, liftB;
 
-    private double liftHeight;
+    private int liftHeight;
 
     private PIDFController liftAPID, liftBPID;
 
@@ -67,5 +67,13 @@ public class Lift {
 //        double correctionB = liftABPID.calculate(liftA.getCurrentPosition(), liftHeight);
         liftA.set(correctionA);
         liftB.set(correctionA);
+    }
+
+    public int getHeight() {
+        return liftHeight;
+    }
+
+    public void setHeight(int height) {
+        liftHeight = Math.max(0, Math.min(height, 3000));
     }
 }
