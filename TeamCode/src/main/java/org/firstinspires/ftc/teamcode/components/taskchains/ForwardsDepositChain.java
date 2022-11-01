@@ -12,10 +12,12 @@ import kotlin.jvm.functions.Function0;
 public class ForwardsDepositChain implements TaskChain {
     private final Bot bot;
     private final Timer depositTimer;
+    private final Timer liftTimer;
 
     public ForwardsDepositChain(Bot bot, int clawOpeningTime) {
         this.bot = bot;
         this.depositTimer = new Timer(clawOpeningTime);
+        this.liftTimer = new Timer(200);
     }
 
     @Override
@@ -26,8 +28,8 @@ public class ForwardsDepositChain implements TaskChain {
             .onRise(depositTimer::setPending)
 
             .onFall(() -> {
-                depositTimer.setPending();
                 bot.claw().openForDeposit();
+                depositTimer.start();
             });
 
         depositTimer
@@ -36,6 +38,12 @@ public class ForwardsDepositChain implements TaskChain {
                 bot.wrist().setToForwardsPos();
             })
 
-            .onDone(bot.claw()::close);
+            .onDone(() -> {
+                bot.claw().close();
+                liftTimer.start();
+            });
+
+        liftTimer
+            .onDone(bot.lift()::goToZero);
     }
 }

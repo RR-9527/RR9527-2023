@@ -10,10 +10,12 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.Timer;
 public class BackwardsDepositChain implements TaskChain {
     private final Bot bot;
     private final Timer depositTimer;
+    private final Timer liftTimer;
 
     public BackwardsDepositChain(Bot bot, int clawOpeningTime) {
         this.bot = bot;
         this.depositTimer = new Timer(clawOpeningTime);
+        this.liftTimer = new Timer(200);
     }
 
     @Override
@@ -22,8 +24,8 @@ public class BackwardsDepositChain implements TaskChain {
             .onRise(depositTimer::setPending)
 
             .onFall(() -> {
-                depositTimer.setPending();
                 bot.claw().openForDeposit();
+                depositTimer.start();
             });
 
         depositTimer
@@ -32,6 +34,12 @@ public class BackwardsDepositChain implements TaskChain {
                 bot.wrist().setToBackwardsPos();
             })
 
-            .onDone(bot.claw()::close);
+            .onDone(() -> {
+                bot.claw().close();
+                liftTimer.start();
+            });
+
+        liftTimer
+            .onDone(bot.lift()::goToZero);
     }
 }

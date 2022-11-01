@@ -38,6 +38,6 @@ public class IntakeChain implements TaskChain {
                 bot.wrist().setToBackwardsPos();
             })
 
-            .onDone(bot.lift()::goToRest);
+            .onDone(bot.lift()::goToZero);
     }
 }

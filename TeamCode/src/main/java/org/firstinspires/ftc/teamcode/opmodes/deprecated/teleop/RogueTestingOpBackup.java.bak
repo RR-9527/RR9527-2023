@@ -45,7 +45,7 @@ public class RogueTestingOpBackup extends LinearOpMode {
 
         // Lift: increment up and down with button presses
         driver.dpad_up   .onRise(lift::goToHigh);
-        driver.dpad_down .onRise(lift::goToRest);
+        driver.dpad_down .onRise(lift::goToZero);
         driver.dpad_right.onRise(lift::goToMid);
         driver.dpad_left .onRise(lift::goToLow);
 
@@ -84,7 +84,7 @@ public class RogueTestingOpBackup extends LinearOpMode {
             .whileWaiting(arm::setToBackwardsPos)
             .whileWaiting(wrist::setToBackwardsPos)
 
-            .onDone(lift::goToRest);
+            .onDone(lift::goToZero);
     }
 
     private void depositChain(Listener listener, Timer timer) {

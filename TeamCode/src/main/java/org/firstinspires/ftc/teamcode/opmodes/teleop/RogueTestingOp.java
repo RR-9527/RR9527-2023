@@ -18,7 +18,7 @@ public class RogueTestingOp extends RougeBaseOp {
     @Override
     public void scheduleTasks() {
         driver.dpad_up   .onRise(lift::goToHigh);
-        driver.dpad_down .onRise(lift::goToRest);
+        driver.dpad_down .onRise(lift::goToZero);
         driver.dpad_right.onRise(lift::goToMid);
         driver.dpad_left .onRise(lift::goToLow);
 
@@ -26,20 +26,17 @@ public class RogueTestingOp extends RougeBaseOp {
         forwardsDepositChain.invokeOn(driver.right_bumper);
         backwardsDepositChain.invokeOn(driver.y);
 
-        codriver.right_stick_x(.1).whileHigh(() -> {
-            if (gamepad2.right_stick_x > 0) {
-                lift.setHeight(lift.getHeight() + 10);
-            } else {
-                lift.setHeight(lift.getHeight() - 10);
-            }
-        });
+        driver.right_stick_x(.2).and(driver.x)
+            .whileHigh(() -> {
+                lift.setHeight(lift.getHeight() + (int) (13 * gamepad2.right_stick_x));
+            });
 
         driver.a.onRise(this::rotateDriveType);
 
         driver.left_trigger.whileHigh(this::decreaseDriveSpeed);
 
         new Listener(() -> lift.getHeight() > 1000)
-            .whileHigh(() -> powerMulti = .1);
+            .whileHigh(() -> powerMulti /= 2);
     }
 
     private void rotateDriveType() {

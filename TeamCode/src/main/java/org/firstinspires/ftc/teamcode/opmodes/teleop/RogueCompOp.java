@@ -15,7 +15,7 @@ public class RogueCompOp extends RougeBaseOp {
     @Override
     public void scheduleTasks() {
         codriver.dpad_up   .onRise(lift::goToHigh);
-        codriver.dpad_down .onRise(lift::goToRest);
+        codriver.dpad_down .onRise(lift::goToZero);
         codriver.dpad_right.onRise(lift::goToMid);
         codriver.dpad_left .onRise(lift::goToLow);
 
@@ -23,18 +23,14 @@ public class RogueCompOp extends RougeBaseOp {
         forwardsDepositChain.invokeOn(codriver.right_bumper);
         backwardsDepositChain.invokeOn(codriver.y);
 
-        codriver.right_stick_x(.1).whileHigh(() -> {
-            if (gamepad2.right_stick_x > 0) {
-                lift.setHeight(lift.getHeight() + 10);
-            } else {
-                lift.setHeight(lift.getHeight() - 10);
-            }
+        codriver.right_stick_x(.2).whileHigh(() -> {
+            lift.setHeight(lift.getHeight() + (int) (13 * gamepad2.right_stick_x));
         });
 
         driver.left_trigger.whileHigh(this::decreaseDriveSpeed);
 
         new Listener(() -> lift.getHeight() > 1000)
-            .whileHigh(() -> powerMulti = .1);
+            .whileHigh(() -> powerMulti /= 2);
     }
 
     private void decreaseDriveSpeed() {
