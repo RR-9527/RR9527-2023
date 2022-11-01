@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.util;
 
 @SuppressWarnings("unchecked")
 public class StateRotator<T> {
-    T[] states;
-    int currentStatePos;
+    private final T[] states;
+    private int currentStatePos;
 
-    public StateRotator(T ...states) {
+    public StateRotator(T... states) {
         this.states = states;
         this.currentStatePos = 0;
 
@@ -14,11 +14,11 @@ public class StateRotator<T> {
 
     public StateRotator(Iterable<? extends T> states) {
         int totalStates = 0;
-        for(T ignored : states)
+        for (T ignored : states)
             totalStates++;
 
         this.states = (T[]) new Object[totalStates];
-        for(T ignored : states)
+        for (T ignored : states)
             this.states[--totalStates] = ignored;
 
         this.currentStatePos = 0;

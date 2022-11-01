@@ -32,9 +32,8 @@ public class RobotConstants {
     @Config
     public static class Lift {
 		public static int ZERO = 0;
-		public static int REST = 0;
-		public static int LOW = 1500;
-		public static int MID = 2250;
+		public static int LOW = 1300;
+		public static int MID = 2000;
 		public static int HIGH = 3000;
 
 		public static double P = 0.0015;
