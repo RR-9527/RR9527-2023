@@ -27,6 +27,7 @@ public abstract class BezierFollower extends CommandOpMode {
 
     /**
      * Create a follower object using FTCLib's Pure Pursuit library
+     *
      * @param controlPoints
      */
     public void init_bezier(final OdometrySubsystem odometrySubsystem, final MecanumDrive drive, final Function2<Double, Double, Double> velocityFunction, final Function2<Double, Double, Double> angularFunction, final Point... controlPoints) {
@@ -42,29 +43,40 @@ public abstract class BezierFollower extends CommandOpMode {
     }
 
 
-
-    public void generatePath(final double numPoints, final double maxV, final double maxAngV) {
-        for(double t=0;t<=1;t+=1/numPoints){
+    public void generatePath(final double numPoints, final double maxV, final double maxAngV, boolean constantHeading) {
+        for (double t = 0; t <= 1; t += 1 / numPoints) {
             Point p = recursiveLerp(controlPoints, t);
 
             double mvmtSpeed = velocityFunction.invoke(t, maxV);
             double angSpeed = velocityFunction.invoke(t, maxAngV);
 
-            if(t == 0)
+            // TODO: Check the implementation derivatives and angle following
+            if(constantHeading){
+                Point pMinus1 = recursiveLerp(controlPoints, t - 1 / numPoints);
+                double xDeriv = numPoints * (p.x - pMinus1.x);
+                double yDeriv = numPoints * (p.y - pMinus1.y);
+                p.angle = Math.atan2(xDeriv, yDeriv);
+            }
+
+            if (t == 0)
                 pathPoints.add(new StartWaypoint(p.toPose()));
-            else if(t == 1)
+            else if (t == 1)
                 pathPoints.add(new EndWaypoint(p.toPose(), 0, 0, 0, 0.05, 0.01));
             else
                 pathPoints.add(new GeneralWaypoint(p.toPose(), mvmtSpeed, angSpeed, -0.0));
         }
         Waypoint[] pointsInArray = new Waypoint[pathPoints.size()];
-        for(int i=0;i<pointsInArray.length;i++)
+        for (int i = 0; i < pointsInArray.length; i++)
             pointsInArray[i] = pathPoints.get(i);
 
         command = new PurePursuitCommand(drive, odometrySubsystem, pointsInArray);
     }
 
-    public void run(){
+    public void generatePath(final double numPoints, final double maxV, final double maxAngV){
+        generatePath(numPoints, maxV, maxAngV, false);
+    }
+
+    public void run() {
         schedule(command);
     }
 
