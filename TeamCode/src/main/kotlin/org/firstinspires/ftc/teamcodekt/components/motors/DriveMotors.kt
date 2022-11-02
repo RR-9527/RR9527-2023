@@ -47,6 +47,8 @@ class DriveMotors(hwMap: HardwareMap) {
     private val backLeft   = initializedMotor("BL", hwMap, reversed = true)
     private val backRight  = initializedMotor("BR", hwMap)
 
+    private val A_MULT = 2
+
     var driveType = DriveType.IMPROVED
 
     fun setPowers(flp: Number, frp: Number, blp: Number, brp: Number) {
@@ -76,19 +78,34 @@ class DriveMotors(hwMap: HardwareMap) {
         DriveType.FIELD_CENTRIC -> driveFc(gamepad, localizer, powerMulti)
     }
 
+    private fun powerScaling(power: Double): Double {
+        return 0.0
+    }
+
     private fun driveNormal(gamepad: Gamepad, _powerMulti: Double) = with(gamepad) {
         val (speed, strafe, rotation) = gamepad.getDriveSticks()
 
-        val flp = speed + strafe + rotation
-        val frp = speed - strafe - rotation
-        val blp = speed - strafe + rotation
-        val brp = speed + strafe - rotation
+        var flp = speed + strafe + rotation
+        var frp = speed - strafe - rotation
+        var blp = speed - strafe + rotation
+        var brp = speed + strafe - rotation
 
         val powerScale = listOf(flp, frp, blp, brp)
             .maxByOrNull(kotlin.Float::absoluteValue)!!
             .coerceAtLeast(1f)
 
         val powerMulti = if (!isJoystickTriggered()) 0.0 else _powerMulti
+
+        // Tiernan rescale code
+//        val max = max(max(flp, frp), max(blp, brp))
+//        if(max >= 1) {
+//            flp /= max
+//            frp /= max
+//            blp /= max
+//            brp /= max
+//        }
+
+
 
         setPowers(flp, frp, blp, brp)
         transformPowers { it * powerMulti / powerScale }

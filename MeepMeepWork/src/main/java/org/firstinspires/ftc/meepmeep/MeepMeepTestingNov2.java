@@ -24,7 +24,7 @@ public class MeepMeepTestingNov2 {
             .setDimensions(15.67, 15.17)
 
             .setConstraints(new Constraints(
-                49.396,
+                70.396,
                 41.986335266644225,
                 Math.toRadians(567.98274),
                 Math.toRadians(189.42045732283466),
@@ -32,10 +32,10 @@ public class MeepMeepTestingNov2 {
             ))
 
             .followTrajectorySequence(drive ->
-                drive.trajectorySequenceBuilder(new Pose2d(toInches(91), toInches(-159), radians(-90)))
+                drive.trajectorySequenceBuilder(new Pose2d(toInches(91), toInches(-159), radians(90)))
                     // Deposit preload
-                    .back(toInches(135))
-                    .turn(radians(-135))
+                    .forward(toInches(135))
+                    .turn(radians(45))
 
                     .turn(radians(30))
 
@@ -57,20 +57,20 @@ public class MeepMeepTestingNov2 {
                     .setReversed(false)
                     .splineTo(new Vector2d(toInches(91), toInches(-24)), radians(140))
 
-//                    // Auto Cycle - #4
-//                    .setReversed(true)
-//                    .splineTo(new Vector2d(toInches(145), toInches(-30.5)), radians(0))
-//                    .setReversed(false)
-//                    .splineTo(new Vector2d(toInches(91), toInches(-24)), radians(140))
-//
-//                    // Auto Cycle - #5
-//                    .setReversed(true)
-//                    .splineTo(new Vector2d(toInches(145), toInches(-30.5)), radians(0))
-//                    .setReversed(false)
-//                    .splineTo(new Vector2d(toInches(91), toInches(-24)), radians(140))
-//
-                    .turn(radians(-50))
-                    .back(toInches(70))
+                    // Auto Cycle - #4
+                    .setReversed(true)
+                    .splineTo(new Vector2d(toInches(145), toInches(-30.5)), radians(0))
+                    .setReversed(false)
+                    .splineTo(new Vector2d(toInches(91), toInches(-24)), radians(140))
+
+                    // Auto Cycle - #5
+                    .setReversed(true)
+                    .splineTo(new Vector2d(toInches(145), toInches(-30.5)), radians(0))
+                    .setReversed(false)
+                    .splineTo(new Vector2d(toInches(91), toInches(-24)), radians(140))
+
+                    .turn(radians(40))
+                    // Park in correct zone
 
                     .build()
 

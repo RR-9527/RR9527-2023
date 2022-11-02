@@ -21,9 +21,6 @@ public abstract class RougeBaseOp extends LinearOpMode {
     protected DriveMotors driveMotors;
     protected Localizer localizer;
 
-    // TODO: Kavin, if the bot object contains all of these wouldn't
-    //  it make sense to remove these and then run everything through
-    //  the bot object?
     protected Claw claw;
     protected Intake intake;
     protected Arm arm;
@@ -52,13 +49,13 @@ public abstract class RougeBaseOp extends LinearOpMode {
 
         scheduleTasks();
 
-        if(opModeType == OpModeType.TELEOP)
-            Scheduler.start(this, () -> {
-                arm.update(telemetry);
-                lift.update(telemetry);
-                wrist.update();
+        Scheduler.start(this, () -> {
+            arm.update(telemetry);
+            lift.update(telemetry);
+            wrist.update();
+            if(opModeType == OpModeType.TELEOP)
                 driveMotors.drive(gamepad1, localizer, powerMulti);
-            });
+        });
     }
 
     protected void initAdditionalHardware() {}
