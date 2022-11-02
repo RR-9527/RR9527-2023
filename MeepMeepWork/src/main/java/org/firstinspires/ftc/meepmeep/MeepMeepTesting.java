@@ -11,13 +11,13 @@ import org.firstinspires.ftc.meepmeepkt.MeepMeepPersistence;
 //import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 
 public class MeepMeepTesting {
-//    static final String PERSISTENCE_FILE = "./MeepMeepWork/meepmeep.properties";
+    static final String PERSISTENCE_FILE = "./MeepMeepWork/meepmeep.properties";
 
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
 
-//        MeepMeepPersistence persistence = new MeepMeepPersistence(meepMeep, PERSISTENCE_FILE);
-//        persistence.restore();
+        MeepMeepPersistence persistence = new MeepMeepPersistence(meepMeep, PERSISTENCE_FILE);
+        persistence.restore();
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
 

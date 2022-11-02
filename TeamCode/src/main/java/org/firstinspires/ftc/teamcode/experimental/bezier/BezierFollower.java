@@ -44,7 +44,7 @@ public abstract class BezierFollower extends CommandOpMode {
 
 
     public void generatePath(final double numPoints, final double maxV, final double maxAngV, boolean constantHeading) {
-        for (double t = 0; t <= 1; t += 1 / numPoints) {
+        for (double t = 0; t <= 1.000001; t += 1 / numPoints) {
             Point p = recursiveLerp(controlPoints, t);
 
             double mvmtSpeed = velocityFunction.invoke(t, maxV);

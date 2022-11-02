@@ -26,9 +26,9 @@ public class RogueTestingOp extends RougeBaseOp {
         forwardsDepositChain.invokeOn(driver.right_bumper);
         backwardsDepositChain.invokeOn(driver.y);
 
-        driver.right_stick_x(.2).and(driver.x)
+        driver.right_stick_y(.2).and(driver.x)
             .whileHigh(() -> {
-                lift.setHeight(lift.getHeight() + (int) (13 * gamepad2.right_stick_x));
+                lift.setHeight(lift.getHeight() + (int) (13 * -gamepad1.right_stick_y));
             });
 
         driver.a.onRise(this::rotateDriveType);

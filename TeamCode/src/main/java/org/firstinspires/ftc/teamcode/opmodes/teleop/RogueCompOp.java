@@ -23,8 +23,8 @@ public class RogueCompOp extends RougeBaseOp {
         forwardsDepositChain.invokeOn(codriver.right_bumper);
         backwardsDepositChain.invokeOn(codriver.y);
 
-        codriver.right_stick_x(.2).whileHigh(() -> {
-            lift.setHeight(lift.getHeight() + (int) (13 * gamepad2.right_stick_x));
+        codriver.right_stick_y(.2).whileHigh(() -> {
+            lift.setHeight(lift.getHeight() + (int) (13 * -gamepad1.right_stick_y));
         });
 
         driver.left_trigger.whileHigh(this::decreaseDriveSpeed);
