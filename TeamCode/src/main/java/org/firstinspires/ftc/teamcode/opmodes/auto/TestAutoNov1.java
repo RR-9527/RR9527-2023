@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
@@ -12,12 +13,15 @@ import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerWrappe
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.SequenceWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.WrapperBuilder;
 
+@Disabled
 @Autonomous
 public class TestAutoNov1 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();
 
+
+        // TODO: Reverse this path, otherwise intaking/depositing is on the wrong side.
         RoadrunnerWrapper pathing = new RoadrunnerWrapper(hardwareMap, 91, -159, 90, RoadrunnerUnit.CM);
         pathing.sequenceWrapper = new SequenceWrapper(new WrapperBuilder(pathing)
             .splineTo(91, -30, 90)

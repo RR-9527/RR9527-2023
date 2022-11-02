@@ -10,7 +10,7 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 import org.firstinspires.ftc.meepmeepkt.MeepMeepPersistence;
 //import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 
-public class MeepMeepTesting {
+public class MeepMeepTestingNov1 {
     static final String PERSISTENCE_FILE = "./MeepMeepWork/meepmeep.properties";
 
     public static void main(String[] args) {
@@ -31,7 +31,6 @@ public class MeepMeepTesting {
                 12.7165
             ))
 
-// OPTION 1
             .followTrajectorySequence(drive ->
                 drive.trajectorySequenceBuilder(new Pose2d(toInches(91), toInches(-159), radians(90)))
                     // Deposit preload
