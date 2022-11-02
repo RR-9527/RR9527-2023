@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.components.intake.Intake;
 import org.firstinspires.ftc.teamcode.components.lift.Lift;
 import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
+import org.firstinspires.ftc.teamcode.util.OpModeType;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.GamepadEx2;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
@@ -20,6 +21,9 @@ public abstract class RougeBaseOp extends LinearOpMode {
     protected DriveMotors driveMotors;
     protected Localizer localizer;
 
+    // TODO: Kavin, if the bot object contains all of these wouldn't
+    //  it make sense to remove these and then run everything through
+    //  the bot object?
     protected Claw claw;
     protected Intake intake;
     protected Arm arm;
@@ -29,6 +33,9 @@ public abstract class RougeBaseOp extends LinearOpMode {
 
     protected GamepadEx2 driver;
     protected GamepadEx2 codriver;
+
+    // Default opmode is set to teleop
+    protected OpModeType opModeType = OpModeType.TELEOP;
 
     protected abstract void scheduleTasks();
 
@@ -45,12 +52,13 @@ public abstract class RougeBaseOp extends LinearOpMode {
 
         scheduleTasks();
 
-        Scheduler.start(this, () -> {
-            arm.update(telemetry);
-            lift.update(telemetry);
-            wrist.update();
-            driveMotors.drive(gamepad1, localizer, powerMulti);
-        });
+        if(opModeType == OpModeType.TELEOP)
+            Scheduler.start(this, () -> {
+                arm.update(telemetry);
+                lift.update(telemetry);
+                wrist.update();
+                driveMotors.drive(gamepad1, localizer, powerMulti);
+            });
     }
 
     protected void initAdditionalHardware() {}

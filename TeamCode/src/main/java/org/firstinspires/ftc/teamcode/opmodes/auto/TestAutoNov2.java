@@ -1,83 +1,96 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.opmodes.teleop.RougeBaseOp;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.SequenceWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.WrapperBuilder;
+import org.firstinspires.ftc.teamcode.util.OpModeType;
 
 @Autonomous
-public class TestAutoNov2 extends LinearOpMode {
+public class TestAutoNov2 extends RougeBaseOp {
     @Override
-    public void runOpMode() throws InterruptedException {
-        waitForStart();
+    protected void scheduleTasks() {
+        opModeType = OpModeType.AUTO;
+        runAuto();
+    }
 
+    public void runAuto(){
         RoadrunnerWrapper pathing = new RoadrunnerWrapper(hardwareMap, 91, -159, -90, RoadrunnerUnit.CM);
         pathing.sequenceWrapper = new SequenceWrapper(new WrapperBuilder(pathing)
             .back(135)
-            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                // Extend lift and arm
-            })
+
+            // TODO: Uncomment the temporal marker blocks to test intaking and depositing
+//            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                // TODO: Find out if these markers run at the beginning of the previous command,
+//                //  or at the end. I think it's at the end
+//                // Extend lift and arm
+//                wrist.setToBackwardsPos();
+//                lift.goToHigh();
+//                arm.setToBackwardsPos();
+//            })
+
+//            .UNSTABLE_addTemporalMarkerOffset(0.5, () -> { // TODO: Tune the delay here, or put after turn command
+//                // Deposit, then wait a tenth of a second before bringing lift down
+//                claw.openForDeposit();
+//            })
             .turn(-135)
-            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                // Deposit, bring lift down
-            })
+            // Actually deposits while at the end of the turn
+
+//            .UNSTABLE_addTemporalMarkerOffset(0.25, () -> { // TODO: Tune delay here
+//                // Bring lift down and reset for intaking
+//                claw.openForIntake();
+//                lift.goToZero();
+//                arm.setToForwardsPos();
+//                wrist.setToForwardsPos();
+//            })
 
             // Auto Cycle #1
             .setReversed(true)
+//            .UNSTABLE_addTemporalMarkerOffset(0.5, () -> { // TODO: Tune delay here
+//                // Intake - TODO: Implement setHeight for the lift to intake at the right position
+//                claw.openForIntake();
+//                intake.enable();
+//            })
             .splineTo(145, -30.5, 0)
-            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                // Intake
-            })
-            .UNSTABLE_addTemporalMarkerOffset(0.25, () -> {
-                // Extend lift
-            })
-            .setReversed(false)
-            .splineTo(91, -24, 140)
-            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                // Deposit, bring lift down
-            })
+            // Actually intakes around here
 
-            // Auto Cycle #2
-            .setReversed(true)
-            .splineTo(145, -30.5, 0)
-            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                // Intake
-            })
-            .UNSTABLE_addTemporalMarkerOffset(0.25, () -> {
-                // Extend lift
-            })
+//            .UNSTABLE_addTemporalMarkerOffset(0.25, () -> { // TODO: Tune delay here
+//                // Extend lift and arm
+//                wrist.setToBackwardsPos();
+//                lift.goToHigh();
+//                arm.setToBackwardsPos();
+//            })
             .setReversed(false)
-            .splineTo(91, -24, 140)
-            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                // Deposit, bring lift down
-            })
 
-            // Auto Cycle #3
-            .setReversed(true)
-            .splineTo(145, -30.5, 0)
-            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                // Intake
-            })
-            .UNSTABLE_addTemporalMarkerOffset(0.25, () -> {
-                // Extend lift
-            })
-            .setReversed(false)
-            .splineTo(91, -24, 140)
-            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                // Deposit, bring lift down
-            })
+//            .UNSTABLE_addTemporalMarkerOffset(0.5, () -> { // TODO: Tune delay here
+//                // Deposit, then wait a tenth of a second before bringing lift down
+//                claw.openForDeposit();
+//            })
 
-            // Move to park, TODO: Implement parking in the correct zones
+            .splineTo(91, -24, 140)
+            // Actually deposits around here
+
+//            .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
+//                // Bring lift down and reset for intaking
+//                claw.openForIntake();
+//                lift.goToZero();
+//                arm.setToForwardsPos();
+//                wrist.setToRestingPos();
+//            })
+
+
+
             .turn(-50)
             .back(70)
+            // Move to park, TODO: Implement parking in the correct zones
+
         );
 
         pathing.build();
         pathing.follow();
-
     }
+
 }

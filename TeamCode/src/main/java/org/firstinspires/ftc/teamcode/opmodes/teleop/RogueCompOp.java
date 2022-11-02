@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.TaskChain;
 
 @TeleOp
 public class RogueCompOp extends RougeBaseOp {
-    TaskChain intakeChain, forwardsDepositChain, backwardsDepositChain;
+    private TaskChain intakeChain, forwardsDepositChain, backwardsDepositChain;
 
     @Override
     public void scheduleTasks() {
@@ -33,7 +33,10 @@ public class RogueCompOp extends RougeBaseOp {
             .whileHigh(() -> powerMulti /= 2);
     }
 
-    private void decreaseDriveSpeed() {
+    private void decreaseDriveSpeed()
+    {
+        // TODO: Kavin, I think we could implement a nicer control
+        //  for the sticks to motor velocities, ax^3 is a common one
         powerMulti = Math.max(1.0 - gamepad1.left_trigger, .1);
     }
 

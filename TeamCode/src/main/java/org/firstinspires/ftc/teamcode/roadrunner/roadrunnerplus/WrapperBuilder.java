@@ -201,7 +201,7 @@ public class WrapperBuilder {
      * @return this object to use in a builder design pattern
      */
     public WrapperBuilder UNSTABLE_addTemporalMarkerOffset(double offset, MarkerCallback callback) {
-        trajectorySequenceBuilder.addTemporalMarker(
+        trajectorySequenceBuilder.UNSTABLE_addTemporalMarkerOffset(
                 trajectorySequenceBuilder.currentDuration + offset, callback);
         return this;
     }
