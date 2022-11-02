@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.kinematics.HolonomicOdometry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+@SuppressWarnings("FieldCanBeLocal")
 @Autonomous
 @Disabled
 public class ExampleBezierOpMode extends BezierFollower {

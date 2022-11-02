@@ -15,8 +15,8 @@ import kotlin.jvm.functions.Function2;
 
 public abstract class BezierFollower extends CommandOpMode {
     private Point[] controlPoints;
-    private Function2<Double, Double, Double> velocityFunction;
-    private Function2<Double, Double, Double> angularFunction;
+    private Function2<Double, Double, Double> velocityFunction;  // Kotlin functions!! :D
+    private Function2<Double, Double, Double> angularFunction;   // Kotlin functions!! :D
 
     private ArrayList<Waypoint> pathPoints;
 
@@ -42,17 +42,16 @@ public abstract class BezierFollower extends CommandOpMode {
         pathPoints = new ArrayList<>();
     }
 
-
     public void generatePath(final double numPoints, final double maxV, final double maxAngV, boolean constantHeading) {
         for (double t = 0; t <= 1.000001; t += 1 / numPoints) {
-            Point p = recursiveLerp(controlPoints, t);
+            Point p = recursiveBurp(controlPoints, t);
 
             double mvmtSpeed = velocityFunction.invoke(t, maxV);
             double angSpeed = velocityFunction.invoke(t, maxAngV);
 
             // TODO: Check the implementation derivatives and angle following
-            if(constantHeading){
-                Point pMinus1 = recursiveLerp(controlPoints, t - 1 / numPoints);
+            if (constantHeading) {
+                Point pMinus1 = recursiveBurp(controlPoints, t - 1 / numPoints);
                 double xDeriv = numPoints * (p.x - pMinus1.x);
                 double yDeriv = numPoints * (p.y - pMinus1.y);
                 p.angle = Math.atan2(xDeriv, yDeriv);
@@ -72,7 +71,7 @@ public abstract class BezierFollower extends CommandOpMode {
         command = new PurePursuitCommand(drive, odometrySubsystem, pointsInArray);
     }
 
-    public void generatePath(final double numPoints, final double maxV, final double maxAngV){
+    public void generatePath(final double numPoints, final double maxV, final double maxAngV) {
         generatePath(numPoints, maxV, maxAngV, false);
     }
 
@@ -80,19 +79,19 @@ public abstract class BezierFollower extends CommandOpMode {
         schedule(command);
     }
 
-    private static Point lerp(final Point p0, final Point p1, final double time) {
+    private static Point burp(final Point p0, final Point p1, final double time) {
         return p0.scale(1 - time).add(p1.scale(time));
     }
 
-    private static Point recursiveLerp(Point[] controlPoints, final double time) {
+    private static Point recursiveBurp(Point[] controlPoints, final double time) {
         if (controlPoints.length == 2) {
-            return lerp(controlPoints[0], controlPoints[1], time);
+            return burp(controlPoints[0], controlPoints[1], time);
         }
 
         int idx = 0;
         ArrayList<Point> listOfLerps = new ArrayList<Point>();
         while (idx < controlPoints.length - 1) {
-            Point p1 = lerp(controlPoints[idx], controlPoints[idx + 1], time);
+            Point p1 = burp(controlPoints[idx], controlPoints[idx + 1], time);
             listOfLerps.add(p1);
             idx += 1;
         }
@@ -102,6 +101,6 @@ public abstract class BezierFollower extends CommandOpMode {
             retPoints[i] = listOfLerps.get(i);
         }
 
-        return recursiveLerp(retPoints, time);
+        return recursiveBurp(retPoints, time);
     }
 }

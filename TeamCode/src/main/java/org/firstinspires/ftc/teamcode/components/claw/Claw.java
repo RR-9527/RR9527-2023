@@ -15,14 +15,14 @@ public class Claw {
     }
 
     public void openForIntake() {
-//        clawServo.setPosition(RobotConstants.Claw.INTAKE);
+        clawServo.setPosition(RobotConstants.Claw.INTAKE);
     }
 
     public void openForDeposit() {
-//        clawServo.setPosition(RobotConstants.Claw.DEPOSIT);
+        clawServo.setPosition(RobotConstants.Claw.DEPOSIT);
     }
 
     public void close() {
-//        clawServo.setPosition(RobotConstants.Claw.CLOSE);
+        clawServo.setPosition(RobotConstants.Claw.CLOSE);
     }
 }
