@@ -1,28 +1,40 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import android.annotation.SuppressLint;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import org.firstinspires.ftc.teamcode.opmodes.teleop.RougeBaseOp;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.SequenceWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.WrapperBuilder;
-import org.firstinspires.ftc.teamcode.util.OpModeType;
-import org.firstinspires.ftc.teamcode.util.RobotConstants;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
-@Autonomous
-public class TestAutoNov2 extends RougeBaseOp {
+import java.lang.reflect.Field;
+
+public class TestAutoNov2PointOh extends RougeBaseAuto {
     @Override
-    protected void scheduleTasks() {
-        opModeType = OpModeType.AUTO;
-        runAuto();
+    public void runOpMode() throws InterruptedException {
+        initHardware();
+        waitForStart();
+
+        Scheduler.beforeEach(() -> {
+            arm.setToRestingPos();
+            wrist.setToRestingPos();
+        });
+
+        schedulePaths();
+
+        Scheduler.start(this, () -> {
+            arm.update(telemetry);
+            lift.update(telemetry);
+            wrist.update();
+            drive.update();
+        });
     }
 
-    @SuppressLint("SuspiciousIndentation")
-    public void runAuto(){
+    public void schedulePaths() {
         RoadrunnerWrapper pathing = new RoadrunnerWrapper(hardwareMap, 91, -159, 90, RoadrunnerUnit.CM);
         pathing.sequenceWrapper = new SequenceWrapper(new WrapperBuilder(pathing)
             .forward(135)
@@ -47,26 +59,12 @@ public class TestAutoNov2 extends RougeBaseOp {
             .setReversed(false)
             .splineTo(91, -24, 140)
 
-
-
             .turn(-50)
             .back(12)
-            // Move to park, TODO: Implement parking in the correct zones
 
-
-            // Temporal markers:
-            .addTemporalMarker(0, () -> {
-                // This is not python or f# or nim or something smh
-                while(opModeIsActive()) // {
-                    wrist.update();
-                    lift.update(telemetry);
-                    arm.update(telemetry);
-                // }
-            })
             .addTemporalMarker(0.5, () -> {
                 wrist.setToBackwardsPos();
                 wrist.update();
-
             })
 
             .addTemporalMarker(2.3, () -> {
@@ -76,18 +74,16 @@ public class TestAutoNov2 extends RougeBaseOp {
             .addTemporalMarker(2.4, () -> {
                 claw.openForDeposit();
             })
-
-//            .addTemporalMarker(4, () -> {
-//                intake.disable();
-//                wrist.setToRestingPos();
-//                wrist.update();
-//
-//                claw.close();
-//            })
         );
 
-        pathing.build();
-        pathing.follow();
-    }
+        try {
+            pathing.build();
 
+            Field f = pathing.getClass().getField("trajectorySequence");
+            f.setAccessible(true);
+
+            TrajectorySequence sequence = (TrajectorySequence) f.get(pathing);
+            drive.followTrajectorySequenceAsync(sequence);
+        } catch (Exception ignored) {}
+    }
 }
