@@ -53,6 +53,12 @@ public class TestAutoNov2 extends RougeBaseOp {
 
 
             // Temporal markers:
+            .addTemporalMarker(0, () -> {
+                while(opModeIsActive())
+                    wrist.update();
+                    lift.update(telemetry);
+                    arm.update(telemetry);
+            })
             .addTemporalMarker(0.5, () -> {
                 wrist.setToBackwardsPos();
                 wrist.update();

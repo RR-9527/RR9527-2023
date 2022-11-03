@@ -42,34 +42,34 @@ import kotlin.math.*
  * @author KG
  */
 class DriveMotors(hwMap: HardwareMap) {
-    private val frontLeft  = initializedMotor("FL", hwMap, reversed = true)
+    private val frontLeft = initializedMotor("FL", hwMap, reversed = true)
     private val frontRight = initializedMotor("FR", hwMap)
-    private val backLeft   = initializedMotor("BL", hwMap, reversed = true)
-    private val backRight  = initializedMotor("BR", hwMap)
+    private val backLeft = initializedMotor("BL", hwMap, reversed = true)
+    private val backRight = initializedMotor("BR", hwMap)
 
-    private val A_MULT = 2
+    private val A_MULT = 1
 
     var driveType = DriveType.IMPROVED
 
     fun setPowers(flp: Number, frp: Number, blp: Number, brp: Number) {
-        frontLeft.power   =   flp.toDouble()
-        frontRight.power  =   frp.toDouble()
-        backLeft.power    =   blp.toDouble()
-        backRight.power   =   brp.toDouble()
+        frontLeft.power = flp.toDouble()
+        frontRight.power = frp.toDouble()
+        backLeft.power = blp.toDouble()
+        backRight.power = brp.toDouble()
     }
 
     fun transformPowers(scaleFunction: (Double) -> Double) {
-        frontLeft.power   =   scaleFunction(frontLeft.power)
-        frontRight.power  =   scaleFunction(frontRight.power)
-        backLeft.power    =   scaleFunction(backLeft.power)
-        backRight.power   =   scaleFunction(backRight.power)
+        frontLeft.power = scaleFunction(frontLeft.power)
+        frontRight.power = scaleFunction(frontRight.power)
+        backLeft.power = scaleFunction(backLeft.power)
+        backRight.power = scaleFunction(backRight.power)
     }
 
     fun logData(telemetry: Telemetry, dataSupplier: DataSupplier<DcMotorEx>) {
-        telemetry.addData("Front-left motor:",  dataSupplier(frontLeft))
+        telemetry.addData("Front-left motor:", dataSupplier(frontLeft))
         telemetry.addData("Front-right motor:", dataSupplier(frontRight))
-        telemetry.addData("Back-left motor:",   dataSupplier(backLeft))
-        telemetry.addData("Back-right motor:",  dataSupplier(backRight))
+        telemetry.addData("Back-left motor:", dataSupplier(backLeft))
+        telemetry.addData("Back-right motor:", dataSupplier(backRight))
     }
 
     fun drive(gamepad: Gamepad, localizer: Localizer, powerMulti: Double) = when (driveType) {
@@ -78,8 +78,8 @@ class DriveMotors(hwMap: HardwareMap) {
         DriveType.FIELD_CENTRIC -> driveFc(gamepad, localizer, powerMulti)
     }
 
-    private fun powerScaling(power: Double): Double {
-        return 0.0
+    private fun powerScaling(power: Float): Float {
+        return (A_MULT * Math.pow(power.toDouble(), 3.0) + power * (1 - A_MULT)).toFloat()
     }
 
     private fun driveNormal(gamepad: Gamepad, _powerMulti: Double) = with(gamepad) {
@@ -97,15 +97,18 @@ class DriveMotors(hwMap: HardwareMap) {
         val powerMulti = if (!isJoystickTriggered()) 0.0 else _powerMulti
 
         // Tiernan rescale code
-//        val max = max(max(flp, frp), max(blp, brp))
-//        if(max >= 1) {
-//            flp /= max
-//            frp /= max
-//            blp /= max
-//            brp /= max
-//        }
+        val max = max(max(flp, frp), max(blp, brp))
+        if (max >= 1) {
+            flp /= max
+            frp /= max
+            blp /= max
+            brp /= max
+        }
 
-
+        flp = powerScaling(flp)
+        frp = powerScaling(frp)
+        blp = powerScaling(blp)
+        brp = powerScaling(brp)
 
         setPowers(flp, frp, blp, brp)
         transformPowers { it * powerMulti / powerScale }
@@ -135,25 +138,26 @@ class DriveMotors(hwMap: HardwareMap) {
         transformPowers { it * powerMulti / powerScale }
     }
 
-    private fun driveFc(gamepad: Gamepad, localizer: Localizer, _powerMulti: Double) = with(gamepad) {
-        val (speed, strafe, turn) = gamepad.getDriveSticks()
+    private fun driveFc(gamepad: Gamepad, localizer: Localizer, _powerMulti: Double) =
+        with(gamepad) {
+            val (speed, strafe, turn) = gamepad.getDriveSticks()
 
-        val heading = -localizer.poseEstimate.heading
-        val xRotation = strafe * cos(heading) - speed * sin(heading)
-        val yRotation = strafe * sin(heading) + speed * cos(heading)
+            val heading = -localizer.poseEstimate.heading
+            val xRotation = strafe * cos(heading) - speed * sin(heading)
+            val yRotation = strafe * sin(heading) + speed * cos(heading)
 
-        val flp = yRotation + xRotation + turn
-        val frp = yRotation - xRotation - turn
-        val blp = yRotation - xRotation + turn
-        val brp = yRotation + xRotation - turn
+            val flp = yRotation + xRotation + turn
+            val frp = yRotation - xRotation - turn
+            val blp = yRotation - xRotation + turn
+            val brp = yRotation + xRotation - turn
 
-        val powerScale = listOf(flp, frp, blp, brp).maxOf { abs(it) }
-            .coerceAtLeast(1.0)
+            val powerScale = listOf(flp, frp, blp, brp).maxOf { abs(it) }
+                .coerceAtLeast(1.0)
 
-        val powerMulti = if (!isJoystickTriggered()) 0.0 else _powerMulti
+            val powerMulti = if (!isJoystickTriggered()) 0.0 else _powerMulti
 
-        setPowers(flp, frp, blp, brp)
-        transformPowers { it * powerMulti / powerScale }
-    }
+            setPowers(flp, frp, blp, brp)
+            transformPowers { it * powerMulti / powerScale }
+        }
 }
 
