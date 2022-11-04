@@ -10,7 +10,7 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 import org.firstinspires.ftc.meepmeepkt.MeepMeepPersistence;
 //import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 
-public class MeepMeepTestingNov2 {
+public class MeepMeepTestingNov4 {
     static final String PERSISTENCE_FILE = "./MeepMeepWork/meepmeep.properties";
 
     public static void main(String[] args) {
@@ -32,44 +32,31 @@ public class MeepMeepTestingNov2 {
             ))
 
             .followTrajectorySequence(drive ->
-                drive.trajectorySequenceBuilder(new Pose2d(toInches(91), toInches(-159), radians(90)))
+                drive.trajectorySequenceBuilder(new Pose2d(in(91), in(-159), rad(90)))
                     // Deposit preload
-                    .forward(toInches(135))
-                    .turn(radians(45))
+                    .splineTo(new Vector2d(in(91), in(-50)), rad(90))
+                    .splineTo(new Vector2d(in(86), in(-22)), rad(135))
 
-                    .turn(radians(30))
 
                     // Auto Cycle - #1
                     .setReversed(true)
-                    .splineTo(new Vector2d(toInches(145), toInches(-30.5)), radians(0))
+                    .splineTo(new Vector2d(in(145), in(-30.5)), rad(0))
                     .setReversed(false)
-                    .splineTo(new Vector2d(toInches(91), toInches(-24)), radians(140))
+                    .splineTo(new Vector2d(in(86), in(-22)), rad(140))
 
                     // Auto Cycle - #2
                     .setReversed(true)
-                    .splineTo(new Vector2d(toInches(145), toInches(-30.5)), radians(0))
+                    .splineTo(new Vector2d(in(145), in(-30.5)), rad(0))
                     .setReversed(false)
-                    .splineTo(new Vector2d(toInches(91), toInches(-24)), radians(140))
+                    .splineTo(new Vector2d(in(86), in(-22)), rad(140))
 
                     // Auto Cycle - #3
                     .setReversed(true)
-                    .splineTo(new Vector2d(toInches(145), toInches(-30.5)), radians(0))
+                    .splineTo(new Vector2d(in(145), in(-30.5)), rad(0))
                     .setReversed(false)
-                    .splineTo(new Vector2d(toInches(91), toInches(-24)), radians(140))
+                    .splineTo(new Vector2d(in(86), in(-22)), rad(140))
 
-                    // Auto Cycle - #4
-                    .setReversed(true)
-                    .splineTo(new Vector2d(toInches(145), toInches(-30.5)), radians(0))
-                    .setReversed(false)
-                    .splineTo(new Vector2d(toInches(91), toInches(-24)), radians(140))
-
-                    // Auto Cycle - #5
-                    .setReversed(true)
-                    .splineTo(new Vector2d(toInches(145), toInches(-30.5)), radians(0))
-                    .setReversed(false)
-                    .splineTo(new Vector2d(toInches(91), toInches(-24)), radians(140))
-
-                    .turn(radians(40))
+                    .turn(rad(40))
                     // Park in correct zone
 
                     .build()
@@ -84,12 +71,12 @@ public class MeepMeepTestingNov2 {
             .start();
     }
 
-    public static double radians(double degrees) {
+    public static double rad(double degrees) {
         return Math.toRadians(degrees);
     }
 
     // FROM CENTIMETERS
-    public static double toInches(double centimeters) {
+    public static double in(double centimeters) {
         return centimeters * 0.3837008;
     }
 }
