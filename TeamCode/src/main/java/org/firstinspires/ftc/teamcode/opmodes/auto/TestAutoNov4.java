@@ -48,21 +48,22 @@ public class TestAutoNov4 extends RougeBaseAuto {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
-            // TODO: Change this into a forward spline and then small turn as an additional spline
-            //  in order to be start-position independent
-            .forward(in(135))
+            .splineTo(new Vector2d(in(91), in(-50)), rad(90))
+
             .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                 // Start getting the lift ready while turning
                 lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
                 armPosFunction = arm::setToForwardsPos;
             })
-            .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
+            .UNSTABLE_addTemporalMarkerOffset(0.5, () -> { // TODO: Tune depositing time
                 // Deposit the cone while turning
                 claw.openForDeposit();
             })
-            .turn(rad(60))
-            .forward(in(4))
+
+            .splineTo(new Vector2d(in(86), in(-22)), rad(135))
+
+
             .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                 // Prepare the robot for intaking
                 claw.openForIntake();
@@ -71,8 +72,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
                 armPosFunction = arm::setToBackwardsPos;
                 wristPosFunction = wrist::setToBackwardsPos;
             })
-            .back(in(4))
-            .turn(rad(30))
+
 
             // Auto Cycle #1
             .setReversed(true)
