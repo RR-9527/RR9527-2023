@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerWrappe
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.SequenceWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.WrapperBuilder;
 
-@Disabled
 @Autonomous
 public class TestAutoNov1 extends LinearOpMode {
     @Override

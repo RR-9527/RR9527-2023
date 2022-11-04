@@ -33,7 +33,7 @@ public class RoadrunnerWrapper {
     /**
      * The trajectory sequence object to follow and build
      */
-    private TrajectorySequence trajectorySequence;
+    public TrajectorySequence trajectorySequence;
 
     /**
      * Conversion factor to convert metric values to inches. <strong>SHOULD NEVER CHANGE!</strong>

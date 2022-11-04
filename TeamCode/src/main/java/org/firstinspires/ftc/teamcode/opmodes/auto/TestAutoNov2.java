@@ -22,7 +22,7 @@ public class TestAutoNov2 extends RougeBaseOp {
     }
 
     @SuppressLint("SuspiciousIndentation")
-    public void runAuto(){
+    public void runAuto() {
         RoadrunnerWrapper pathing = new RoadrunnerWrapper(hardwareMap, 91, -159, 90, RoadrunnerUnit.CM);
         pathing.sequenceWrapper = new SequenceWrapper(new WrapperBuilder(pathing)
             .forward(135)
@@ -31,19 +31,19 @@ public class TestAutoNov2 extends RougeBaseOp {
 
             // Auto Cycle #1
             .setReversed(true)
-            .splineTo(150, -30, 0)
+            .splineTo(150, -29, 0)
             .setReversed(false)
             .splineTo(91, -24, 140)
 
             // Auto Cycle #2
             .setReversed(true)
-            .splineTo(150, -30, 0)
+            .splineTo(150, -29, 0)
             .setReversed(false)
             .splineTo(91, -24, 140)
 
             // Auto Cycle #3
             .setReversed(true)
-            .splineTo(150, -30, 0)
+            .splineTo(150, -29, 0)
             .setReversed(false)
             .splineTo(91, -24, 140)
 
@@ -53,16 +53,6 @@ public class TestAutoNov2 extends RougeBaseOp {
             .back(12)
             // Move to park, TODO: Implement parking in the correct zones
 
-
-            // Temporal markers:
-            .addTemporalMarker(0, () -> {
-                // This is not python or f# or nim or something smh
-                while(opModeIsActive()) // {
-                    wrist.update();
-                    lift.update(telemetry);
-                    arm.update(telemetry);
-                // }
-            })
             .addTemporalMarker(0.5, () -> {
                 wrist.setToBackwardsPos();
                 wrist.update();
