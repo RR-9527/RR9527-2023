@@ -40,80 +40,174 @@ public class TestAutoNov4 extends RougeBaseAuto {
     public void schedulePaths() {
         // TODO: Fix RoadrunnerPlus in order to accommodate asynchronous trajectories
 
-        // Start moving the lift up to the middle position to be ready for depositing the preload
-        lift.setHeight(RobotConstants.Lift.MID);
-
         Pose2d startPose = new Pose2d(in(91), in(-159), rad(90));
 
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
-            .splineTo(new Vector2d(in(91), in(-50)), rad(90))
-
             .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                 // Start getting the lift ready while turning
-                lift.setHeight(RobotConstants.Lift.HIGH);
+                lift.setHeight(RobotConstants.Lift.HIGH+50);
                 wristPosFunction = wrist::setToForwardsPos;
                 armPosFunction = arm::setToForwardsPos;
             })
-            .UNSTABLE_addTemporalMarkerOffset(0.5, () -> { // TODO: Tune depositing time
+
+            .splineTo(new Vector2d(in(91), in(-50)), rad(90))
+            .waitSeconds(0.125)
+            .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE))
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
+                lift.setHeight(RobotConstants.Lift.MID);
+            })
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.DEPOSIT_OFFSET, () -> {
                 // Deposit the cone while turning
                 claw.openForDeposit();
             })
 
-            .splineTo(new Vector2d(in(86), in(-22)), rad(135))
+            .waitSeconds(AutoData.DEPOSIT_DELAY)
 
-
-            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
                 claw.openForIntake();
                 intake.enable();
-                lift.setHeight(400); // TODO: I don't think this works... look into this later
+                lift.setHeight(AutoData.INTAKING_POSITIONS[0]);
                 armPosFunction = arm::setToBackwardsPos;
                 wristPosFunction = wrist::setToBackwardsPos;
             })
-
 
             // Auto Cycle #1
             .setReversed(true)
-            .splineTo(new Vector2d(in(150), in(-28.5)), rad(0))
+            .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
             .setReversed(false)
-            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                // TODO: add a longer delay while intaking to actually be able to auto cycle
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
                 claw.close();
             })
-            .UNSTABLE_addTemporalMarkerOffset(0.25, () -> {
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
                 armPosFunction = arm::setToForwardsPos;
-                lift.setHeight(RobotConstants.Lift.HIGH);
+                lift.setHeight(RobotConstants.Lift.HIGH+50);
                 wristPosFunction = wrist::setToForwardsPos;
             })
-            .splineTo(new Vector2d(in(91), in(-24)), rad(130))
-            .UNSTABLE_addTemporalMarkerOffset(0.15, () -> {
+            .waitSeconds(AutoData.INTAKE_DELAY)
+
+            .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE))
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
+                lift.setHeight(RobotConstants.Lift.MID);
+            })
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.DEPOSIT_OFFSET, () -> {
+                // Deposit the cone while turning
                 claw.openForDeposit();
             })
-            .UNSTABLE_addTemporalMarkerOffset(0.35, () -> {
-                // TODO: Increase delay, at the moment (11/3) the lift goes up and down too quickly,
-                //  no time to deposit
+
+            .waitSeconds(AutoData.DEPOSIT_DELAY)
+
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
+                // Prepare the robot for intaking
                 claw.openForIntake();
                 intake.enable();
-                lift.setHeight(RobotConstants.Lift.ZERO);
+                lift.setHeight(AutoData.INTAKING_POSITIONS[1]);
                 armPosFunction = arm::setToBackwardsPos;
-
                 wristPosFunction = wrist::setToBackwardsPos;
-
             })
 
-//            // Auto Cycle #2
-//            .setReversed(true)
-//            .splineTo(new Vector2d(in(150), in(-28.5)), rad(0))
-//            .setReversed(false)
-//            .splineTo(new Vector2d(in(91), in(-24)), rad(140))
-//
-//            // Auto Cycle #3
-//            .setReversed(true)
-//            .splineTo(new Vector2d(in(150), in(-28.5)), rad(0))
-//            .setReversed(false)
-//            .splineTo(new Vector2d(in(91), in(-24)), rad(140))
+            // Auto Cycle #2
+            .setReversed(true)
+            .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
+            .setReversed(false)
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
+                claw.close();
+            })
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
+                armPosFunction = arm::setToForwardsPos;
+                lift.setHeight(RobotConstants.Lift.HIGH+50);
+                wristPosFunction = wrist::setToForwardsPos;
+            })
+            .waitSeconds(AutoData.INTAKE_DELAY)
+
+            .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE))
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
+                lift.setHeight(RobotConstants.Lift.MID);
+            })
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.DEPOSIT_OFFSET, () -> {
+                // Deposit the cone while turning
+                claw.openForDeposit();
+            })
+
+            .waitSeconds(AutoData.DEPOSIT_DELAY)
+
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
+                // Prepare the robot for intaking
+                claw.openForIntake();
+                intake.enable();
+                lift.setHeight(AutoData.INTAKING_POSITIONS[2]);
+                armPosFunction = arm::setToBackwardsPos;
+                wristPosFunction = wrist::setToBackwardsPos;
+            })
+
+            // Auto Cycle #3
+            .setReversed(true)
+            .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
+            .setReversed(false)
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
+                claw.close();
+            })
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
+                armPosFunction = arm::setToForwardsPos;
+                lift.setHeight(RobotConstants.Lift.HIGH+50);
+                wristPosFunction = wrist::setToForwardsPos;
+            })
+            .waitSeconds(AutoData.INTAKE_DELAY)
+
+            .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE))
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
+                lift.setHeight(RobotConstants.Lift.MID);
+            })
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.DEPOSIT_OFFSET, () -> {
+                // Deposit the cone while turning
+                claw.openForDeposit();
+            })
+
+            .waitSeconds(AutoData.DEPOSIT_DELAY)
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
+                // Prepare the robot for intaking
+                claw.openForIntake();
+                intake.enable();
+                lift.setHeight(AutoData.INTAKING_POSITIONS[3]);
+                armPosFunction = arm::setToBackwardsPos;
+                wristPosFunction = wrist::setToBackwardsPos;
+            })
+
+            // Auto Cycle #4
+            .setReversed(true)
+            .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
+            .setReversed(false)
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
+                claw.close();
+            })
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
+                armPosFunction = arm::setToForwardsPos;
+                lift.setHeight(RobotConstants.Lift.HIGH+50);
+                wristPosFunction = wrist::setToForwardsPos;
+            })
+            .waitSeconds(AutoData.INTAKE_DELAY)
+
+            .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE))
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
+                lift.setHeight(RobotConstants.Lift.MID);
+            })
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.DEPOSIT_OFFSET, () -> {
+                // Deposit the cone while turning
+                claw.openForDeposit();
+            })
+            .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                lift.setHeight(RobotConstants.Lift.ZERO);
+                arm.setToRestingPos();
+                wrist.setToRestingPos();
+                intake.disable();
+                claw.close();
+            })
+
+            .back(10)
+            .turn(rad(50))
+            .forward(in(90))
 
             .build();
 

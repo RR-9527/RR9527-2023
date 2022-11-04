@@ -64,7 +64,7 @@ public class MeepMeepTestingNov4 {
             );
 
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
+        meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_KAI_LIGHT)
             .setDarkMode(true)
             .setBackgroundAlpha(0.95f)
             .addEntity(myBot)
