@@ -3,14 +3,17 @@ package org.firstinspires.ftc.teamcode.components.taskchains;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.components.bot.Bot;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.CancellableTaskChain;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Listener;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.TaskChain;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Timer;
 
-public class BackwardsDepositChain implements TaskChain {
+public class BackwardsDepositChain implements CancellableTaskChain {
     private final Bot bot;
     private final Timer depositTimer;
     private final Timer liftTimer;
+
+    private boolean isCancelled = false;
 
     public BackwardsDepositChain(Bot bot, int clawOpeningTime) {
         this.bot = bot;
@@ -24,8 +27,13 @@ public class BackwardsDepositChain implements TaskChain {
             .onRise(depositTimer::setPending)
 
             .onFall(() -> {
-                bot.claw().openForDeposit();
-                depositTimer.start();
+                if (!isCancelled) {
+                    bot.claw().openForDeposit();
+                    depositTimer.start();
+                } else {
+                    depositTimer.finishPrematurely();
+                    isCancelled = false;
+                }
             });
 
         depositTimer
@@ -41,5 +49,10 @@ public class BackwardsDepositChain implements TaskChain {
 
         liftTimer
             .onDone(bot.lift()::goToZero);
+    }
+
+    @Override
+    public void cancelOn(@NonNull Listener button) {
+        button.onRise(() -> isCancelled = true);
     }
 }

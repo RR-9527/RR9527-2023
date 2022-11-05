@@ -66,13 +66,6 @@ class Timer @JvmOverloads constructor(length: Long, unit: TimeUnit = TimeUnit.MI
     fun whileWaiting(action: Runnable) = this.also { listener.whileLow(action) }
 
     /**
-     * Schedules the given action to run while the timer is done.
-     * @param action The action to run.
-     * @return The timer instance.
-     */
-    fun whileDone(action: Runnable) = this.also { listener.whileHigh(action) }
-
-    /**
      * Schedules the given action to run once when the timer is finished.
      * @param action The action to run.
      * @return The timer instance.
@@ -92,6 +85,10 @@ class Timer @JvmOverloads constructor(length: Long, unit: TimeUnit = TimeUnit.MI
      */
     fun reset() {
         startTime = System.currentTimeMillis()
+    }
+
+    fun finishPrematurely() {
+        startTime = System.currentTimeMillis() + length
     }
 
     /**

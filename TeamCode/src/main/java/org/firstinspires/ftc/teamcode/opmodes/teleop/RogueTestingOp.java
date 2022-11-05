@@ -7,13 +7,15 @@ import org.firstinspires.ftc.teamcode.components.taskchains.ForwardsDepositChain
 import org.firstinspires.ftc.teamcode.components.taskchains.IntakeChain;
 import org.firstinspires.ftc.teamcode.util.StateRotator;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveType;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.CancellableTaskChain;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Listener;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.TaskChain;
 
 @TeleOp
 public class RogueTestingOp extends RougeBaseOp {
     StateRotator<DriveType> driveTypes;
-    TaskChain intakeChain, forwardsDepositChain, backwardsDepositChain;
+    TaskChain intakeChain;
+    CancellableTaskChain forwardsDepositChain, backwardsDepositChain;
 
     @Override
     public void scheduleTasks() {
@@ -23,10 +25,14 @@ public class RogueTestingOp extends RougeBaseOp {
         driver.dpad_left .onRise(lift::goToLow);
 
         intakeChain.invokeOn(driver.left_bumper);
-        forwardsDepositChain.invokeOn(driver.right_bumper);
-        backwardsDepositChain.invokeOn(driver.y);
 
-        driver.right_stick_y(.2).and(driver.x)
+        forwardsDepositChain.invokeOn(driver.right_bumper);
+        forwardsDepositChain.cancelOn(driver.x);
+
+        backwardsDepositChain.invokeOn(driver.y);
+        backwardsDepositChain.cancelOn(driver.x);
+
+        driver.right_stick_y(.2).and(driver.right_trigger)
             .whileHigh(() -> {
                 lift.setHeight(lift.getHeight() + (int) (13 * -gamepad1.right_stick_y));
             });
