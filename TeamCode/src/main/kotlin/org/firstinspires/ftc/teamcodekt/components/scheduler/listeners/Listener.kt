@@ -1,7 +1,9 @@
 @file:Suppress("MemberVisibilityCanBePrivate", "unused")
 
-package org.firstinspires.ftc.teamcodekt.components.scheduler
+package org.firstinspires.ftc.teamcodekt.components.scheduler.listeners
 
+import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler
+import org.firstinspires.ftc.teamcodekt.components.scheduler.SignalEdgeDetector
 import org.firstinspires.ftc.teamcodekt.util.Condition
 
 /**
@@ -46,7 +48,16 @@ import org.firstinspires.ftc.teamcodekt.util.Condition
  * @see GamepadEx2
  * @see Timer
  */
-class Listener(val condition: Condition) {
+open class Listener(_condition: Condition) {
+
+    constructor() : this({ false })
+
+    var condition = _condition
+        set(value) {
+            conditionSED = SignalEdgeDetector(value)
+            field = value
+        }
+
     /**
      * The subscribed set of [actions][Runnable] that are performed when the given
      * condition's state matches the given [SignalTrigger][SignalTrigger].
@@ -58,7 +69,7 @@ class Listener(val condition: Condition) {
      * signal is [high][SignalTrigger.IS_HIGH], [low][SignalTrigger.IS_LOW],
      * [rising][SignalTrigger.RISING_EDGE], and/or [falling][SignalTrigger.FALLING_EDGE].
      */
-    private val conditionSED = SignalEdgeDetector(condition)
+    private var conditionSED = SignalEdgeDetector(condition)
 
     /**
      * Remembers whether or not this listener has been hooked.
@@ -129,6 +140,8 @@ class Listener(val condition: Condition) {
             if (condition()) action.run()
         }
     }
+
+    operator fun invoke() = condition()
 
     // -----------------------------------------------------------------
     // Listener builders

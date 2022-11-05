@@ -35,6 +35,10 @@ fun rad(int: Int) = Math.toRadians(int.toDouble())
  */
 fun rad(double: Double) = Math.toRadians(double)
 
+fun Double.toIn() = this / 2.54
+
+fun Double.toRad() = Math.toRadians(this)
+
 /**
  * Simple utility function to return a default value if the given double is NaN
  *

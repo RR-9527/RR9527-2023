@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode.components.taskchains;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.components.bot.Bot;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Listener;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.TaskChain;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Timer;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.listeners.Listener;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.taskchains.TaskChain;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.listeners.Timer;
 
 public class IntakeChain implements TaskChain {
     private final Bot bot;

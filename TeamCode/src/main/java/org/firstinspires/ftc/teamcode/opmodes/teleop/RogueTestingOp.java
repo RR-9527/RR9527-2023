@@ -7,9 +7,9 @@ import org.firstinspires.ftc.teamcode.components.taskchains.ForwardsDepositChain
 import org.firstinspires.ftc.teamcode.components.taskchains.IntakeChain;
 import org.firstinspires.ftc.teamcode.util.StateRotator;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveType;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.CancellableTaskChain;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Listener;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.TaskChain;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.taskchains.CancellableTaskChain;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.listeners.Listener;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.taskchains.TaskChain;
 
 @TeleOp
 public class RogueTestingOp extends RougeBaseOp {

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcodekt.components.scheduler
+package org.firstinspires.ftc.teamcodekt.components.scheduler.listeners
 
 import java.util.concurrent.TimeUnit
 
@@ -37,7 +37,11 @@ import java.util.concurrent.TimeUnit
  * @see Listener
  * @see GamepadEx2
  */
-class Timer @JvmOverloads constructor(length: Long, unit: TimeUnit = TimeUnit.MILLISECONDS) {
+class Timer @JvmOverloads constructor(length: Long, unit: TimeUnit = TimeUnit.MILLISECONDS) : Listener() {
+    init {
+        condition = { !isPending && timeMs() >= this.length }
+    }
+
     /**
      * The length of the timer in milliseconds.
      */
@@ -54,23 +58,18 @@ class Timer @JvmOverloads constructor(length: Long, unit: TimeUnit = TimeUnit.MI
     private var isPending = false
 
     /**
-     * The trigger which keeps track of when the timer is done.
-     */
-    private var listener = Listener { !isPending && timeMs() >= this.length }
-
-    /**
      * Schedules the given action to run while the timer is running and not yet finsihed.
      * @param action The action to run.
      * @return The timer instance.
      */
-    fun whileWaiting(action: Runnable) = this.also { listener.whileLow(action) }
+    fun whileWaiting(action: Runnable) = this.also { whileLow(action) }
 
     /**
      * Schedules the given action to run once when the timer is finished.
      * @param action The action to run.
      * @return The timer instance.
      */
-    fun onDone(action: Runnable) = this.also { listener.onRise(action) }
+    fun onDone(action: Runnable) = this.also { onRise(action) }
 
     /**
      * Resets the timer and sets it to not pending.
@@ -102,7 +101,7 @@ class Timer @JvmOverloads constructor(length: Long, unit: TimeUnit = TimeUnit.MI
      * Gets the current time in milliseconds.
      * @return The current time in milliseconds.
      */
-    fun timeMs(): Long {
+    private fun timeMs(): Long {
         return if (isPending) -1 else System.currentTimeMillis() - startTime
     }
 }

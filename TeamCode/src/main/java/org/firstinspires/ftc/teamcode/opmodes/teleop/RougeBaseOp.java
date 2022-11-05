@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.util.OpModeType;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.GamepadEx2;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.listeners.GamepadEx2;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
 @SuppressWarnings("SameParameterValue")
