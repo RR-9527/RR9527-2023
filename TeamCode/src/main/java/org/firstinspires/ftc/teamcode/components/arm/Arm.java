@@ -69,8 +69,8 @@ public class Arm {
         }
 
         // Old code - uses builtin encoder
-        double correction = armPID.calculate(armMotor.getCurrentPosition(), armCorrection);
-//        double correction = armPID.calculate(getArmPosition(), armCorrection);
+//        double correction = armPID.calculate(armMotor.getCurrentPosition(), armCorrection);
+        double correction = armPID.calculate(getArmPosition(), armCorrection);
         armMotor.set(correction);
 
         telemetry.addData("Arm target pos", armCorrection);
