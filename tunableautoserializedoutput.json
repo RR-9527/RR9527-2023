@@ -1,5 +1,4 @@
     {
-        "output_file_path":"C:\\Users\\wanna\\Documents\\GitHub\\RR9527-2023\\TeamCode\\src\\main\\java\\org\\firstinspires\\ftc\\teamcode\\opmodes\\auto\\AutoProviderImpl.java",
         "method_calls":[
             {
                 "index":0,
@@ -58,7 +57,7 @@
      "name": "callback",
      "type": "com.acmerobotics.roadrunner.trajectory.MarkerCallback",
      "is_serialized": true,
-     "file_path": "C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker12873394533615869471ser"
+     "file_path": "C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker7974238130531428996ser"
 }
                 ]
             },
@@ -87,7 +86,7 @@
      "name": "callback",
      "type": "com.acmerobotics.roadrunner.trajectory.MarkerCallback",
      "is_serialized": true,
-     "file_path": "C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker12102042316983713080ser"
+     "file_path": "C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker16467807720441399662ser"
 }
                 ]
             },
@@ -116,7 +115,7 @@
      "name": "callback",
      "type": "com.acmerobotics.roadrunner.trajectory.MarkerCallback",
      "is_serialized": true,
-     "file_path": "C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker12882304284518831824ser"
+     "file_path": "C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker12388762704851349331ser"
 }
                 ]
             },
@@ -145,7 +144,7 @@
      "name": "callback",
      "type": "com.acmerobotics.roadrunner.trajectory.MarkerCallback",
      "is_serialized": true,
-     "file_path": "C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker16954794978004075156ser"
+     "file_path": "C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker15292735518904270503ser"
 }
                 ]
             }

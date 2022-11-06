@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.SuperExperimentalWIPTestAutoN
 import java.io.*
 import java.nio.file.Files
 
+const val DEFAULT_CONFIG_FILE = "tunableautoconfig.json"
+
 class MethodCall(
     val index: Int,
     val methodName: String,
@@ -35,12 +37,19 @@ class SerializableVar(name: String, type: String, val filePath: String) : Var(na
     """.trimIndent()
 }
 
-class TuningAutoBuilder {
-    var jsonOutputPath = System.getProperty("user.dir") + "/auto.json"
+class TuningAutoBuilder(_configFile: String = DEFAULT_CONFIG_FILE) {
+    private val jsonOutputPath: String
 
-    var javaOutputPath = (System.getProperty("user.dir") +
-        "\\TeamCode\\src\\main\\java\\org\\firstinspires\\ftc\\teamcode\\opmodes\\auto\\AutoProviderImpl.java")
-        .replace("\\", File.separator.repeat(2))
+    init {
+        val configFile = File(_configFile)
+
+        val config = configFile.readText()
+
+        jsonOutputPath = config
+            .substringAfter("\"json_output_path\":")
+            .substringAfter('"')
+            .substringBefore('"')
+    }
 
     private var variables = mutableListOf<MethodCall>()
     private var methodCalls = mutableMapOf<String, Int>()
@@ -113,7 +122,6 @@ class TuningAutoBuilder {
 
     fun toJSON() = """
     {
-        "output_file_path":"$javaOutputPath",
         "method_calls":[${
             variables.joinToString(",") {"""
             {
@@ -129,7 +137,7 @@ class TuningAutoBuilder {
     """.trimIndent()
 
     fun writeJsonToFile() {
-        print(toJSON())
+//        print(toJSON())
 
         File(jsonOutputPath).bufferedWriter().use { out ->
             out.write(toJSON())
