@@ -53,7 +53,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
             })
 
             .splineTo(new Vector2d(in(91), in(-50)), rad(90))
-            .waitSeconds(0.125)
+            .waitSeconds(0.075)
             .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE))
             .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
                 lift.setHeight(RobotConstants.Lift.MID);
@@ -69,7 +69,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
                 // Prepare the robot for intaking
                 claw.openForIntake();
                 intake.enable();
-                lift.setHeight(AutoData.INTAKING_POSITIONS[0]);
+                lift.setHeight(AutoData.INTAKING_START_POS);
                 armPosFunction = arm::setToBackwardsPos;
                 wristPosFunction = wrist::setToBackwardsPos;
             })
@@ -103,7 +103,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
                 // Prepare the robot for intaking
                 claw.openForIntake();
                 intake.enable();
-                lift.setHeight(AutoData.INTAKING_POSITIONS[1]);
+                lift.setHeight(AutoData.INTAKING_START_POS-AutoData.INTAKING_DECREMENT);
                 armPosFunction = arm::setToBackwardsPos;
                 wristPosFunction = wrist::setToBackwardsPos;
             })
@@ -137,7 +137,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
                 // Prepare the robot for intaking
                 claw.openForIntake();
                 intake.enable();
-                lift.setHeight(AutoData.INTAKING_POSITIONS[2]);
+                lift.setHeight(AutoData.INTAKING_START_POS-AutoData.INTAKING_DECREMENT*2);
                 armPosFunction = arm::setToBackwardsPos;
                 wristPosFunction = wrist::setToBackwardsPos;
             })
@@ -170,7 +170,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
                 // Prepare the robot for intaking
                 claw.openForIntake();
                 intake.enable();
-                lift.setHeight(AutoData.INTAKING_POSITIONS[3]);
+                lift.setHeight(AutoData.INTAKING_START_POS-AutoData.INTAKING_DECREMENT*3);
                 armPosFunction = arm::setToBackwardsPos;
                 wristPosFunction = wrist::setToBackwardsPos;
             })

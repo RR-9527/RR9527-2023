@@ -13,9 +13,9 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.taskchains.TaskChai
 
 @TeleOp
 public class RogueTestingOp extends RougeBaseOp {
-    StateRotator<DriveType> driveTypes;
-    TaskChain intakeChain;
-    CancellableTaskChain forwardsDepositChain, backwardsDepositChain;
+    private StateRotator<DriveType> driveTypes;
+    private TaskChain intakeChain;
+    private CancellableTaskChain forwardsDepositChain, backwardsDepositChain;
 
     @Override
     public void scheduleTasks() {

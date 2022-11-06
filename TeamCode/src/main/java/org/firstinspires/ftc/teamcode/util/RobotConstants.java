@@ -3,6 +3,16 @@ package org.firstinspires.ftc.teamcode.util;
 import com.acmerobotics.dashboard.config.Config;
 
 public class RobotConstants {
+	@Config
+	public static class VoltagePID {
+		public static int TARGET_VOLTAGE = 14;
+
+		public static double P = 0.025;
+		public static double I = 0;
+		public static double D = 0.01;
+		public static double F = 0.01;
+	}
+
     @Config
     public static class Claw {
     	public static double INTAKE = 0.55;
@@ -12,11 +22,14 @@ public class RobotConstants {
 
     @Config
     public static class Arm {
-    	public static double BACKWARDS = 480;
-    	public static double VERTICAL = 0;
-    	public static double FORWARDS = -480;
+    	public static double BACKWARDS = 1500;
+    	public static double VERTICAL = 300;
+    	public static double FORWARDS = -320;
 
-    	public static double P = 0.002;
+		public static double VOLTAGE_BACKWARDS = 0.539;
+		public static double VOLTAGE_FORWARDS = 2.07;
+
+    	public static double P = 0.001;
     	public static double I = 0.085;
     	public static double D = 0.00001;
     	public static double F = 0;

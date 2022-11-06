@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.components.bot.Bot;
 import org.firstinspires.ftc.teamcode.components.claw.Claw;
 import org.firstinspires.ftc.teamcode.components.intake.Intake;
 import org.firstinspires.ftc.teamcode.components.lift.Lift;
+import org.firstinspires.ftc.teamcode.components.voltagescaler.VoltageScaler;
 import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.util.OpModeType;
@@ -26,6 +27,7 @@ public abstract class RougeBaseOp extends LinearOpMode {
     protected Arm arm;
     protected Wrist wrist;
     protected Lift lift;
+    protected VoltageScaler voltageScaler;
     protected Bot bot;
 
     protected GamepadEx2 driver;
@@ -53,6 +55,9 @@ public abstract class RougeBaseOp extends LinearOpMode {
             arm.update(telemetry);
             lift.update(telemetry);
             wrist.update();
+            telemetry.update();
+
+            // TODO: Yoink this out of existence
             if(opModeType == OpModeType.TELEOP)
                 driveMotors.drive(gamepad1, localizer, powerMulti);
         });
@@ -67,11 +72,12 @@ public abstract class RougeBaseOp extends LinearOpMode {
         driveMotors = new DriveMotors(hardwareMap);
         localizer   = new StandardTrackingWheelLocalizer(hardwareMap);
 
+        voltageScaler = new VoltageScaler(hardwareMap);
         claw   = new Claw(hardwareMap);
         intake = new Intake(hardwareMap);
         arm    = new Arm(hardwareMap);
         wrist  = new Wrist(hardwareMap);
-        lift   = new Lift(hardwareMap);
+        lift   = new Lift(hardwareMap, voltageScaler);
 
         bot = new Bot(driveMotors, localizer, claw, intake, arm, wrist, lift);
 

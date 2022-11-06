@@ -8,6 +8,8 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.components.voltagescaler.VoltageScaler;
+import org.firstinspires.ftc.teamcode.opmodes.auto.AutoData;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
 
 @Config
@@ -16,9 +18,16 @@ public class Lift {
 
     private int liftHeight;
 
-    private PIDFController liftAPID, liftBPID;
+    private HardwareMap hardwareMap;
 
-    public Lift(HardwareMap hwMap) {
+    private PIDFController liftPID;
+
+    private VoltageScaler voltageScaler;
+
+    public Lift(HardwareMap hwMap, VoltageScaler voltageScaler) {
+        hardwareMap = hwMap;
+        this.voltageScaler = voltageScaler;
+
         liftA = new Motor(hwMap, "L1", Motor.GoBILDA.RPM_1150);
         liftA.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         liftA.setRunMode(Motor.RunMode.VelocityControl);
@@ -28,10 +37,8 @@ public class Lift {
         liftB.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         liftB.setRunMode(Motor.RunMode.VelocityControl);
         liftB.setInverted(true);
-//        liftB.resetEncoder();
 
-//        liftBPID = new PIDFController(Lift.P, Lift.I, Lift.D, Lift.F);
-        liftAPID = new PIDFController(RobotConstants.Lift.P, RobotConstants.Lift.I, RobotConstants.Lift.D, RobotConstants.Lift.F);
+        liftPID = new PIDFController(RobotConstants.Lift.P, RobotConstants.Lift.I, RobotConstants.Lift.D, RobotConstants.Lift.F);
     }
 
     public void goToZero() {
@@ -51,16 +58,18 @@ public class Lift {
     }
 
     public void update(Telemetry telemetry) {
+        double voltageCorrection = voltageScaler.getVoltageCorrection();
+        telemetry.addData("Voltage PIDF correction for lift", voltageCorrection);
+
         // Allows hot reloading for PIDF and outputs some telemetry
         if(DEBUG) {
-            liftAPID.setPIDF(RobotConstants.Lift.P, RobotConstants.Lift.I, RobotConstants.Lift.D, RobotConstants.Lift.F);
-//            liftBPID.setPIDF(Lift.P, Lift.I, Lift.D, Lift.F);
+            liftPID.setPIDF(RobotConstants.Lift.P, RobotConstants.Lift.I, RobotConstants.Lift.D, RobotConstants.Lift.F);
 
             telemetry.addData("Motor position", liftA.getCurrentPosition());
         }
 
-        double correctionA = liftAPID.calculate(liftA.getCurrentPosition(), liftHeight);
-//        double correctionB = liftABPID.calculate(liftA.getCurrentPosition(), liftHeight);
+        double correctionA = liftPID.calculate(liftA.getCurrentPosition(), liftHeight+voltageCorrection);
+
         liftA.set(correctionA);
         liftB.set(correctionA);
     }
