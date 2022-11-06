@@ -3,7 +3,7 @@
 import * as fsp from 'node:fs/promises';
 import { Argument, AutoBuilder, AutoBuilderConfig, MethodCall } from './types';
 
-const CONFIG_FILE_PATH = './tunableautoconfig.json';
+const CONFIG_FILE_PATH = './.tunableautoconfig';
 
 /**
  * Reads in a JSON file of auto builder method calls and some given metadata, and turns it

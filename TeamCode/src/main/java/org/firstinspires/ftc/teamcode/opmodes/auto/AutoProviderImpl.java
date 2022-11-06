@@ -46,7 +46,7 @@ public class AutoProviderImpl implements AutoProvider {
 
     private static com.acmerobotics.roadrunner.trajectory.MarkerCallback temporalMarker0$callback; 
     static { 
-        try (ObjectInput oi = new ObjectInputStream(new FileInputStream("C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker7974238130531428996ser"))) { 
+        try (ObjectInput oi = new ObjectInputStream(new FileInputStream("C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker13537295576468947363ser"))) { 
             temporalMarker0$callback = (com.acmerobotics.roadrunner.trajectory.MarkerCallback) oi.readObject(); 
         } catch (IOException | ClassNotFoundException e) { 
             e.printStackTrace(); 
@@ -59,7 +59,7 @@ public class AutoProviderImpl implements AutoProvider {
 
     private static com.acmerobotics.roadrunner.trajectory.MarkerCallback temporalMarker1$callback; 
     static { 
-        try (ObjectInput oi = new ObjectInputStream(new FileInputStream("C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker16467807720441399662ser"))) { 
+        try (ObjectInput oi = new ObjectInputStream(new FileInputStream("C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker6559342085970339335ser"))) { 
             temporalMarker1$callback = (com.acmerobotics.roadrunner.trajectory.MarkerCallback) oi.readObject(); 
         } catch (IOException | ClassNotFoundException e) { 
             e.printStackTrace(); 
@@ -72,7 +72,7 @@ public class AutoProviderImpl implements AutoProvider {
 
     private static com.acmerobotics.roadrunner.trajectory.MarkerCallback temporalMarker2$callback; 
     static { 
-        try (ObjectInput oi = new ObjectInputStream(new FileInputStream("C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker12388762704851349331ser"))) { 
+        try (ObjectInput oi = new ObjectInputStream(new FileInputStream("C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker15382719210621046668ser"))) { 
             temporalMarker2$callback = (com.acmerobotics.roadrunner.trajectory.MarkerCallback) oi.readObject(); 
         } catch (IOException | ClassNotFoundException e) { 
             e.printStackTrace(); 
@@ -85,7 +85,7 @@ public class AutoProviderImpl implements AutoProvider {
 
     private static com.acmerobotics.roadrunner.trajectory.MarkerCallback temporalMarker3$callback; 
     static { 
-        try (ObjectInput oi = new ObjectInputStream(new FileInputStream("C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker15292735518904270503ser"))) { 
+        try (ObjectInput oi = new ObjectInputStream(new FileInputStream("C:\\Users\\wanna\\AppData\\Local\\Temp\\autobuilder_temporalMarker15724625874487357021ser"))) { 
             temporalMarker3$callback = (com.acmerobotics.roadrunner.trajectory.MarkerCallback) oi.readObject(); 
         } catch (IOException | ClassNotFoundException e) { 
             e.printStackTrace(); 

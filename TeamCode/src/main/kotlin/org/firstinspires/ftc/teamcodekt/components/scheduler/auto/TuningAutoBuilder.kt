@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.SuperExperimentalWIPTestAutoN
 import java.io.*
 import java.nio.file.Files
 
-const val DEFAULT_CONFIG_FILE = "tunableautoconfig.json"
+const val DEFAULT_CONFIG_FILE = ".tunableautoconfig"
 
 class MethodCall(
     val index: Int,
