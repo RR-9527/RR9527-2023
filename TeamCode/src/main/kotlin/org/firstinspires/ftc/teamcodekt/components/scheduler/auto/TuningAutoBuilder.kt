@@ -4,76 +4,70 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.acmerobotics.roadrunner.trajectory.MarkerCallback
 import org.firstinspires.ftc.teamcode.opmodes.auto.SuperExperimentalWIPTestAutoNov5ForMyTestingOnlyPleaseDoNotUseItWontWork
-import org.firstinspires.ftc.teamcodekt.util.toIn
-import org.firstinspires.ftc.teamcodekt.util.toRad
 import java.io.*
 import java.nio.file.Files
 
-const val FILE_PATH = "../test_autobuilder.json"
-
-class Action(
+class MethodCall(
     val index: Int,
     val methodName: String,
     val tag: String,
     val args: Array<out Var>
 )
 
-open class Var(
-    val name: String,
-    val type: String,
-    val data: Any?,
-) {
-    override fun toString() = buildString { 
-        append('{')
-        append("\"name:\": $name,")
-        append("\"type:\": $type,")
-        append("\"data:\": $data")
-        append('}')
+open class Var(val name: String, val type: String, val data: Any?) {
+    override fun toString() = """
+    {
+         "name": "$name",
+         "type": "$type",
+         "data": "$data"
     }
+    """.trimIndent()
 }
 
-class SerializableVar(
-    name: String,
-    type: String,
-    val filePath: String,
-) : Var(name, type, null) {
-    override fun toString() = buildString {
-        append('{')
-        append("\"name:\": $name,")
-        append("\"type:\": $type,")
-        append("\"serialized:\": true,")
-        append("\"filePath:\" $filePath")
-        append('}')
+class SerializableVar(name: String, type: String, val filePath: String) : Var(name, type, null) {
+    override fun toString() = """
+    {
+         "name": "$name",
+         "type": "$type",
+         "is_serialized": true,
+         "file_path": "$filePath"
     }
+    """.trimIndent()
 }
 
-class AutoBuilder {
-    private var variables = mutableListOf<Action>()
+class TuningAutoBuilder {
+    var jsonOutputPath = System.getProperty("user.dir") + "/auto.json"
+
+    var javaOutputPath = (System.getProperty("user.dir") +
+        "\\TeamCode\\src\\main\\java\\org\\firstinspires\\ftc\\teamcode\\opmodes\\auto\\AutoProviderImpl.java")
+        .replace("\\", File.separator.repeat(2))
+
+    private var variables = mutableListOf<MethodCall>()
     private var methodCalls = mutableMapOf<String, Int>()
 
     @JvmOverloads
     fun forward(distance: Double, tag: String? = null) = this.apply {
-        val param1 = Var("distance", "double", distance.toIn())
+        val param1 = Var("distance", "double", distance)
         variables.addAction("forward", tag, param1)
     }
 
     @JvmOverloads
     fun back(distance: Double, tag: String? = null) = this.apply {
-        val param1 = Var("distance", "double", distance.toIn())
+        val param1 = Var("distance", "double", distance)
         variables.addAction("back", tag, param1)
     }
 
     @JvmOverloads
     fun turn(angle: Double, tag: String? = null) = this.apply {
-        val param1 = Var("angle", "double", angle.toRad())
+        val param1 = Var("angle", "double", angle)
         variables.addAction("turn", tag, param1)
     }
 
     @JvmOverloads
     fun splineTo(x: Double, y: Double, heading: Double, tag: String? = null) = this.apply {
-        val param1 = Var("x", "double", x.toIn())
-        val param2 = Var("y", "double", y.toIn())
-        val param3 = Var("heading", "double", heading.toRad())
+        val param1 = Var("x", "double", x)
+        val param2 = Var("y", "double", y)
+        val param3 = Var("heading", "double", heading)
         variables.addAction("splineTo", tag, param1, param2, param3)
     }
 
@@ -102,13 +96,13 @@ class AutoBuilder {
         }
 
         val param1 = Var("offset", "double", offset)
-        val param2 = SerializableVar("offset", lambdaType, file.absolutePath)
+        val param2 = SerializableVar("callback", lambdaType, file.absolutePath.replace("\\", "\\\\"))
 
         variables.addAction("temporalMarker", tag, param1, param2)
     }
 
     interface AutoBuilderRepeatCallback {
-        fun callback(iterationNum: Int, builder: AutoBuilder)
+        fun callback(iterationNum: Int, builder: TuningAutoBuilder)
     }
 
     fun doTimes(times: Int, callback: AutoBuilderRepeatCallback) = this.apply {
@@ -117,40 +111,37 @@ class AutoBuilder {
         }
     }
 
-    fun toJSON() = buildString {
-        append('[')
-        variables.forEachIndexed { index, action ->
-            append("{")
-            append("\"index\": ${action.index},")
-            append("\"method_name\": \"${action.methodName}\",")
-            append("\"tag\": \"${action.tag}\",")
-            append("\"args\": [")
-            action.args.joinToString(",", transform = Var::toString)
-            deleteCharAt(lastIndex)
-            append("]")
-            append("}")
-            if (index != variables.size - 1) {
-                append(',')
-            }
-        }
-        append(']')
+    fun toJSON() = """
+    {
+        "output_file_path":"$javaOutputPath",
+        "method_calls":[${
+            variables.joinToString(",") {"""
+            {
+                "index":${it.index},
+                "method_name":"${it.methodName}",
+                "tag":"${it.tag}",
+                "args":[
+                    ${it.args.joinToString(",")}
+                ]
+            }"""}}
+        ]
     }
+    """.trimIndent()
 
-    @JvmOverloads
-    fun writeJsonToFile(filePath: String = FILE_PATH) {
+    fun writeJsonToFile() {
         print(toJSON())
 
-        File(filePath).bufferedWriter().use { out ->
+        File(jsonOutputPath).bufferedWriter().use { out ->
             out.write(toJSON())
         }
     }
 
-    private fun MutableList<Action>.addAction(methodName: String, tag: String?, vararg args: Var) {
+    private fun MutableList<MethodCall>.addAction(methodName: String, tag: String?, vararg args: Var) {
         incrementMethodCallsFor(methodName)
 
-        val defaultTag = methodName + "_" + methodCalls[methodName]
+        val defaultTag = methodName + methodCalls[methodName]
 
-        this.add(Action(size, methodName, tag?:defaultTag, args))
+        add(MethodCall(size, methodName, tag?:defaultTag, args))
     }
 
     private fun incrementMethodCallsFor(methodName: String) =
