@@ -7,7 +7,7 @@ public class RobotConstants {
 	public static class VoltagePID {
 		public static int TARGET_VOLTAGE = 14;
 
-		public static double P = 0.025;
+		public static double P = 0.075;
 		public static double I = 0;
 		public static double D = 0.01;
 		public static double F = 0.01;

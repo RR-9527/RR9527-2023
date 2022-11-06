@@ -48,7 +48,7 @@ public class TestAutoNov5 extends RougeBaseAuto {
         TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
             .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                 // Start getting the lift ready while turning
-                lift.setHeight(RobotConstants.Lift.HIGH+50);
+                lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
 
                 armPosFunction = arm::setToForwardsPos;
@@ -72,14 +72,17 @@ public class TestAutoNov5 extends RougeBaseAuto {
                 claw.openForIntake();
                 intake.enable();
                 lift.setHeight(AutoData.INTAKING_START_POS);
-                armPosFunction = arm::setToBackwardsPos;
-//                arm.setToBackwardsPos();
+                armPosFunction = arm::setToRestingPos;
                 wristPosFunction = wrist::setToBackwardsPos;
             })
 
             // Auto Cycle #1
             .setReversed(true)
             .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
+            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                armPosFunction = arm::setToBackwardsPos; // TODO: Move this earlier to reduce time it takes to intake
+
+            })
             .setReversed(false)
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
                 claw.close();
@@ -88,7 +91,7 @@ public class TestAutoNov5 extends RougeBaseAuto {
                 armPosFunction = arm::setToForwardsPos;
 //                arm.setToForwardsPos();
 
-                lift.setHeight(RobotConstants.Lift.HIGH+50);
+                lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
 //                wrist.setToForwardsPos();
 
@@ -120,9 +123,9 @@ public class TestAutoNov5 extends RougeBaseAuto {
             })
 
 
-            .back(10)
-            .turn(rad(50))
-            .forward(in(90))
+//            .back(10)
+//            .turn(rad(50))
+//            .forward(in(90))
 
             .build();
 
