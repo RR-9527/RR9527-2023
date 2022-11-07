@@ -8,7 +8,7 @@ function print_rename() {
   # "./java/org/firstinspires/ftc/teamcode/opmodes/deprecated/ftclibscheduler/DepositCommand.java"
   # into
   # "./java/../opmodes/deprecated/ftclibscheduler/DepositCommand.java"
-  clean_path=$(echo "$1" | sed -E 's/org\/firstinspires\/ftc\/teamcode(kt)?/../')
+  clean_path=$(echo "$1" | sed -E 's.txt/org\/firstinspires\/ftc\/teamcode(kt)?/../')
 
   # Echoes something like
   # "Renaming './java/../opmodes/deprecated/ftclibscheduler/DepositCommand.java' to 'DepositCommand.java.bak'"
@@ -20,7 +20,7 @@ parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" || fail ; pwd -P )
 
 # Changes directory to the TeamCode source files
 # This is agnostic to the location of where the script was called;
-# it will always run relative to the script's location
+# it will always run relative to the script's.txt location
 cd "$parent_path"/../TeamCode/src/main || fail
 
 # Finds all the code files in 'TeamCode/src/main' that are in a 'deprecated' folder

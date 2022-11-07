@@ -26,6 +26,17 @@ open class Var(val name: String, val type: String, val data: Any?) {
     """.trimIndent()
 }
 
+open class TunableVar(name: String, type: String, data: Any?) : Var(name, type, data) {
+    override fun toString() = """
+    {
+         "name": "$name",
+         "type": "$type",
+         "data": "$data",
+         "is_tunable": true
+    }
+    """.trimIndent()
+}
+
 class SerializableVar(name: String, type: String, val filePath: String) : Var(name, type, null) {
     override fun toString() = """
     {
@@ -61,14 +72,32 @@ class TuningAutoBuilder(_configFile: String = DEFAULT_CONFIG_FILE) {
     }
 
     @JvmOverloads
+    fun forwardT(distance: Double, tag: String? = null) = this.apply {
+        val param1 = TunableVar("distance", "double", distance)
+        variables.addAction("forward", tag, param1)
+    }
+
+    @JvmOverloads
     fun back(distance: Double, tag: String? = null) = this.apply {
         val param1 = Var("distance", "double", distance)
         variables.addAction("back", tag, param1)
     }
 
     @JvmOverloads
+    fun backT(distance: Double, tag: String? = null) = this.apply {
+        val param1 = TunableVar("distance", "double", distance)
+        variables.addAction("back", tag, param1)
+    }
+
+    @JvmOverloads
     fun turn(angle: Double, tag: String? = null) = this.apply {
         val param1 = Var("angle", "double", angle)
+        variables.addAction("turn", tag, param1)
+    }
+
+    @JvmOverloads
+    fun turnT(angle: Double, tag: String? = null) = this.apply {
+        val param1 = TunableVar("angle", "double", angle)
         variables.addAction("turn", tag, param1)
     }
 
@@ -81,8 +110,22 @@ class TuningAutoBuilder(_configFile: String = DEFAULT_CONFIG_FILE) {
     }
 
     @JvmOverloads
+    fun splineToT(x: Double, y: Double, heading: Double, tag: String? = null) = this.apply {
+        val param1 = TunableVar("x", "double", x)
+        val param2 = TunableVar("y", "double", y)
+        val param3 = TunableVar("heading", "double", heading)
+        variables.addAction("splineTo", tag, param1, param2, param3)
+    }
+
+    @JvmOverloads
     fun waitSeconds(time: Double, tag: String? = null) = this.apply {
         val param1 = Var("time", "double", time)
+        variables.addAction("waitSeconds", tag, param1)
+    }
+
+    @JvmOverloads
+    fun waitSecondsT(time: Double, tag: String? = null) = this.apply {
+        val param1 = TunableVar("time", "double", time)
         variables.addAction("waitSeconds", tag, param1)
     }
 
@@ -92,7 +135,13 @@ class TuningAutoBuilder(_configFile: String = DEFAULT_CONFIG_FILE) {
         variables.addAction("setReversed", tag, param1)
     }
 
-    interface SerializableMarkerCallback : MarkerCallback, Serializable
+    @JvmOverloads
+    fun setReversedT(reversed: Boolean, tag: String? = null) = this.apply {
+        val param1 = TunableVar("reversed", "boolean", reversed)
+        variables.addAction("setReversed", tag, param1)
+    }
+
+    fun interface SerializableMarkerCallback : MarkerCallback, Serializable
 
     @RequiresApi(Build.VERSION_CODES.O)
     @JvmOverloads
@@ -105,6 +154,22 @@ class TuningAutoBuilder(_configFile: String = DEFAULT_CONFIG_FILE) {
         }
 
         val param1 = Var("offset", "double", offset)
+        val param2 = SerializableVar("callback", lambdaType, file.absolutePath.replace("\\", "\\\\"))
+
+        variables.addAction("temporalMarker", tag, param1, param2)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @JvmOverloads
+    fun temporalMarkerT(offset: Double = 0.0, action: SerializableMarkerCallback, tag: String? = null) = this.apply {
+        val lambdaType = "com.acmerobotics.roadrunner.trajectory.MarkerCallback"
+
+        val file: File = Files.createTempFile("autobuilder_temporalMarker", "ser").toFile()
+        ObjectOutputStream(FileOutputStream(file)).use { oo ->
+            oo.writeObject(action)
+        }
+
+        val param1 = TunableVar("offset", "double", offset)
         val param2 = SerializableVar("callback", lambdaType, file.absolutePath.replace("\\", "\\\\"))
 
         variables.addAction("temporalMarker", tag, param1, param2)
@@ -137,8 +202,6 @@ class TuningAutoBuilder(_configFile: String = DEFAULT_CONFIG_FILE) {
     """.trimIndent()
 
     fun writeJsonToFile() {
-//        print(toJSON())
-
         File(jsonOutputPath).bufferedWriter().use { out ->
             out.write(toJSON())
         }

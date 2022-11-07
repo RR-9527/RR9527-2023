@@ -1,14 +1,14 @@
 /**
  * Represents a paramether of a function and the argument that was passed to it
  *
- * E.g. `builder.splineTo(10.0, 10.0, 0)`'s arguments would be represented as:
+ * E.g. `builder.splineToT(10.0, 10.0, 0)`'s arguments would be represented as:
  * ```
  * {
  *   // other stuff...
  *   args: [
- *     { name: 'x', type: 'double', value: 10.0 },
- *     { name: 'y', type: 'double', value: 10.0 },
- *     { name: 'z', type: 'int'   , value: 0    },
+ *     { name: 'x', type: 'double', is_tunable: true, value: 10.0 },
+ *     { name: 'y', type: 'double', is_tunable: true, value: 10.0 },
+ *     { name: 'z', type: 'int'   , is_tunable: true, value: 0    },
  *   ]
  * }
  * ```
@@ -17,7 +17,7 @@
  * {
  *   // other stuff...
  *   args: [
- *     { name: 'offset', type: 'double', value: 0.5 },
+ *     { name: 'offset', type: 'double', is_tunable: true, value: 0.5 },
  *     {
  *       name: 'callback',
  *       type: 'com.acmerobotics.roadrunner.trajectory.MarkerCallback',
@@ -32,6 +32,7 @@ export interface Argument {
   name: string;
   type: string;
   data: any;
+  is_tunable?: boolean;
   is_serialized?: boolean;
   file_path?: string;
 }
