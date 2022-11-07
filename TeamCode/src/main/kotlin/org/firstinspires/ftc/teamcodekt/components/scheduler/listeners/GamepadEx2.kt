@@ -258,7 +258,7 @@ class GamepadEx2(val gamepad: Gamepad) {
      * gamepad_x1.right_trigger.onLow(this::doSomething)
      */
     @JvmField
-    val right_trigger = left_trigger(deadzone = .5)
+    val right_trigger = right_trigger(deadzone = .5)
 
     /**
      * Allows client to perform an action when the gamepad's 'right_trigger' button's state is mutated.

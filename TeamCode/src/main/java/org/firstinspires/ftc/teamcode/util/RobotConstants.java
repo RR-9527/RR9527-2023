@@ -7,10 +7,10 @@ public class RobotConstants {
 	public static class VoltagePID {
 		public static int TARGET_VOLTAGE = 14;
 
-		public static double P = 0.075;
+		public static double P = 0.0;
 		public static double I = 0;
-		public static double D = 0.01;
-		public static double F = 0.01;
+		public static double D = 0.0;
+		public static double F = 0.0;
 	}
 
     @Config
@@ -30,8 +30,8 @@ public class RobotConstants {
 		public static double VOLTAGE_FORWARDS = 2.07;
 
     	public static double P = 0.001;
-    	public static double I = 0.085;
-    	public static double D = 0.00001;
+    	public static double I = 0.0;
+    	public static double D = 0.0000;
     	public static double F = 0;
     }
 
@@ -48,6 +48,13 @@ public class RobotConstants {
 		public static int LOW = 1350;
 		public static int MID = 2100;
 		public static int HIGH = 3000;
+
+		public static double MANUAL_ADJUSTMENT_MULT = 4;
+
+		public static int AUTO_INTAKE_1 = 460;
+		public static int AUTO_INTAKE_2 = 360;
+		public static int AUTO_INTAKE_3 = 250;
+		public static int AUTO_INTAKE_4 = 145;
 
 		public static double P = 0.0015;
 		public static double I = 0.1;

@@ -20,11 +20,11 @@ public class AutoData {
     public static double INTAKE_Y = -30;
 
     // Depositing positon
-    public static double DEPOSIT_X = 86;
-    public static double DEPOSIT_Y = -22;
-    public static double DEPOSIT_ANGLE = 126;
+    public static double DEPOSIT_X = 85.5;
+    public static double DEPOSIT_Y = -22.5;
+    public static double DEPOSIT_ANGLE = 132;
 
     // Cone stack intaking positions
-    public static int INTAKING_START_POS = 430;
-    public static int INTAKING_DECREMENT = 30;
+    public static int INTAKING_START_POS = 420;
+    public static int INTAKING_DECREMENT = 55;
 }

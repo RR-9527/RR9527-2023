@@ -11,7 +11,8 @@ public class Intake {
     }
 
     public void enable()  {
-        intakeServo.set(1);
+        // DISABLED FOR AUTO TESTING
+//        intakeServo.set(1);
     }
 
     public void disable() {

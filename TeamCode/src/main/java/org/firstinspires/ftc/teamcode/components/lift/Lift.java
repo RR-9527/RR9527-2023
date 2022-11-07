@@ -72,6 +72,8 @@ public class Lift {
 
         liftA.set(correctionA);
         liftB.set(correctionA);
+
+        telemetry.addData("Lift set position", liftHeight);
     }
 
     public int getHeight() {

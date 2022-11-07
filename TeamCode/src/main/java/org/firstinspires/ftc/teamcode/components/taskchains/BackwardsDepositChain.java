@@ -24,6 +24,7 @@ public class BackwardsDepositChain implements CancellableTaskChain {
     public void invokeOn(@NonNull Listener button) {
         button
             .onRise(depositTimer::setPending)
+            .onRise(() -> isCancelled = false)
 
             .onFall(() -> {
                 if (!isCancelled) {
@@ -31,14 +32,15 @@ public class BackwardsDepositChain implements CancellableTaskChain {
                     depositTimer.start();
                 } else {
                     depositTimer.finishPrematurely();
-                    isCancelled = false;
                 }
             });
 
         depositTimer
             .whileWaiting(() -> {
-                bot.arm().setToBackwardsPos();
-                bot.wrist().setToBackwardsPos();
+                if (!isCancelled) {
+                    bot.arm().setToBackwardsPos();
+                    bot.wrist().setToBackwardsPos();
+                }
             })
 
             .onDone(() -> {

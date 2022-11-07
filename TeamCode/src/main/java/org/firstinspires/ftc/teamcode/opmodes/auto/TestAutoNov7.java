@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.util.RobotConstants;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
 @Autonomous
-public class TestAutoNov4 extends RougeBaseAuto {
+public class TestAutoNov7 extends RougeBaseAuto {
     private Runnable armPosFunction;
     private Runnable wristPosFunction;
 
@@ -34,6 +34,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
             lift.update(telemetry);
             wrist.update();
             drive.update();
+            telemetry.update();
         });
     }
 
@@ -47,13 +48,14 @@ public class TestAutoNov4 extends RougeBaseAuto {
         TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
             .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                 // Start getting the lift ready while turning
-                lift.setHeight(RobotConstants.Lift.HIGH+50);
+                lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
+
                 armPosFunction = arm::setToForwardsPos;
+//                arm.setToForwardsPos();
             })
 
             .splineTo(new Vector2d(in(91), in(-50)), rad(90))
-            .waitSeconds(0.075)
             .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE))
             .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
                 lift.setHeight(RobotConstants.Lift.MID);
@@ -69,22 +71,30 @@ public class TestAutoNov4 extends RougeBaseAuto {
                 // Prepare the robot for intaking
                 claw.openForIntake();
                 intake.enable();
-                lift.setHeight(AutoData.INTAKING_START_POS);
-                armPosFunction = arm::setToBackwardsPos;
+                lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_1);
+                armPosFunction = arm::setToRestingPos;
                 wristPosFunction = wrist::setToBackwardsPos;
             })
 
             // Auto Cycle #1
             .setReversed(true)
             .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
+            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                armPosFunction = arm::setToBackwardsPos; // TODO: Move this earlier to reduce time it takes to intake
+
+            })
             .setReversed(false)
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
                 armPosFunction = arm::setToForwardsPos;
-                lift.setHeight(RobotConstants.Lift.HIGH+50);
+//                arm.setToForwardsPos();
+
+                lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
+//                wrist.setToForwardsPos();
+
             })
             .waitSeconds(AutoData.INTAKE_DELAY)
 
@@ -103,22 +113,35 @@ public class TestAutoNov4 extends RougeBaseAuto {
                 // Prepare the robot for intaking
                 claw.openForIntake();
                 intake.enable();
-                lift.setHeight(AutoData.INTAKING_START_POS-AutoData.INTAKING_DECREMENT);
+                lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_1);
                 armPosFunction = arm::setToBackwardsPos;
+//                arm.setToBackwardsPos();
+
                 wristPosFunction = wrist::setToBackwardsPos;
+//                wrist.setToBackwardsPos();
+
             })
+
 
             // Auto Cycle #2
             .setReversed(true)
             .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
+            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                armPosFunction = arm::setToBackwardsPos; // TODO: Move this earlier to reduce time it takes to intake
+
+            })
             .setReversed(false)
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
                 armPosFunction = arm::setToForwardsPos;
-                lift.setHeight(RobotConstants.Lift.HIGH+50);
+//                arm.setToForwardsPos();
+
+                lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
+//                wrist.setToForwardsPos();
+
             })
             .waitSeconds(AutoData.INTAKE_DELAY)
 
@@ -137,22 +160,34 @@ public class TestAutoNov4 extends RougeBaseAuto {
                 // Prepare the robot for intaking
                 claw.openForIntake();
                 intake.enable();
-                lift.setHeight(AutoData.INTAKING_START_POS-AutoData.INTAKING_DECREMENT*2);
+                lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_2);
                 armPosFunction = arm::setToBackwardsPos;
+//                arm.setToBackwardsPos();
+
                 wristPosFunction = wrist::setToBackwardsPos;
+//                wrist.setToBackwardsPos();
             })
+
 
             // Auto Cycle #3
             .setReversed(true)
             .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
+            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                armPosFunction = arm::setToBackwardsPos; // TODO: Move this earlier to reduce time it takes to intake
+
+            })
             .setReversed(false)
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
                 armPosFunction = arm::setToForwardsPos;
-                lift.setHeight(RobotConstants.Lift.HIGH+50);
+//                arm.setToForwardsPos();
+
+                lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
+//                wrist.setToForwardsPos();
+
             })
             .waitSeconds(AutoData.INTAKE_DELAY)
 
@@ -166,26 +201,38 @@ public class TestAutoNov4 extends RougeBaseAuto {
             })
 
             .waitSeconds(AutoData.DEPOSIT_DELAY)
+
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
                 claw.openForIntake();
                 intake.enable();
-                lift.setHeight(AutoData.INTAKING_START_POS-AutoData.INTAKING_DECREMENT*3);
+                lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_3);
                 armPosFunction = arm::setToBackwardsPos;
+//                arm.setToBackwardsPos();
+
                 wristPosFunction = wrist::setToBackwardsPos;
+//                wrist.setToBackwardsPos();
             })
 
             // Auto Cycle #4
             .setReversed(true)
             .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
+            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                armPosFunction = arm::setToBackwardsPos; // TODO: Move this earlier to reduce time it takes to intake
+
+            })
             .setReversed(false)
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
                 armPosFunction = arm::setToForwardsPos;
-                lift.setHeight(RobotConstants.Lift.HIGH+50);
+//                arm.setToForwardsPos();
+
+                lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
+//                wrist.setToForwardsPos();
+
             })
             .waitSeconds(AutoData.INTAKE_DELAY)
 
@@ -197,17 +244,20 @@ public class TestAutoNov4 extends RougeBaseAuto {
                 // Deposit the cone while turning
                 claw.openForDeposit();
             })
-            .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                lift.setHeight(RobotConstants.Lift.ZERO);
-                arm.setToRestingPos();
-                wrist.setToRestingPos();
-                intake.disable();
-                claw.close();
-            })
 
-            .back(10)
-            .turn(rad(50))
-            .forward(in(90))
+            .waitSeconds(AutoData.DEPOSIT_DELAY)
+
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
+                // Prepare the robot for intaking
+                claw.openForIntake();
+                intake.enable();
+                lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_4);
+                armPosFunction = arm::setToBackwardsPos;
+//                arm.setToBackwardsPos();
+
+                wristPosFunction = wrist::setToBackwardsPos;
+//                wrist.setToBackwardsPos();
+            })
 
             .build();
 

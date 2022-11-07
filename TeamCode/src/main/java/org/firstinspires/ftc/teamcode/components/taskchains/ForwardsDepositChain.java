@@ -28,6 +28,7 @@ public class ForwardsDepositChain implements CancellableTaskChain {
 
         button.and(liftIsHighEnough)
             .onRise(depositTimer::setPending)
+            .onRise(() -> isCancelled = false)
 
             .onFall(() -> {
                 if (!isCancelled) {
@@ -35,14 +36,15 @@ public class ForwardsDepositChain implements CancellableTaskChain {
                     depositTimer.start();
                 } else {
                     depositTimer.finishPrematurely();
-                    isCancelled = false;
                 }
             });
 
         depositTimer
             .whileWaiting(() -> {
-                bot.arm().setToForwardsPos();
-                bot.wrist().setToForwardsPos();
+                if (!isCancelled) {
+                    bot.arm().setToForwardsPos();
+                    bot.wrist().setToForwardsPos();
+                }
             })
 
             .onDone(() -> {

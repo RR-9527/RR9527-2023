@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.components.taskchains.BackwardsDepositChain;
 import org.firstinspires.ftc.teamcode.components.taskchains.ForwardsDepositChain;
 import org.firstinspires.ftc.teamcode.components.taskchains.IntakeChain;
+import org.firstinspires.ftc.teamcode.util.RobotConstants;
 import org.firstinspires.ftc.teamcode.util.StateRotator;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveType;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.taskchains.CancellableTaskChain;
@@ -34,7 +35,7 @@ public class RogueTestingOp extends RougeBaseOp {
 
         driver.right_stick_y(.2).and(driver.right_trigger)
             .whileHigh(() -> {
-                lift.setHeight(lift.getHeight() + (int) (13 * -gamepad1.right_stick_y));
+                lift.setHeight(lift.getHeight() + (int) (RobotConstants.Lift.MANUAL_ADJUSTMENT_MULT * Math.pow(-gamepad2.right_stick_y, 3)));
             });
 
         driver.a.onRise(this::rotateDriveType);
