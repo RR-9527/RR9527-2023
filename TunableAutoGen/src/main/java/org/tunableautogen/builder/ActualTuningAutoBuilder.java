@@ -1,4 +1,4 @@
-package org.tunableautogen;
+package org.tunableautogen.builder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,54 +8,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class TuningAutoBuilder {
-    public final String JSON_OUTPUT_PATH = "C:\\Users\\wanna\\Documents\\GitHub\\RR9527-2023\\tunableautoserializedoutput2.json";
-
+class ActualTuningAutoBuilder {
     private final List<MethodCall> methodCalls;
     private final Map<String, Integer> methodTimesCalled;
 
-    public TuningAutoBuilder() {
+    public ActualTuningAutoBuilder() {
         this.methodCalls = new ArrayList<>();
         this.methodTimesCalled = new HashMap<>();
     }
 
-    public TuningAutoBuilder forward(double distance) {
-        Var param1 = new Var("distance", "double", distance);
-        addMethodCall("forward", null, param1);
-        return this;
-    }
-
-    public TuningAutoBuilder forwardT(double distance) {
-        Var param1 = new TunableVar("distance", "double", distance);
-        addMethodCall("forward", null, param1);
-        return this;
-    }
-
-    public TuningAutoBuilder back(double distance) {
-        Var param1 = new Var("distance", "double", distance);
-        addMethodCall("back", null, param1);
-        return this;
-    }
-
-    public TuningAutoBuilder backT(double distance) {
-        Var param1 = new TunableVar("distance", "double", distance);
-        addMethodCall("back", null, param1);
-        return this;
-    }
-
-    private void addMethodCall(String name, String tag, Var... args) {
-        incrementMethodTimesCalled(name);
-        String defaultTag = name + methodTimesCalled.get(name);
-        methodCalls.add(new MethodCall(methodCalls.size(), name, tag == null ? defaultTag : tag, args));
-    }
-
-    private void incrementMethodTimesCalled(String name) {
-        methodTimesCalled.compute(name, (k, v) -> v == null ? 0 : v + 1);
-    }
-
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void writeJsonToFile() throws Exception {
-        File file = new File(JSON_OUTPUT_PATH);
+    public void finish() throws Exception {
+        File file = new File("pathname");
 
         if (!file.exists())
             file.createNewFile();
@@ -66,7 +30,17 @@ class TuningAutoBuilder {
     }
 
     private String toJSON() {
-        return "{\"methodCalls\": " + methodCalls + "}";
+        return "{\"method_calls\": " + methodCalls + "}";
+    }
+
+    private void addMethodCall(String name, String tag, Var... args) {
+        incrementMethodTimesCalled(name);
+        String defaultTag = name + methodTimesCalled.get(name);
+        methodCalls.add(new MethodCall(methodCalls.size(), name, tag == null ? defaultTag : tag, args));
+    }
+
+    private void incrementMethodTimesCalled(String name) {
+        methodTimesCalled.compute(name, (k, v) -> v == null ? 0 : v + 1);
     }
 
     static class MethodCall {
@@ -150,9 +124,5 @@ class TuningAutoBuilder {
                     "\"file_path\": \"" + filePath + "\"" +
                     "}";
         }
-    }
-
-    public static void main(String[] args) throws Exception {
-
     }
 }

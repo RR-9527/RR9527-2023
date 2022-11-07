@@ -1,13 +1,16 @@
 package org.tunableautogen
 
+import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.symbol.KSAnnotated
+import com.google.devtools.ksp.symbol.KSFile
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.google.devtools.ksp.validate
 import org.tunableautogen.annotations.GenerateTunableAuto
 import java.io.File
+import java.io.OutputStream
 import java.nio.file.Files
 import kotlin.reflect.KClass
 
@@ -22,30 +25,30 @@ class AutoBuilderProcessor(private val environment: SymbolProcessorEnvironment) 
             return emptyList()
         }
 
-        val function = listedFunctions.iterator().next();
+        val function = listedFunctions.iterator().next()
+        val containingFile = function.containingFile!!
 
-        val containingFile = File(function.containingFile!!.filePath).bufferedReader().readLines()
+        val fullCode = File(containingFile.filePath).bufferedReader().readLines()
 
-        val startIndex = containingFile.indexOfFirst { it.contains("new TuningAutoBuilder()") }
-        val endIndex = containingFile.indexOfFirst { it.contains(".writeJsonToFile();") } + 1
+        val newFile: OutputStream = environment.codeGenerator
+            .createNewFile(
+                dependencies = Dependencies(false),
+                packageName = containingFile.packageName.asString(),
+                fileName = "ActualTuningAutoBuilder",
+                extensionName = "java"
+            )
 
-        val builderCode = containingFile.subList(startIndex, endIndex).joinToString("\n")
+        val startIndex = fullCode.indexOfFirst { it.contains("new TuningAutoBuilder()") }
+        val endIndex = fullCode.indexOfFirst { it.contains(".finish();") } + 1
 
-        val tuningAutoBuilderString = createTuningAutoBuilderString(builderCode)
+        val builderCode = fullCode.subList(startIndex, endIndex).joinToString("\n")
 
-        val tempFile = Files.createTempFile("", ".java").toFile()
-        tempFile.writeText(tuningAutoBuilderString)
-
-        ProcessBuilder().command("java", tempFile.absolutePath).start().waitFor()
-
-        val out = File("C:\\Users\\wanna\\Documents\\GitHub\\RR9527-2023\\s.txt")
-        out.createNewFile()
-
-        ProcessBuilder().command("C:\\Users\\wanna\\AppData\\Roaming\\npm\\ts-node.cmd".r, "C:\\Users\\wanna\\Documents\\GitHub\\RR9527-2023\\scripts\\auto_generator\\make_pathing_with_hot_reloading.ts".r)
-            .redirectOutput(out)
-            .redirectError(out)
-            .start()
-            .waitFor()
+//        val tuningAutoBuilderString = createTuningAutoBuilderString(builderCode)
+//
+//        val tempFile = Files.createTempFile("", ".java").toFile()
+//        tempFile.writeText(tuningAutoBuilderString)
+//
+//        ProcessBuilder().command("java", tempFile.absolutePath).start().waitFor()
 
         return listedFunctions.filterNot { it.validate() }.toList()
     }

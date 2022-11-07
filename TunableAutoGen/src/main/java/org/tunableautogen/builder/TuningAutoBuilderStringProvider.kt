@@ -1,4 +1,4 @@
-package org.tunableautogen
+package org.tunableautogen.builder
 
 fun createTuningAutoBuilderString(builderCode: String) = """
 import java.io.File;
@@ -46,7 +46,7 @@ class TuningAutoBuilder {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void writeJsonToFile() throws Exception {
+    public void finish() throws Exception {
         File file = new File(JSON_OUTPUT_PATH);
 
         if (!file.exists())
@@ -155,7 +155,7 @@ class TuningAutoBuilder {
     }
 
     public static void main(String[] args) throws Exception {
-        ${builderCode}
+        $builderCode
     }
 }
 """.trimIndent()
