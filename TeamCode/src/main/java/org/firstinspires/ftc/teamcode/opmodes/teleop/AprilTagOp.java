@@ -20,7 +20,9 @@ public class AprilTagOp extends LinearOpMode
     private OpenCvCamera camera;
     private AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
-    static final double FEET_PER_METER = 3.28084;
+    private int numFramesWithoutDetection = 0;
+
+    private static final double FEET_PER_METER = 3.28084;
 
     // Lens intrinsics
     // Units are in pixels
@@ -31,8 +33,6 @@ public class AprilTagOp extends LinearOpMode
 
     // UNITS ARE METERS
     private static final double tagsize = 0.166;
-
-    private int numFramesWithoutDetection = 0;
 
     private static final float DECIMATION_HIGH = 3;
     private static final float DECIMATION_LOW = 2;
@@ -52,8 +52,8 @@ public class AprilTagOp extends LinearOpMode
         {
             @Override
             public void onOpened()
-            {
-                camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+            {                               // RESOLUTION
+                camera.startStreaming(1280,960, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
