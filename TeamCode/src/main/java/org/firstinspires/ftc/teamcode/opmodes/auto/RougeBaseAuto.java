@@ -76,7 +76,7 @@ public abstract class RougeBaseAuto extends LinearOpMode {
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {                               // RESOLUTION
-                camera.startStreaming(1280, 960, OpenCvCameraRotation.UPRIGHT);
+                camera.startStreaming(1280, 960, OpenCvCameraRotation.UPSIDE_DOWN);
             }
 
             @Override
@@ -106,13 +106,17 @@ public abstract class RougeBaseAuto extends LinearOpMode {
 
                 ArrayList<Integer> idList = new ArrayList<>();
                 for (AprilTagDetection detection : detections) {
-                    idList.add(detection.id);
+                    if(detection.id == 1 || detection.id == 2 || detection.id == 3) {
+                        return detection.id;
+                    }
+//                    idList.add(detection.id);
                 }
-                OptionalDouble average = idList.stream().mapToDouble(a -> a).average();
-                return average.isPresent() ? (int) Math.round(average.getAsDouble()) : -1;
+//                OptionalDouble average = idList.stream().mapToDouble(a -> a).average();
+//                return average.isPresent() ? (int) Math.round(average.getAsDouble()) : -1;
             }
         }
         // In case of no detections
+//        telemetry.addData("No apriltag detected", "");
         return -1;
     }
 }

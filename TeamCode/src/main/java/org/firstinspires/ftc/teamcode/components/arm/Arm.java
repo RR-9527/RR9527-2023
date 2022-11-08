@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.components.arm;
 
+import static org.firstinspires.ftc.teamcode.util.RobotConstants.Arm.USE_ENC;
 import static org.firstinspires.ftc.teamcode.util.RuntimeMode.DEBUG;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
@@ -14,7 +15,7 @@ import kotlin.ranges.RangesKt;
 
 public class Arm {
     private final Motor armMotor;
-    private final PIDFController armPID;
+    private final PIDFController armPID, armEncoderPID;
 
     private HardwareMap hardwareMap;
 
@@ -34,19 +35,34 @@ public class Arm {
             RobotConstants.Arm.D,
             RobotConstants.Arm.F
         );
+        armEncoderPID = new PIDFController(
+            RobotConstants.Arm.ENC_P,
+            RobotConstants.Arm.ENC_I,
+            RobotConstants.Arm.ENC_D,
+            RobotConstants.Arm.ENC_F
+        );
 
     }
 
     public void setToRestingPos() {
-        armCorrection = RobotConstants.Arm.VERTICAL;
+        if(USE_ENC)
+            armCorrection = RobotConstants.Arm.ENC_VERTICAL;
+        else
+            armCorrection = RobotConstants.Arm.VERTICAL;
     }
 
     public void setToBackwardsPos() {
-        armCorrection = RobotConstants.Arm.BACKWARDS;
+        if(USE_ENC)
+            armCorrection = RobotConstants.Arm.ENC_BACKWARDS;
+        else
+            armCorrection = RobotConstants.Arm.BACKWARDS;
     }
 
     public void setToForwardsPos() {
-        armCorrection = RobotConstants.Arm.FORWARDS;
+        if(USE_ENC)
+            armCorrection = RobotConstants.Arm.ENC_FORWARDS;
+        else
+            armCorrection = RobotConstants.Arm.FORWARDS;
     }
 
     public double getArmRawPosition(){
@@ -59,6 +75,10 @@ public class Arm {
     }
 
     public void update(Telemetry telemetry) {
+        update(telemetry, false);
+    }
+
+    public void update(Telemetry telemetry, boolean useEncoder) {
         if (DEBUG) {
             // Constantly set PIDF to allow for hot reloading, also some telemetry
             armPID.setPIDF(
@@ -68,9 +88,14 @@ public class Arm {
                 RobotConstants.Arm.F);
         }
 
+        double correction;
+
         // Old code - uses builtin encoder
-//        double correction = armPID.calculate(armMotor.getCurrentPosition(), armCorrection);
-        double correction = armPID.calculate(getArmPosition(), armCorrection);
+        if(useEncoder)
+            correction = armEncoderPID.calculate(armMotor.getCurrentPosition(), armCorrection);
+        else
+            correction = armPID.calculate(getArmPosition(), armCorrection);
+
         armMotor.set(correction);
 
         telemetry.addData("Arm target pos", armCorrection);

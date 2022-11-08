@@ -82,7 +82,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
             .setReversed(true)
             .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
             .setReversed(false)
-            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
@@ -116,7 +116,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
             .setReversed(true)
             .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
             .setReversed(false)
-            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
@@ -150,7 +150,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
             .setReversed(true)
             .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
             .setReversed(false)
-            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
@@ -183,7 +183,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
             .setReversed(true)
             .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
             .setReversed(false)
-            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {

@@ -31,12 +31,13 @@ public class Lift {
         liftA = new Motor(hwMap, "L1", Motor.GoBILDA.RPM_1150);
         liftA.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         liftA.setRunMode(Motor.RunMode.VelocityControl);
-//        liftA.resetEncoder();
+        liftA.resetEncoder();
 
         liftB = new Motor(hwMap, "L2", Motor.GoBILDA.RPM_1150);
         liftB.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         liftB.setRunMode(Motor.RunMode.VelocityControl);
         liftB.setInverted(true);
+        liftB.resetEncoder();
 
         liftPID = new PIDFController(RobotConstants.Lift.P, RobotConstants.Lift.I, RobotConstants.Lift.D, RobotConstants.Lift.F);
     }

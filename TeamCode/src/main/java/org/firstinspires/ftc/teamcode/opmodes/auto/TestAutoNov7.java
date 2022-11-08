@@ -84,7 +84,7 @@ public class TestAutoNov7 extends RougeBaseAuto {
 
             })
             .setReversed(false)
-            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
@@ -131,7 +131,7 @@ public class TestAutoNov7 extends RougeBaseAuto {
 
             })
             .setReversed(false)
-            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
@@ -177,7 +177,7 @@ public class TestAutoNov7 extends RougeBaseAuto {
 
             })
             .setReversed(false)
-            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
@@ -222,7 +222,7 @@ public class TestAutoNov7 extends RougeBaseAuto {
 
             })
             .setReversed(false)
-            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_OFFSET, () -> {
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
