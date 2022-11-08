@@ -9,9 +9,14 @@ import org.firstinspires.ftc.teamcode.util.RobotConstants;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
 @Autonomous
-public class TestAutoNov7 extends RougeBaseAuto {
+public class TestAutoNov8 extends RougeBaseAuto {
     private Runnable armPosFunction;
     private Runnable wristPosFunction;
+
+    private int signalZone;
+
+    // Variable added to signal when to start the parking sequence
+    private boolean startParking = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -27,7 +32,12 @@ public class TestAutoNov7 extends RougeBaseAuto {
 
         schedulePaths();
 
-        waitForStart();
+        // Added this during init
+        do {
+            signalZone = getApriltagNumber();
+            telemetry.addData("Signal zone detected", signalZone);
+        }
+        while(!opModeIsActive());
 
         Scheduler.start(this, () -> {
             arm.update(telemetry);
@@ -52,7 +62,6 @@ public class TestAutoNov7 extends RougeBaseAuto {
                 wristPosFunction = wrist::setToForwardsPos;
 
                 armPosFunction = arm::setToForwardsPos;
-//                arm.setToForwardsPos();
             })
 
             .splineTo(new Vector2d(in(91), in(-50)), rad(90))
@@ -89,11 +98,9 @@ public class TestAutoNov7 extends RougeBaseAuto {
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
                 armPosFunction = arm::setToForwardsPos;
-//                arm.setToForwardsPos();
 
                 lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
-//                wrist.setToForwardsPos();
 
             })
             .waitSeconds(AutoData.INTAKE_DELAY)
@@ -115,10 +122,8 @@ public class TestAutoNov7 extends RougeBaseAuto {
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_1);
                 armPosFunction = arm::setToBackwardsPos;
-//                arm.setToBackwardsPos();
 
                 wristPosFunction = wrist::setToBackwardsPos;
-//                wrist.setToBackwardsPos();
 
             })
 
@@ -136,11 +141,9 @@ public class TestAutoNov7 extends RougeBaseAuto {
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
                 armPosFunction = arm::setToForwardsPos;
-//                arm.setToForwardsPos();
 
                 lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
-//                wrist.setToForwardsPos();
 
             })
             .waitSeconds(AutoData.INTAKE_DELAY)
@@ -162,10 +165,8 @@ public class TestAutoNov7 extends RougeBaseAuto {
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_2);
                 armPosFunction = arm::setToBackwardsPos;
-//                arm.setToBackwardsPos();
 
                 wristPosFunction = wrist::setToBackwardsPos;
-//                wrist.setToBackwardsPos();
             })
 
 
@@ -182,11 +183,9 @@ public class TestAutoNov7 extends RougeBaseAuto {
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
                 armPosFunction = arm::setToForwardsPos;
-//                arm.setToForwardsPos();
 
                 lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
-//                wrist.setToForwardsPos();
 
             })
             .waitSeconds(AutoData.INTAKE_DELAY)
@@ -208,10 +207,8 @@ public class TestAutoNov7 extends RougeBaseAuto {
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_3);
                 armPosFunction = arm::setToBackwardsPos;
-//                arm.setToBackwardsPos();
 
                 wristPosFunction = wrist::setToBackwardsPos;
-//                wrist.setToBackwardsPos();
             })
 
             // Auto Cycle #4
@@ -227,11 +224,9 @@ public class TestAutoNov7 extends RougeBaseAuto {
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
                 armPosFunction = arm::setToForwardsPos;
-//                arm.setToForwardsPos();
 
                 lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
-//                wrist.setToForwardsPos();
 
             })
             .waitSeconds(AutoData.INTAKE_DELAY)
@@ -253,16 +248,22 @@ public class TestAutoNov7 extends RougeBaseAuto {
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_4);
                 armPosFunction = arm::setToBackwardsPos;
-//                arm.setToBackwardsPos();
 
                 wristPosFunction = wrist::setToBackwardsPos;
-//                wrist.setToBackwardsPos();
+            })
+
+            .back(in(10))
+            .turn(rad(50))
+            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                startParking = true;
             })
 
             .build();
 
 
         drive.followTrajectorySequenceAsync(trajSeq);
+
+        // TODO: Implement parking code
     }
 
     private static double in(double cm) {
