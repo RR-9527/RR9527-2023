@@ -1,0 +1,78 @@
+[
+  {
+    "name": "startAt",
+    "params": [
+      {
+        "name": "x",
+        "type": "double"
+      },
+      {
+        "name": "y",
+        "type": "double"
+      },
+      {
+        "name": "heading",
+        "type": "double"
+      }
+    ]
+  },
+  {
+    "name": "forward",
+    "params": [
+      {
+        "name": "distance",
+        "type": "double"
+      }
+    ]
+  },
+  {
+    "name": "back",
+    "params": [
+      {
+        "name": "distance",
+        "type": "double"
+      }
+    ]
+  },
+  {
+    "name": "turn",
+    "params": [
+      {
+        "name": "angle",
+        "type": "double"
+      }
+    ]
+  },
+  {
+    "name": "splineTo",
+    "params": [
+      {
+        "name": "x",
+        "type": "double"
+      },
+      {
+        "name": "y",
+        "type": "double"
+      },
+      {
+        "name": "heading",
+        "type": "double"
+      }
+    ]
+  },
+  {
+    "name": "temporalMarker",
+    "params": [
+      {
+        "name": "offset",
+        "type": "double",
+        "optional": true
+      },
+      {
+        "name": "callback",
+        "type": "MarkerCallback",
+        "lambda": true
+      }
+    ]
+  }
+]
