@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import static org.firstinspires.ftc.teamcode.util.RobotConstants.Arm.USE_ENC;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -55,7 +53,7 @@ public class TestAutoNov8 extends RougeBaseAuto {
         while (!opModeIsActive());
 
         Scheduler.start(this, () -> {
-            arm.update(telemetry, USE_ENC);
+            arm.update(telemetry, true);
             lift.update(telemetry);
             wrist.update();
             drive.update();
@@ -110,9 +108,10 @@ public class TestAutoNov8 extends RougeBaseAuto {
 
             // Auto Cycle #1
             .setReversed(true)
-            .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> claw.close())
             .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
             .setReversed(false)
+
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> claw.close())
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
                 lift.setHeight(RobotConstants.Lift.HIGH);
@@ -212,8 +211,8 @@ public class TestAutoNov8 extends RougeBaseAuto {
                 claw.openForIntake();
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_3);
-                armPosFunction = arm::setToBackwardsPos;
 
+                armPosFunction = arm::setToBackwardsPos;
                 wristPosFunction = wrist::setToBackwardsPos;
             })
 

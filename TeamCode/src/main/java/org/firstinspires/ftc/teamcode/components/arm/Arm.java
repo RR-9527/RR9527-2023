@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.components.arm;
 
-import static org.firstinspires.ftc.teamcode.util.RobotConstants.Arm.USE_ENC;
 import static org.firstinspires.ftc.teamcode.util.RuntimeMode.DEBUG;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
@@ -8,10 +7,7 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.opmodes.auto.AutoData;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
-
-import kotlin.ranges.RangesKt;
 
 public class Arm {
     private final Motor armMotor;
@@ -20,6 +16,8 @@ public class Arm {
     private HardwareMap hardwareMap;
 
     private double armCorrection;
+
+    private boolean useEncoder;
 
     public Arm(HardwareMap hwMap) {
         hardwareMap = hwMap;
@@ -42,24 +40,25 @@ public class Arm {
             RobotConstants.Arm.ENC_F
         );
 
+        useEncoder = false;
     }
 
     public void setToRestingPos() {
-        if(USE_ENC)
+        if(useEncoder)
             armCorrection = RobotConstants.Arm.ENC_VERTICAL;
         else
             armCorrection = RobotConstants.Arm.VERTICAL;
     }
 
     public void setToBackwardsPos() {
-        if(USE_ENC)
+        if(useEncoder)
             armCorrection = RobotConstants.Arm.ENC_BACKWARDS;
         else
             armCorrection = RobotConstants.Arm.BACKWARDS;
     }
 
     public void setToForwardsPos() {
-        if(USE_ENC)
+        if(useEncoder)
             armCorrection = RobotConstants.Arm.ENC_FORWARDS;
         else
             armCorrection = RobotConstants.Arm.FORWARDS;
@@ -79,13 +78,16 @@ public class Arm {
     }
 
     public void update(Telemetry telemetry, boolean useEncoder) {
+        this.useEncoder = useEncoder;
+
         if (DEBUG) {
             // Constantly set PIDF to allow for hot reloading, also some telemetry
             armPID.setPIDF(
                 RobotConstants.Arm.P,
                 RobotConstants.Arm.I,
                 RobotConstants.Arm.D,
-                RobotConstants.Arm.F);
+                RobotConstants.Arm.F
+            );
         }
 
         double correction;

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
-import static org.firstinspires.ftc.teamcode.util.RobotConstants.Arm.USE_ENC;
 
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -54,13 +53,13 @@ public abstract class RougeBaseOp extends LinearOpMode {
         scheduleTasks();
 
         Scheduler.start(this, () -> {
-            arm.update(telemetry, true);
+            arm.update(telemetry, false);
             lift.update(telemetry);
             wrist.update();
             telemetry.update();
 
             // TODO: Yoink this out of existence
-            if(opModeType == OpModeType.TELEOP)
+            if (opModeType == OpModeType.TELEOP)
                 driveMotors.drive(gamepad1, localizer, powerMulti);
         });
     }
