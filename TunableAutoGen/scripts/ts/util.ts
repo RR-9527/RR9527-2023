@@ -3,7 +3,7 @@ import * as fsp from 'node:fs/promises';
 
 export const PATHS = {
   METHODS_JSON: 'TunableAutoGen/auto_builder_methods.json',
-  ACTUAL_BUILDER: 'TunableAutoGen/src/main/java/org/tunableautogen/builder/ActualTuningAutoBuilder.java',
+  ACTUAL_BUILDER: 'TunableAutoGen/src/main/resources/ActualTuningAutoBuilder.java',
   DUMMY_BUILDER: 'TunableAutoGen/src/main/java/org/tunableautogen/builder/TuningAutoBuilder.java'
 };
 

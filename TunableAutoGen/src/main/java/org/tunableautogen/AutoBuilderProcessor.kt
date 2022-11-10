@@ -9,6 +9,7 @@ import com.google.devtools.ksp.symbol.KSFile
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.google.devtools.ksp.validate
 import org.tunableautogen.annotations.GenerateTunableAuto
+import org.tunableautogen.builder.createTuningAutoBuilderString
 import java.io.File
 import java.io.OutputStream
 import java.nio.file.Files
@@ -43,12 +44,12 @@ class AutoBuilderProcessor(private val environment: SymbolProcessorEnvironment) 
 
         val builderCode = fullCode.subList(startIndex, endIndex).joinToString("\n")
 
-//        val tuningAutoBuilderString = createTuningAutoBuilderString(builderCode)
-//
-//        val tempFile = Files.createTempFile("", ".java").toFile()
-//        tempFile.writeText(tuningAutoBuilderString)
-//
-//        ProcessBuilder().command("java", tempFile.absolutePath).start().waitFor()
+        val tuningAutoBuilderString = createTuningAutoBuilderString(builderCode)
+
+        val tempFile = Files.createTempFile("", ".java").toFile()
+        tempFile.writeText(tuningAutoBuilderString)
+
+        ProcessBuilder().command("java", tempFile.absolutePath).start().waitFor()
 
         return listedFunctions.filterNot { it.validate() }.toList()
     }
