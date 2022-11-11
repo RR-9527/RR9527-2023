@@ -70,15 +70,15 @@ html {
 }
 
 .setting-desc::after {
-  content: " -";
+  content: " =";
 }
 
 #field-img {
   position: absolute;
+  height: 85vmin;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  height: 85vmin;
   filter: drop-shadow(0px 0px 23px rgba(210, 232, 234, 0.43));
 }
 
@@ -87,7 +87,18 @@ html {
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  height: 10vmin;
+  width: calc(1.235 * (85vmin / 6));
+  filter: drop-shadow(0px 0px 16px rgba(210, 232, 234, 0.33));
+  cursor: grab;
+}
+
+#sizing-square {
+  position: absolute;
+  top: 8%;
+  left: 90%;
+  background: #b3d4fc;
+  height: calc(15.1969 * (85vmin / 144));
+  width: calc(15.68314961 * (85vmin / 144));
   filter: drop-shadow(0px 0px 16px rgba(210, 232, 234, 0.33));
   cursor: grab;
 }
