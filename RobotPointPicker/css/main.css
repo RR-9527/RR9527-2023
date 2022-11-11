@@ -14,6 +14,14 @@
   --more-transparent-white: rgba(200,200,200,.05);
 }
 
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/spacegrotesk/v13/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUXskPMA.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /*noinspection CssReplaceWithShorthandSafely*/
 html {
   color: #b3d4fc;
@@ -24,6 +32,8 @@ html {
   background-image:
           linear-gradient(to right, var(--transparent-white) 1px, transparent 1px),
           linear-gradient(to bottom, var(--transparent-white) 1px, transparent 1px);
+  font-family: 'Space Grotesk', serif;
+  overflow-y: clip;
 }
 
 .offset-grid {
@@ -45,13 +55,41 @@ html {
           linear-gradient(to bottom, #22222288, transparent 5vh, transparent 95vh, #22222288);
 }
 
-.field-img {
+.settings-container {
+  position: absolute;
+  height: 100%;
+  display: flex;
+  padding: 5vmin;
+  flex-flow: column wrap;
+}
+
+.setting {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 6px;
+}
+
+.setting-desc::after {
+  content: " -";
+}
+
+#field-img {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
   height: 85vmin;
-  filter: drop-shadow(0px 1px 23px rgba(210, 232, 234, 0.43));
+  filter: drop-shadow(0px 0px 23px rgba(210, 232, 234, 0.43));
+}
+
+#robit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  height: 10vmin;
+  filter: drop-shadow(0px 0px 16px rgba(210, 232, 234, 0.33));
+  cursor: grab;
 }
 
 /*

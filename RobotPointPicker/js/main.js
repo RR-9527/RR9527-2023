@@ -1,0 +1,58 @@
+const positionHistory = []
+let currentPosition = 0;
+
+// Make the DIV element draggable:
+dragElement(document.getElementById("robit"));
+
+function dragElement(elmnt) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    if (document.getElementById(elmnt.id + "header")) {
+        // if present, the header is where you move the DIV from:
+        document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+    } else {
+        // otherwise, move the DIV from anywhere inside the DIV:
+        elmnt.onmousedown = dragMouseDown;
+    }
+
+    function dragMouseDown(e) {
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = onDragDone;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+        e.preventDefault();
+
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+
+        // set the element's new position:
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+
+    function onDragDone() {
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+
+        positionHistory[currentPosition] = {
+            top: elmnt.style.top.slice(0, -2),
+            left: elmnt.style.left.slice(0, -2),
+            rotation: '90',
+        };
+
+        document.getElementById('setting-x').innerText = (~~(window.screen.height/2 - positionHistory[currentPosition].top)).toString()
+        document.getElementById('setting-y').innerText = (~~(window.screen.width/2 - positionHistory[currentPosition].left)).toString()
+        document.getElementById('setting-r').innerText = positionHistory[currentPosition].rotation
+
+        positionHistory.splice(++currentPosition)
+    }
+}
