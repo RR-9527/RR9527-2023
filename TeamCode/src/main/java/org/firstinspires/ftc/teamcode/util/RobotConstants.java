@@ -16,8 +16,8 @@ public class RobotConstants {
     @Config
     public static class Claw {
     	public static double INTAKE = 0.55;
-    	public static double DEPOSIT = 0.8;
-    	public static double CLOSE = 0.4;
+    	public static double DEPOSIT = 0.55;
+    	public static double CLOSE = 0.35;
     }
 
     @Config
@@ -54,16 +54,16 @@ public class RobotConstants {
     @Config
     public static class Lift {
 		public static int ZERO = 0;
-		public static int LOW = 1350;
-		public static int MID = 2140;
-		public static int HIGH = 3030;
+		public static int LOW = 1350 - 10;
+		public static int MID = 2140 - 10;
+		public static int HIGH = 3030 - 10;
 
 		public static double MANUAL_ADJUSTMENT_MULT = 4;
 
-		public static int AUTO_INTAKE_1 = 501;
-		public static int AUTO_INTAKE_2 = 408;
-		public static int AUTO_INTAKE_3 = 345;
-		public static int AUTO_INTAKE_4 = 232;
+		public static int AUTO_INTAKE_1 = 439;
+		public static int AUTO_INTAKE_2 = 356;
+		public static int AUTO_INTAKE_3 = 248;
+		public static int AUTO_INTAKE_4 = 144;
 
 		public static double P = 0.0015;
 		public static double I = 0.1;

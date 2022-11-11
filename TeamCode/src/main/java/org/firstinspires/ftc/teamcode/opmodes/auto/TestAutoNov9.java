@@ -112,7 +112,7 @@ public class TestAutoNov9 extends RougeBaseAuto {
                 claw.openForDeposit(); // Deposit the cone while turning
             })
 
-            .waitSeconds(AutoData.DEPOSIT_DELAY);
+            .waitSeconds(AutoData.DEPOSIT_DELAY + .05);
 
         for (int i = 0; i < 4; i++) {
             int finalI = i;
@@ -145,7 +145,7 @@ public class TestAutoNov9 extends RougeBaseAuto {
                 .waitSeconds(AutoData.INTAKE_DELAY)
 
                 .setReversed(false)
-                .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE - 1))
+                .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE - 1 - AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i))
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
                     lift.setHeight(RobotConstants.Lift.HIGH - AutoData.DEPOSIT_DROP_AMOUNT);

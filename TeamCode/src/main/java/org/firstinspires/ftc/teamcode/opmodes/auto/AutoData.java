@@ -6,8 +6,8 @@ import com.acmerobotics.dashboard.config.Config;
 public class AutoData {
     // Timing variables
     public static double CLAW_CLOSE_OFFSET = 0.05;
-    public static double INTAKE_LIFT_OFFSET = 0.4;
-    public static double INTAKE_DELAY = .7;
+    public static double INTAKE_LIFT_OFFSET = 0.565;
+    public static double INTAKE_DELAY = .58;
 
     public static double LOWER_OFFSET = 0.08;
     public static double DEPOSIT_DELAY = 0.4;
@@ -15,13 +15,14 @@ public class AutoData {
     public static double RETRACT_OFFSET = 0.1;
 
     // Positions in centimeters/degrees of where to intake/deposit
-    public static double INTAKE_X = 158.4;
+    public static double INTAKE_X = 158.2;
     public static double INTAKE_Y = -28.98;
 
     // Depositing positon
-    public static double DEPOSIT_X = 87.5;
-    public static double DEPOSIT_Y = -17.75;
-    public static double DEPOSIT_ANGLE = 142.25;
+    public static double DEPOSIT_X = 87.97;
+    public static double DEPOSIT_Y = -17.29;
+    public static double DEPOSIT_ANGLE = 139.94;
+    public static double DEPOSIT_ANGLE_ADJUSTMENT = .12;
 
     public static int DEPOSIT_DROP_AMOUNT = 800;
 
