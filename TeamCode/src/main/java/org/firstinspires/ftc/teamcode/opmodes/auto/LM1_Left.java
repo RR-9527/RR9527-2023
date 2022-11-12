@@ -60,7 +60,7 @@ public class LM1_Left extends RougeBaseAuto {
             case 2:
                 parkTrajBuilder
                     .strafeRight(in(3))
-                    .forward(in(66));
+                    .forward(in(70));
 //                parkTrajBuilder
 //                    .UNSTABLE_addTemporalMarkerOffset(0, () -> {
 //                        lift.setHeight(RobotConstants.Lift.HIGH);
