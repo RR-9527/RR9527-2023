@@ -54,8 +54,8 @@ public class RobotConstants {
     @Config
     public static class Lift {
 		public static int ZERO = 0;
-		public static int LOW = 1340;
-		public static int MID = 2130;
+		public static int LOW = 1100;
+		public static int MID = 1900;
 		public static int HIGH = 3100;
 
 		public static double MANUAL_ADJUSTMENT_MULT = 4;
