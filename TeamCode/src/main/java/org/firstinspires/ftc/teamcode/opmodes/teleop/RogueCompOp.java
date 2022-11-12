@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.listeners.Listener;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.taskchains.TaskChain;
 
 @TeleOp
-public class RogueCompOp extends RougeBaseOp {
+public class RogueCompOp extends RogueBaseTeleOp {
     private StateRotator<DriveType> driveTypes;
     TaskChain intakeChain;
     CancellableTaskChain forwardsDepositChain, backwardsDepositChain;

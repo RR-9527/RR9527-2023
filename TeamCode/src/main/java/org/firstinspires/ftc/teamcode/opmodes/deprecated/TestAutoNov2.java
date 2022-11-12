@@ -5,18 +5,16 @@ import android.annotation.SuppressLint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.opmodes.teleop.RougeBaseOp;
+import org.firstinspires.ftc.teamcode.opmodes.teleop.RogueBaseTeleOp;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.SequenceWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.WrapperBuilder;
 import org.firstinspires.ftc.teamcode.util.OpModeType;
-import org.firstinspires.ftc.teamcode.util.RobotConstants;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
 @Disabled
 @Autonomous
-public class TestAutoNov2 extends RougeBaseOp {
+public class TestAutoNov2 extends RogueBaseTeleOp {
     @Override
     protected void scheduleTasks() {
         opModeType = OpModeType.AUTO;

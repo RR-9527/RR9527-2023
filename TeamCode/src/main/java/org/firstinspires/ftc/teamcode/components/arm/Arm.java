@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
+import org.firstinspires.ftc.teamcode.util.StateFunctions;
 
 public class Arm {
     private final Motor armMotor;
@@ -17,7 +18,7 @@ public class Arm {
 
     private double armCorrection;
 
-    private boolean useEncoder;
+    public boolean useEncoder;
 
     public Arm(HardwareMap hwMap) {
         hardwareMap = hwMap;
@@ -41,6 +42,10 @@ public class Arm {
         );
 
         useEncoder = false;
+    }
+    public void checkResetEncoder() {
+        if (StateFunctions.InRange(getArmPosition(), RobotConstants.Arm.VERTICAL, 3))
+            armMotor.resetEncoder();
     }
 
     public void setToRestingPos() {
@@ -79,6 +84,7 @@ public class Arm {
 
     public void update(Telemetry telemetry, boolean useEncoder) {
         this.useEncoder = useEncoder;
+        telemetry.addData("Encoder position", armMotor.getCurrentPosition());
 
         if (DEBUG) {
             // Constantly set PIDF to allow for hot reloading, also some telemetry

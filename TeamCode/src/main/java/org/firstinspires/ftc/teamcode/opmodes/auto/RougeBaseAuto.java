@@ -37,7 +37,6 @@ public abstract class RougeBaseAuto extends LinearOpMode {
 
     private int numFramesWithoutDetection = 0;
 
-    private static final double FEET_PER_METER = 3.28084;
 
     // Lens intrinsics
     // Units are in pixels
@@ -81,42 +80,43 @@ public abstract class RougeBaseAuto extends LinearOpMode {
 
             @Override
             public void onError(int errorCode) {
-                throw new RuntimeException("Error opening camera! Error code " + errorCode);
+//                throw new RuntimeException("Error opening camera! Error code " + errorCode);
             }
         });
     }
 
-    public int getApriltagNumber() {
-        ArrayList<AprilTagDetection> detections = aprilTagDetectionPipeline.getDetectionsUpdate();
+    public int waitForStartWithVision() {
+        int lastIntID = -1;
+        while (!opModeIsActive()) {
+            ArrayList<AprilTagDetection> detections = aprilTagDetectionPipeline.getDetectionsUpdate();
 
-        if (detections != null) {
+            if (detections != null) {
+                telemetry.addData("FPS", camera.getFps());
+                telemetry.addData("Overhead ms", camera.getOverheadTimeMs());
+                telemetry.addData("Pipeline ms", camera.getPipelineTimeMs());
 
-            if (detections.size() == 0) {
-                numFramesWithoutDetection++;
+                if (detections.size() == 0) {
+                    numFramesWithoutDetection++;
 
-                if (numFramesWithoutDetection >= THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION) {
-                    aprilTagDetectionPipeline.setDecimation(DECIMATION_LOW);
-                }
-            } else {
-                numFramesWithoutDetection = 0;
-
-                if (detections.get(0).pose.z < THRESHOLD_HIGH_DECIMATION_RANGE_METERS) {
-                    aprilTagDetectionPipeline.setDecimation(DECIMATION_HIGH);
-                }
-
-                ArrayList<Integer> idList = new ArrayList<>();
-                for (AprilTagDetection detection : detections) {
-                    if(detection.id == 1 || detection.id == 2 || detection.id == 3) {
-                        return detection.id;
+                    if (numFramesWithoutDetection >= THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION) {
+                        aprilTagDetectionPipeline.setDecimation(DECIMATION_LOW);
                     }
-//                    idList.add(detection.id);
+                } else {
+                    numFramesWithoutDetection = 0;
+
+                    if (detections.get(0).pose.z < THRESHOLD_HIGH_DECIMATION_RANGE_METERS) {
+                        aprilTagDetectionPipeline.setDecimation(DECIMATION_HIGH);
+                    }
+
+                    for (AprilTagDetection detection : detections) {
+                        lastIntID = detection.id;
+                        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+                    }
                 }
-//                OptionalDouble average = idList.stream().mapToDouble(a -> a).average();
-//                return average.isPresent() ? (int) Math.round(average.getAsDouble()) : -1;
+
+                telemetry.update();
             }
         }
-        // In case of no detections
-//        telemetry.addData("No apriltag detected", "");
-        return -1;
+        return lastIntID;
     }
 }

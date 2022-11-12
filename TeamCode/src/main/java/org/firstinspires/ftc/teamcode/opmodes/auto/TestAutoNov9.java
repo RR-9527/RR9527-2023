@@ -3,12 +3,14 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
+@Disabled
 @Autonomous
 public class TestAutoNov9 extends RougeBaseAuto {
     private Runnable armPosFunction;
@@ -36,7 +38,7 @@ public class TestAutoNov9 extends RougeBaseAuto {
         // Added this during init
         int signalZone;
         do {
-            signalZone = getApriltagNumber();
+            signalZone = waitForStartWithVision();
             telemetry.addData("Signal zone detected", signalZone);
             telemetry.update();
         } while (!opModeIsActive());

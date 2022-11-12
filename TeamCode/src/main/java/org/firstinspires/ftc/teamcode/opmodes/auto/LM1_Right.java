@@ -1,7 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
+import android.sax.TextElementListener;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
+import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
@@ -10,14 +15,14 @@ import org.firstinspires.ftc.teamcode.util.RobotConstants;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
 @Autonomous
-public class TestAutoNov9ButForTheLeftSide extends RougeBaseAuto {
+public class LM1_Right extends RougeBaseAuto {
     private Runnable armPosFunction;
     private Runnable wristPosFunction;
 
     // Variable added to signal when to start the parking sequence
     private boolean startParking = false;
 
-    TrajectorySequence mainTraj, parkTraj;
+    private TrajectorySequence mainTraj, parkTraj;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -34,32 +39,52 @@ public class TestAutoNov9ButForTheLeftSide extends RougeBaseAuto {
         schedulePaths();
 
         // Added this during init
-        int signalZone;
-        do {
-            signalZone = waitForStartWithVision();
-            telemetry.addData("Signal zone detected", signalZone);
-            telemetry.update();
-        } while (!opModeIsActive());
+        int signalZone = waitForStartWithVision();
+        telemetry.addData("Final signal zone", signalZone);
+        telemetry.update();
+
 
         TrajectorySequenceBuilder parkTrajBuilder = drive.trajectorySequenceBuilder(mainTraj.end())
             .UNSTABLE_addTemporalMarkerOffset(0.05, () -> {
                 lift.goToZero();
                 armPosFunction = arm::setToRestingPos;
                 wristPosFunction = wrist::setToRestingPos;
-            })
-            .turn(rad(180 - AutoData.DEPOSIT_ANGLE))
-            .back(in(24));
+            });
 
         switch (signalZone) {
             case 1:
-                parkTrajBuilder.forward(in(75));
+                parkTrajBuilder.forward(in(126));
                 break;
-            case 3:
-                parkTrajBuilder.back(in(44));
+            case 2:
+                parkTrajBuilder.forward(in(0.001));
+//                parkTrajBuilder
+//                    .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                        lift.setHeight(RobotConstants.Lift.HIGH);
+//                    })
+//                    .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
+//                        armPosFunction = arm::setToForwardsPos;
+//                        wristPosFunction = wrist::setToForwardsPos;
+//                    })
+//
+//                    .setReversed(false)
+//                    .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE - 1 - AutoData.DEPOSIT_ANGLE_ADJUSTMENT * 5))
+//
+//                    .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
+//                        lift.setHeight(RobotConstants.Lift.HIGH - AutoData.DEPOSIT_DROP_AMOUNT);
+//                    })
+//
+//                    .UNSTABLE_addTemporalMarkerOffset(AutoData.DEPOSIT_OFFSET, () -> {
+//                        claw.openForDeposit(); // Deposit the cone while turning
+//                    })
+//                    .UNSTABLE_addTemporalMarkerOffset(AutoData.DEPOSIT_OFFSET+0.5, () -> {
+//                        lift.setHeight(RobotConstants.Lift.ZERO);
+//                        armPosFunction = arm::setToForwardsPos;
+//                        wristPosFunction = wrist::setToForwardsPos;
+//                    })
+//                ;
                 break;
             default:
-                prayToGodCameraIsNotBroken();
-                parkTrajBuilder.forward(in(15));
+                parkTrajBuilder.forward(in(1));
                 break;
         }
 
@@ -69,12 +94,15 @@ public class TestAutoNov9ButForTheLeftSide extends RougeBaseAuto {
 
         Scheduler.start(this, () -> {
             arm.update(telemetry, true);
+
             lift.update(telemetry);
             wrist.update();
             drive.update();
 
             if (startParking) {
                 startParking = false;
+
+                drive.followTrajectorySequenceAsync(parkTraj);
             }
 
             telemetry.update();
@@ -89,7 +117,7 @@ public class TestAutoNov9ButForTheLeftSide extends RougeBaseAuto {
             RobotConstants.Lift.AUTO_INTAKE_4,
         };
 
-        Pose2d startPose = new Pose2d(-in(91), in(-159), rad(90));
+        Pose2d startPose = new Pose2d(in(91), in(-159), rad(90));
         drive.setPoseEstimate(startPose);
 
         TrajectorySequenceBuilder builder = drive.trajectorySequenceBuilder(startPose);
@@ -101,8 +129,8 @@ public class TestAutoNov9ButForTheLeftSide extends RougeBaseAuto {
                 armPosFunction = arm::setToForwardsPos;
             })
 
-            .splineTo(new Vector2d(-in(91), in(-50)), rad(90))
-            .splineTo(new Vector2d(-in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(180 - AutoData.DEPOSIT_ANGLE))
+            .splineTo(new Vector2d(in(91), in(-50)), rad(90))
+            .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE))
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
                 lift.setHeight(RobotConstants.Lift.HIGH - AutoData.DEPOSIT_DROP_AMOUNT);
@@ -127,7 +155,7 @@ public class TestAutoNov9ButForTheLeftSide extends RougeBaseAuto {
                 })
 
                 .setReversed(true)
-                .splineTo(new Vector2d(-in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(180))
+                .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                     claw.close();
@@ -145,7 +173,8 @@ public class TestAutoNov9ButForTheLeftSide extends RougeBaseAuto {
                 .waitSeconds(AutoData.INTAKE_DELAY)
 
                 .setReversed(false)
-                .splineTo(new Vector2d(-in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(180 - (AutoData.DEPOSIT_ANGLE - 1 - AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i)))
+                .waitSeconds(0.125)
+                .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE - 1 - AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i))
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
                     lift.setHeight(RobotConstants.Lift.HIGH - AutoData.DEPOSIT_DROP_AMOUNT);
@@ -158,15 +187,31 @@ public class TestAutoNov9ButForTheLeftSide extends RougeBaseAuto {
                 .waitSeconds(AutoData.DEPOSIT_DELAY);
         }
 
-        builder.UNSTABLE_addTemporalMarkerOffset(0, () -> {
-            drive.followTrajectorySequenceAsync(parkTraj);
+        builder
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
+                claw.openForIntake();
+                lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_5);
+
+                armPosFunction = arm::setToBackwardsPos;
+                wristPosFunction = wrist::setToBackwardsPos;
+            })
+
+            .setReversed(true)
+            .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
+
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
+                claw.close();
+            });
+
+        builder
+            .turn(rad(3))
+            .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+            startParking = true;
+            armPosFunction = arm::setToRestingPos;
+            telemetry.addData("Entering parking auto","");
         });
 
         drive.followTrajectorySequenceAsync(mainTraj = builder.build());
-    }
-
-    private void prayToGodCameraIsNotBroken() {
-        telemetry.addLine("oh god please save us all");
     }
 
     public static double rad(double degrees) {

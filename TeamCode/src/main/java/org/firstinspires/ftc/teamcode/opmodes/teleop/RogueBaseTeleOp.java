@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.listeners.GamepadEx
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
 @SuppressWarnings("SameParameterValue")
-public abstract class RougeBaseOp extends LinearOpMode {
+public abstract class RogueBaseTeleOp extends LinearOpMode {
     protected double powerMulti;
     protected DriveMotors driveMotors;
     protected Localizer localizer;
@@ -53,12 +53,11 @@ public abstract class RougeBaseOp extends LinearOpMode {
         scheduleTasks();
 
         Scheduler.start(this, () -> {
-            arm.update(telemetry, false);
+            arm.update(telemetry);
             lift.update(telemetry);
             wrist.update();
             telemetry.update();
 
-            // TODO: Yoink this out of existence
             if (opModeType == OpModeType.TELEOP)
                 driveMotors.drive(gamepad1, localizer, powerMulti);
         });
