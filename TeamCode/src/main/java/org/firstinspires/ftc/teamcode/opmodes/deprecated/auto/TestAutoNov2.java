@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.deprecated;
+package org.firstinspires.ftc.teamcode.opmodes.deprecated.auto;
 
 import android.annotation.SuppressLint;
 
