@@ -93,7 +93,7 @@ public class LM1_Right extends RougeBaseAuto {
         waitForStart();
 
         Scheduler.start(this, () -> {
-            arm.update(telemetry, true);
+            arm.update(telemetry, false);
 
             lift.update(telemetry);
             wrist.update();
@@ -130,7 +130,7 @@ public class LM1_Right extends RougeBaseAuto {
             })
 
             .splineTo(new Vector2d(in(91), in(-50)), rad(90))
-            .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE))
+            .splineTo(new Vector2d(in(AutoData.DEPOSIT_X+1-0.125), in(AutoData.DEPOSIT_Y+0.25+0.125)), rad(AutoData.DEPOSIT_ANGLE-3))
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
                 lift.setHeight(RobotConstants.Lift.HIGH - AutoData.DEPOSIT_DROP_AMOUNT);
@@ -155,7 +155,7 @@ public class LM1_Right extends RougeBaseAuto {
                 })
 
                 .setReversed(true)
-                .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
+                .splineTo(new Vector2d(in(AutoData.INTAKE_X+0.25), in(AutoData.INTAKE_Y)), rad(0))
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                     claw.close();
@@ -174,7 +174,7 @@ public class LM1_Right extends RougeBaseAuto {
 
                 .setReversed(false)
                 .waitSeconds(0.125)
-                .splineTo(new Vector2d(in(AutoData.DEPOSIT_X), in(AutoData.DEPOSIT_Y)), rad(AutoData.DEPOSIT_ANGLE - 1 - AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i))
+                .splineTo(new Vector2d(in(AutoData.DEPOSIT_X+1-0.125), in(AutoData.DEPOSIT_Y+0.25+0.125)), rad(AutoData.DEPOSIT_ANGLE - 7 - AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i))
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
                     lift.setHeight(RobotConstants.Lift.HIGH - AutoData.DEPOSIT_DROP_AMOUNT);
@@ -197,7 +197,7 @@ public class LM1_Right extends RougeBaseAuto {
             })
 
             .setReversed(true)
-            .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
+            .splineTo(new Vector2d(in(AutoData.INTAKE_X+0.25), in(AutoData.INTAKE_Y)), rad(0))
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                 claw.close();

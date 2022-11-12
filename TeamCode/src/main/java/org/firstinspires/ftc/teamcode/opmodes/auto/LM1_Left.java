@@ -97,7 +97,7 @@ public class LM1_Left extends RougeBaseAuto {
         waitForStart();
 
         Scheduler.start(this, () -> {
-            arm.update(telemetry, true);
+            arm.update(telemetry, false);
 
             lift.update(telemetry);
             wrist.update();
@@ -134,7 +134,7 @@ public class LM1_Left extends RougeBaseAuto {
             })
 
             .splineTo(new Vector2d(in(-91), in(-50)), rad(90))
-            .splineTo(new Vector2d(in(-AutoData.DEPOSIT_X+1.5+.85), in(AutoData.DEPOSIT_Y+3.5+.85)), rad(180 - AutoData.DEPOSIT_ANGLE - 12))
+            .splineTo(new Vector2d(in(-AutoData.DEPOSIT_X+1.5), in(AutoData.DEPOSIT_Y+1.5)), rad(180 - (AutoData.DEPOSIT_ANGLE - .02)- 12))
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
                 lift.setHeight(RobotConstants.Lift.HIGH - AutoData.DEPOSIT_DROP_AMOUNT);
@@ -159,7 +159,7 @@ public class LM1_Left extends RougeBaseAuto {
                 })
 
                 .setReversed(true)
-                .splineTo(new Vector2d(in(-AutoData.INTAKE_X+1), in(AutoData.INTAKE_Y+3.5)), rad(180))
+                .splineTo(new Vector2d(in(-AutoData.INTAKE_X+1.25), in(AutoData.INTAKE_Y+3.5+1)), rad(180))
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                     claw.close();
@@ -178,7 +178,7 @@ public class LM1_Left extends RougeBaseAuto {
 
                 .setReversed(false)
                 .waitSeconds(0.125)
-                .splineTo(new Vector2d(in(-AutoData.DEPOSIT_X+1.5+.75), in(AutoData.DEPOSIT_Y-3.5+.75)), rad(180 - (AutoData.DEPOSIT_ANGLE - 1 - AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i)))
+                .splineTo(new Vector2d(in(-AutoData.DEPOSIT_X+1.5), in(AutoData.DEPOSIT_Y+1.5)), rad(180 - (AutoData.DEPOSIT_ANGLE - 1 - (AutoData.DEPOSIT_ANGLE_ADJUSTMENT - .02) * i)))
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
                     lift.setHeight(RobotConstants.Lift.HIGH - AutoData.DEPOSIT_DROP_AMOUNT);
@@ -201,7 +201,7 @@ public class LM1_Left extends RougeBaseAuto {
             })
 
             .setReversed(true)
-            .splineTo(new Vector2d(in(-AutoData.INTAKE_X+1), in(AutoData.INTAKE_Y+3.5)), rad(180))
+            .splineTo(new Vector2d(in(-AutoData.INTAKE_X+1.25), in(AutoData.INTAKE_Y+4.5)), rad(180))
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                 claw.close();
