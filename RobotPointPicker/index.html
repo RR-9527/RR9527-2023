@@ -17,6 +17,7 @@
 
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,0,200"/>
 
     <meta name="theme-color" content="#fafafa">
   </head>
@@ -26,30 +27,46 @@
     <div class="offset-grid"></div>
     <div class="gradient-border"></div>
 
-    <img id="field-img" src="img/field-2022-official.png" alt="PowerPlay field image">
-
-    <div id="sizing-square" draggable="true"></div>
-
-    <img id="robit" draggable="true" src="img/FullAssem.png" alt="Robit">
-
-    <div class="settings-container">
-      <div class="setting">
-        <h1 class="setting-desc">X</h1>
-        <h1 id="setting-x">0</h1>
+    <div class="side-container">
+      <div class="settings-container">
+        <div class="setting">
+          <h1 class="setting-desc">X</h1>
+          <div class="setting-value">
+            <input type="text" id="setting-x" autocomplete="off" value="0.000">
+            <div class="setting-underline"></div>
+          </div>
+        </div>
+        <div class="setting">
+          <h1 class="setting-desc">Y</h1>
+          <div class="setting-value">
+            <input type="text" id="setting-y" autocomplete="off" value="0.000">
+            <div class="setting-underline"></div>
+          </div>
+        </div>
+        <div class="setting">
+          <h1 class="setting-desc">Heading</h1>
+          <div class="setting-value">
+            <h1 id="setting-heading">90.0</h1>
+            <div class="setting-underline"></div>
+          </div>
+        </div>
       </div>
-      <div class="setting">
-        <h1 class="setting-desc">Y</h1>
-        <h1 id="setting-y">0</h1>
+      <button id="reset" class="material-symbols-outlined">refresh</button>
+    </div>
+
+    <div class="field-container">
+      <div class="field-img-container">
+        <img id="field-img" src="img/field-2022-official.png" alt="PowerPlay field image">
       </div>
-      <div class="setting">
-        <h1 class="setting-desc">Rotation</h1>
-        <h1 id="setting-r">90</h1>
-      </div>
+
+      <div id="sizing-square" draggable="true"></div>
+
+      <img id="robit" draggable="true" src="img/FullAssemCentered.png" alt="Robit">
     </div>
 
     <script src="js/vendor/modernizr-3.11.2.min.js"></script>
     <script src="js/plugins.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/index.js" defer></script>
 
     <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
     <script>
