@@ -11,16 +11,17 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.components.voltagescaler.VoltageScaler;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutoData;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
+import org.firstinspires.ftc.teamcode.util.StateFunctions;
 
-@Config
 public class Lift {
     private final Motor liftA, liftB;
 
     private int liftHeight;
+    private int prevLiftHeight;
 
     private HardwareMap hardwareMap;
 
-    private PIDFController liftPID;
+    private PIDFController liftPID, liftIncreasingPID;
 
     private VoltageScaler voltageScaler;
 
@@ -40,25 +41,42 @@ public class Lift {
         liftB.resetEncoder();
 
         liftPID = new PIDFController(RobotConstants.Lift.P, RobotConstants.Lift.I, RobotConstants.Lift.D, RobotConstants.Lift.F);
+        liftIncreasingPID = new PIDFController(
+            RobotConstants.Lift.INCREASING_P, RobotConstants.Lift.INCREASING_I,
+            RobotConstants.Lift.INCREASING_D, RobotConstants.Lift.INCREASING_F);
     }
 
     public void goToZero() {
+        prevLiftHeight = liftHeight;
         liftHeight = RobotConstants.Lift.ZERO;
     }
 
     public void goToLow() {
+        prevLiftHeight = liftHeight;
         liftHeight = RobotConstants.Lift.LOW;
     }
 
     public void goToMid() {
+        prevLiftHeight = liftHeight;
         liftHeight = RobotConstants.Lift.MID;
     }
 
     public void goToHigh() {
+        prevLiftHeight = liftHeight;
         liftHeight = RobotConstants.Lift.HIGH;
     }
 
+    public int getCurrentPos(){
+        return liftA.getCurrentPosition();
+    }
+
+
     public void update(Telemetry telemetry) {
+        // Default is not to use aggressive ascendance
+        update(telemetry, false);
+    }
+
+    public void update(Telemetry telemetry, boolean aggressiveAscendance) {
         double voltageCorrection = voltageScaler.getVoltageCorrection();
         telemetry.addData("Voltage PIDF correction for lift", voltageCorrection);
 
@@ -69,10 +87,20 @@ public class Lift {
             telemetry.addData("Motor position", liftA.getCurrentPosition());
         }
 
-        double correctionA = liftPID.calculate(liftA.getCurrentPosition(), liftHeight+voltageCorrection);
+        double correction;
 
-        liftA.set(correctionA);
-        liftB.set(correctionA);
+        // If you want to increase lift height aggressively,
+        // and the previous height the lift was set to was below the current target,
+        // and the lift height is not within +/- 50 ticks of the target, use aggressive ascendance
+        if (aggressiveAscendance && prevLiftHeight < liftHeight && !StateFunctions.inRange(getCurrentPos(), liftHeight, 50))
+            correction = liftIncreasingPID.calculate(liftA.getCurrentPosition(), liftHeight+voltageCorrection);
+        // In any other case, use default PIDF
+        else
+            correction = liftPID.calculate(liftA.getCurrentPosition(), liftHeight+voltageCorrection);
+
+
+        liftA.set(correction);
+        liftB.set(correction);
 
         telemetry.addData("Lift set position", liftHeight);
     }

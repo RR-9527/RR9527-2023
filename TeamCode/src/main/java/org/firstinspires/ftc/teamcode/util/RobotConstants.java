@@ -66,9 +66,17 @@ public class RobotConstants {
 		public static int AUTO_INTAKE_4 = 104;
 		public static int AUTO_INTAKE_5 = 29;
 
+
+		public static boolean USE_AGGRESSIVE_ASCENDANCE = false;
+
 		public static double P = 0.0015;
 		public static double I = 0.1;
 		public static double D = 0.0001;
 		public static double F = 0.00001;
+
+		public static double INCREASING_P = 0.0015;
+		public static double INCREASING_I = 0.1;
+		public static double INCREASING_D = 0.0001;
+		public static double INCREASING_F = 0.00001;
     }
 }

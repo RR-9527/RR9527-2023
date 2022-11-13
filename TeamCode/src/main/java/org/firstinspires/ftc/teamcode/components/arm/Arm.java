@@ -44,7 +44,7 @@ public class Arm {
         useEncoder = false;
     }
     public void checkResetEncoder() {
-        if (StateFunctions.InRange(getArmPosition(), RobotConstants.Arm.VERTICAL, 3))
+        if (StateFunctions.inRange(getArmPosition(), RobotConstants.Arm.VERTICAL, 3))
             armMotor.resetEncoder();
     }
 
