@@ -4,9 +4,11 @@ import static org.firstinspires.ftc.teamcode.util.RuntimeMode.DEBUG;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.components.voltagescaler.VoltageScaler;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
 import org.firstinspires.ftc.teamcode.util.UtilityFunctions;
@@ -44,6 +46,15 @@ public class Lift {
             RobotConstants.Lift.INCREASING_D, RobotConstants.Lift.INCREASING_F);
     }
 
+    public void setFloating(){
+        liftA.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        liftB.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+    }
+    public void setBrake(){
+        liftA.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        liftB.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+    }
+
     public void goToZero() {
         prevLiftHeight = liftHeight;
         liftHeight = RobotConstants.Lift.ZERO;
@@ -74,6 +85,22 @@ public class Lift {
         update(telemetry, false);
     }
 
+    public void manualLiftControl(double powerA, double powerB){
+        liftA.setRunMode(Motor.RunMode.RawPower);
+        liftA.set(powerA);
+        liftB.setRunMode(Motor.RunMode.RawPower);
+        liftB.set(powerB);
+    }
+
+    public double getACurrent(){
+        DcMotorEx motorObj = (DcMotorEx) liftA.motor;
+        return motorObj.getCurrent(CurrentUnit.AMPS);
+    }
+    public double getBCurrent(){
+        DcMotorEx motorObj = (DcMotorEx) liftB.motor;
+        return motorObj.getCurrent(CurrentUnit.AMPS);
+    }
+
     public void update(Telemetry telemetry, boolean aggressiveAscendance) {
         double voltageCorrection = voltageScaler.getVoltageCorrection();
         telemetry.addData("Voltage PIDF correction for lift", voltageCorrection);
@@ -96,6 +123,7 @@ public class Lift {
         else
             correction = liftPID.calculate(liftA.getCurrentPosition(), liftHeight+voltageCorrection);
 
+        telemetry.addData("Correction amount", correction);
 
         liftA.set(correction);
         liftB.set(correction);

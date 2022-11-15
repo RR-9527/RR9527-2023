@@ -20,7 +20,7 @@ public class PoleDetector extends OpenCvPipeline {
      */
     private Telemetry telemetry;
 
-    private Point poleLocationPixels;
+    private DetectedCircle poleLocationPixels;
 
     /**
      * Constructor to assign the telemetry object and actually have telemetry work.
@@ -30,7 +30,7 @@ public class PoleDetector extends OpenCvPipeline {
      */
     public PoleDetector(Telemetry telemetry) {
         this.telemetry = telemetry;
-        poleLocationPixels = new Point();
+        poleLocationPixels = new DetectedCircle();
     }
 
 
@@ -49,19 +49,18 @@ public class PoleDetector extends OpenCvPipeline {
 
         Imgproc.cvtColor(src, gray, Imgproc.COLOR_RGB2GRAY);
         Imgproc.blur(gray, gray, new Size(3, 3));
-        Imgproc.Canny(gray, edges, 5, 100);
+        Imgproc.Canny(gray, edges, 1, 150);
 
         Mat circles = new Mat();
-        Imgproc.HoughCircles(edges, circles, Imgproc.HOUGH_GRADIENT, 1.0, frameWidth/13.0, 90.0, 30.0, 10, 50);
+        Imgproc.HoughCircles(edges, circles, Imgproc.HOUGH_GRADIENT, 1.5, frameWidth/4.0, 250, 75, 20, 90);
 
         for(int x=0; x<circles.cols(); x++){
             double[] c = circles.get(0, x);
             Point center = new Point(Math.round(c[0]), Math.round(c[1]));
 
-            Imgproc.circle(src, center, 1, new Scalar(0, 200, 0), 2, 2, 0);
+            Imgproc.circle(src, center, 1, new Scalar(0, 200, 0), 8, 2, 0);
             int radius = (int)Math.round(c[2]);
-            Imgproc.circle(src, center, radius, new Scalar(0, 200, 0), 2, 2, 0);
-
+            Imgproc.circle(src, center, radius, new Scalar(0, 200, 0), 8, 2, 0);
             // Capture the pixel point position as a variable to access
             if(poleLocationPixels.x == 0 && poleLocationPixels.y == 0) {
                 poleLocationPixels.x = center.x;
@@ -71,23 +70,21 @@ public class PoleDetector extends OpenCvPipeline {
                 poleLocationPixels.x = UtilityFunctions.avg(poleLocationPixels.x, center.x);
                 poleLocationPixels.y = UtilityFunctions.avg(poleLocationPixels.y, center.y);
             }
+            poleLocationPixels.radius = radius;
         }
 
 
         gray.release();
         edges.release();
 
-        telemetry.addLine("Pole Detector Running!");
-        telemetry.update();
-
         return src;
     }
 
-    public Point getPoleLocationPixels(){
+    public DetectedCircle getPoleLocationPixels(){
         return poleLocationPixels;
     }
 
-    public Point getPoleLocationRelative(){
+    public DetectedCircle getPoleLocationRelative(){
         // TODO: Apply some operation to convert pixel location to x/y in cm!
         return poleLocationPixels;
     }
