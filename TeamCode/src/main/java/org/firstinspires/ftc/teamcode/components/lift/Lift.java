@@ -2,16 +2,14 @@ package org.firstinspires.ftc.teamcode.components.lift;
 
 import static org.firstinspires.ftc.teamcode.util.RuntimeMode.DEBUG;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.components.voltagescaler.VoltageScaler;
-import org.firstinspires.ftc.teamcode.opmodes.auto.AutoData;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
-import org.firstinspires.ftc.teamcode.util.StateFunctions;
+import org.firstinspires.ftc.teamcode.util.UtilityFunctions;
 
 public class Lift {
     private final Motor liftA, liftB;
@@ -92,7 +90,7 @@ public class Lift {
         // If you want to increase lift height aggressively,
         // and the previous height the lift was set to was below the current target,
         // and the lift height is not within +/- 50 ticks of the target, use aggressive ascendance
-        if (aggressiveAscendance && prevLiftHeight < liftHeight && !StateFunctions.inRange(getCurrentPos(), liftHeight, 50))
+        if (aggressiveAscendance && prevLiftHeight < liftHeight && !UtilityFunctions.inRange(getCurrentPos(), liftHeight, 50))
             correction = liftIncreasingPID.calculate(liftA.getCurrentPosition(), liftHeight+voltageCorrection);
         // In any other case, use default PIDF
         else

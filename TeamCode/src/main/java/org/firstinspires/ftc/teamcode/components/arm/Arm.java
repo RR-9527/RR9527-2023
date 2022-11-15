@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
-import org.firstinspires.ftc.teamcode.util.StateFunctions;
+import org.firstinspires.ftc.teamcode.util.UtilityFunctions;
 
 public class Arm {
     private final Motor armMotor;
@@ -44,7 +44,7 @@ public class Arm {
         useEncoder = false;
     }
     public void checkResetEncoder() {
-        if (StateFunctions.inRange(getArmPosition(), RobotConstants.Arm.VERTICAL, 3))
+        if (UtilityFunctions.inRange(getArmPosition(), RobotConstants.Arm.VERTICAL, 3))
             armMotor.resetEncoder();
     }
 

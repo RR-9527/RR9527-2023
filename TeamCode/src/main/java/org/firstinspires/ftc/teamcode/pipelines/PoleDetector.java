@@ -9,16 +9,18 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+import org.firstinspires.ftc.teamcode.util.UtilityFunctions;
 
 /**
- * Class to apply a canny edge detector in an EasyOpenCV pipeline.
+ * Class to detect the pole in an EasyOpenCV pipeline.
  */
 public class PoleDetector extends OpenCvPipeline {
     /**
      * Telemetry object to display data to the console
      */
     private Telemetry telemetry;
-    private Mat copyInput;
+
+    private Point poleLocationPixels;
 
     /**
      * Constructor to assign the telemetry object and actually have telemetry work.
@@ -28,7 +30,7 @@ public class PoleDetector extends OpenCvPipeline {
      */
     public PoleDetector(Telemetry telemetry) {
         this.telemetry = telemetry;
-
+        poleLocationPixels = new Point();
     }
 
 
@@ -59,6 +61,16 @@ public class PoleDetector extends OpenCvPipeline {
             Imgproc.circle(src, center, 1, new Scalar(0, 200, 0), 2, 2, 0);
             int radius = (int)Math.round(c[2]);
             Imgproc.circle(src, center, radius, new Scalar(0, 200, 0), 2, 2, 0);
+
+            // Capture the pixel point position as a variable to access
+            if(poleLocationPixels.x == 0 && poleLocationPixels.y == 0) {
+                poleLocationPixels.x = center.x;
+                poleLocationPixels.y = center.y;
+            }
+            else {
+                poleLocationPixels.x = UtilityFunctions.avg(poleLocationPixels.x, center.x);
+                poleLocationPixels.y = UtilityFunctions.avg(poleLocationPixels.y, center.y);
+            }
         }
 
 
@@ -70,6 +82,16 @@ public class PoleDetector extends OpenCvPipeline {
 
         return src;
     }
+
+    public Point getPoleLocationPixels(){
+        return poleLocationPixels;
+    }
+
+    public Point getPoleLocationRelative(){
+        // TODO: Apply some operation to convert pixel location to x/y in cm!
+        return poleLocationPixels;
+    }
+
 
     /**
      * Process the frame by returning the canny edge of the input image

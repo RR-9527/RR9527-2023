@@ -15,8 +15,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 @TeleOp
-public class AprilTagOp extends LinearOpMode
-{
+public class AprilTagOp extends LinearOpMode {
     private OpenCvCamera camera;
     private AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -41,8 +40,7 @@ public class AprilTagOp extends LinearOpMode
 
     @SuppressLint("DefaultLocale")
     @Override
-    public void runOpMode()
-    {
+    public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
@@ -51,14 +49,12 @@ public class AprilTagOp extends LinearOpMode
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
-            public void onOpened()
-            {                               // RESOLUTION
+            public void onOpened() {      // RESOLUTION
                 camera.startStreaming(1280,960, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
-            public void onError(int errorCode)
-            {
+            public void onError(int errorCode) {
                 throw new RuntimeException("Error opening camera! Error code "+errorCode);
             }
         });
@@ -67,36 +63,29 @@ public class AprilTagOp extends LinearOpMode
 
         telemetry.setMsTransmissionInterval(50);
 
-        while (opModeIsActive())
-        {
+        while (opModeIsActive() && !isStopRequested()) {
             ArrayList<AprilTagDetection> detections = aprilTagDetectionPipeline.getDetectionsUpdate();
 
-            if(detections != null)
-            {
+            if(detections != null) {
                 telemetry.addData("FPS", camera.getFps());
                 telemetry.addData("Overhead ms", camera.getOverheadTimeMs());
                 telemetry.addData("Pipeline ms", camera.getPipelineTimeMs());
 
-                if(detections.size() == 0)
-                {
+                if(detections.size() == 0) {
                     numFramesWithoutDetection++;
 
-                    if(numFramesWithoutDetection >= THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION)
-                    {
+                    if(numFramesWithoutDetection >= THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION) {
                         aprilTagDetectionPipeline.setDecimation(DECIMATION_LOW);
                     }
                 }
-                else
-                {
+                else {
                     numFramesWithoutDetection = 0;
 
-                    if(detections.get(0).pose.z < THRESHOLD_HIGH_DECIMATION_RANGE_METERS)
-                    {
+                    if(detections.get(0).pose.z < THRESHOLD_HIGH_DECIMATION_RANGE_METERS) {
                         aprilTagDetectionPipeline.setDecimation(DECIMATION_HIGH);
                     }
 
-                    for(AprilTagDetection detection : detections)
-                    {
+                    for(AprilTagDetection detection : detections) {
                         telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
                         telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
                         telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
