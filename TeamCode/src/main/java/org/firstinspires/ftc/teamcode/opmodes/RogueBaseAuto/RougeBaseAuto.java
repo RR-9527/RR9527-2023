@@ -71,7 +71,7 @@ public abstract class RougeBaseAuto extends LinearOpMode {
         arm = new Arm(hardwareMap);
         wrist = new Wrist(hardwareMap);
         lift = new Lift(hardwareMap, voltageScaler);
-        frontSensor = new ShortRangeSensor(hardwareMap, "FRONT"); // TODO: Wire it up and name it!
+        frontSensor = new ShortRangeSensor(hardwareMap, "FRONT_SENSOR"); // TODO: Make sure this is what the name is!
 
         //***************************
         // Set up camera and pipeline
@@ -137,12 +137,20 @@ public abstract class RougeBaseAuto extends LinearOpMode {
 
     public double[] getPolePosition(){
         Pose2d currentPose = drive.getLocalizer().getPoseEstimate();
-        return poleDetector.getRepositionCoord(
+        double[] pos = poleDetector.getRepositionCoord(
             toCentimeters(currentPose.getX()),
             toCentimeters(currentPose.getY()),
             currentPose.getHeading(),
             frontSensor.getDistance()
             );
+
+        // Do not move more than 15 cm in any one direction!
+        if(Math.max(pos[0], pos[1]) > 15){
+            telemetry.addData("Uh oh! Tried to return a pole position greater than 15 cm away!",
+                Math.max(pos[0], pos[1]));
+            return new double[]{0, 0};
+        }
+        return pos;
     }
 
     private double toCentimeters(double inches){

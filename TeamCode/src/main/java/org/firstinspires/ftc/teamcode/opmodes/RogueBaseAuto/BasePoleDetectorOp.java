@@ -16,10 +16,6 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous
 public class BasePoleDetectorOp extends RougeBaseAuto {
-    private OpenCvCamera camera;
-    private BasePoleDetector poleDetectorPipeline;
-
-
     /**
      * Override this method and place your code here.
      * <p>
@@ -50,6 +46,6 @@ public class BasePoleDetectorOp extends RougeBaseAuto {
                 .lineTo(new Vector2d(polePos[0], polePos[1]))
                 .build();
 
-
+        drive.followTrajectorySequence(alignTraj);
     }
 }
