@@ -1,17 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes.deprecated.auto;
 
-import android.sax.TextElementListener;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
-import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.opmodes.auto.AutoData;
-import org.firstinspires.ftc.teamcode.opmodes.auto.RougeBaseAuto;
+import org.firstinspires.ftc.teamcode.opmodes.RogueBaseAuto.AutoData;
+import org.firstinspires.ftc.teamcode.opmodes.RogueBaseAuto.RougeBaseAuto;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;

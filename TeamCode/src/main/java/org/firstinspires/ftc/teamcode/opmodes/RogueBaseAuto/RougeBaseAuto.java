@@ -1,23 +1,26 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.RogueBaseAuto;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.components.arm.Arm;
 import org.firstinspires.ftc.teamcode.components.claw.Claw;
+import org.firstinspires.ftc.teamcode.components.distancesensor.ShortRangeSensor;
 import org.firstinspires.ftc.teamcode.components.intake.Intake;
 import org.firstinspires.ftc.teamcode.components.lift.Lift;
 import org.firstinspires.ftc.teamcode.components.voltagescaler.VoltageScaler;
 import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
 import org.firstinspires.ftc.teamcode.pipelines.AprilTagDetectionPipeline;
+import org.firstinspires.ftc.teamcode.pipelines.BasePoleDetector;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
-import java.util.OptionalDouble;
 
 public abstract class RougeBaseAuto extends LinearOpMode {
     protected SampleMecanumDrive drive;
@@ -28,12 +31,15 @@ public abstract class RougeBaseAuto extends LinearOpMode {
     protected Wrist wrist;
     protected Lift lift;
     protected VoltageScaler voltageScaler;
+    protected ShortRangeSensor frontSensor;
+
 
     //************
     // Camera code
     //************
     private OpenCvCamera camera;
     private AprilTagDetectionPipeline aprilTagDetectionPipeline;
+    private BasePoleDetector poleDetector;
 
     private int numFramesWithoutDetection = 0;
 
@@ -55,6 +61,8 @@ public abstract class RougeBaseAuto extends LinearOpMode {
 
 
     protected void initHardware() {
+        telemetry.setMsTransmissionInterval(50);
+
         drive = new SampleMecanumDrive(hardwareMap);
 
         voltageScaler = new VoltageScaler(hardwareMap);
@@ -63,6 +71,7 @@ public abstract class RougeBaseAuto extends LinearOpMode {
         arm = new Arm(hardwareMap);
         wrist = new Wrist(hardwareMap);
         lift = new Lift(hardwareMap, voltageScaler);
+        frontSensor = new ShortRangeSensor(hardwareMap, "FRONT"); // TODO: Wire it up and name it!
 
         //***************************
         // Set up camera and pipeline
@@ -83,6 +92,8 @@ public abstract class RougeBaseAuto extends LinearOpMode {
 //                throw new RuntimeException("Error opening camera! Error code " + errorCode);
             }
         });
+
+        poleDetector = new BasePoleDetector(telemetry);
     }
 
     public int waitForStartWithVision() {
@@ -118,5 +129,23 @@ public abstract class RougeBaseAuto extends LinearOpMode {
             }
         }
         return lastIntID;
+    }
+
+    public void setPoleDetectorAsPipeline(){
+        camera.setPipeline(poleDetector);
+    }
+
+    public double[] getPolePosition(){
+        Pose2d currentPose = drive.getLocalizer().getPoseEstimate();
+        return poleDetector.getRepositionCoord(
+            toCentimeters(currentPose.getX()),
+            toCentimeters(currentPose.getY()),
+            currentPose.getHeading(),
+            frontSensor.getDistance()
+            );
+    }
+
+    private double toCentimeters(double inches){
+        return inches*2.54;
     }
 }

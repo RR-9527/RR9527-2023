@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.util.RuntimeMode.DEBUG;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -15,6 +16,7 @@ public class Arm {
     private final PIDFController armPID, armEncoderPID;
 
     private HardwareMap hardwareMap;
+    private AnalogInput sensor;
 
     private double armCorrection;
 
@@ -42,6 +44,8 @@ public class Arm {
         );
 
         useEncoder = false;
+
+        sensor = hardwareMap.analogInput.get("ARM_ENC");
     }
     public void checkResetEncoder() {
         if (UtilityFunctions.inRange(getArmPosition(), RobotConstants.Arm.VERTICAL, 3))
@@ -70,7 +74,7 @@ public class Arm {
     }
 
     public double getArmRawPosition(){
-        return hardwareMap.analogInput.get("ARM_ENC").getVoltage();
+        return sensor.getVoltage();
     }
 
     public double getArmPosition(){

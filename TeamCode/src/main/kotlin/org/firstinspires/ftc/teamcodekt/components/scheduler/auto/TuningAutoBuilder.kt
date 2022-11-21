@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcodekt.components.scheduler.auto
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.acmerobotics.roadrunner.trajectory.MarkerCallback
-import org.firstinspires.ftc.teamcode.opmodes.auto.SuperExperimentalWIPTestAutoNov5ForMyTestingOnlyPleaseDoNotUseItWontWork
+import org.firstinspires.ftc.teamcode.opmodes.RogueBaseAuto.SuperExperimentalWIPTestAutoNov5ForMyTestingOnlyPleaseDoNotUseItWontWork
 import java.io.*
 import java.nio.file.Files
 

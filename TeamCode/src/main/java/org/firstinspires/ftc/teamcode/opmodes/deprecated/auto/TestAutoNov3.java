@@ -5,17 +5,10 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.opmodes.auto.RougeBaseAuto;
-import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerUnit;
-import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerWrapper;
-import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.SequenceWrapper;
-import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.WrapperBuilder;
+import org.firstinspires.ftc.teamcode.opmodes.RogueBaseAuto.RougeBaseAuto;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
-
-import java.lang.reflect.Field;
 
 @Disabled
 @Autonomous

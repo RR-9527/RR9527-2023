@@ -36,6 +36,16 @@ public class BasePoleDetector extends OpenCvPipeline {
     private static final int PIXELS_TO_EXTRAPOLATE_AT = 6 * 720;
 
     /**
+     * Camera offset from the center of the front of the robot
+     */
+    private static final double CAMERA_OFFSET = 1.2;
+
+    /**
+     * Size in centimeters of the robot on a side
+     */
+    private static final double ROBOT_SIZE = 40;
+
+    /**
      * Constructor to assign the telemetry object and actually have telemetry work.
      * This works because the OpenCvPipeline object has this built in interface to
      * use telemetry.
@@ -115,7 +125,7 @@ public class BasePoleDetector extends OpenCvPipeline {
      */
     @Override
     public Mat processFrame(Mat img) {
-        double[] polePosAbsolute = getRepositionCoord(0, 0, 0.1, Math.PI / 2, 0.3);
+        double[] polePosAbsolute = getRepositionCoord(0, 0, Math.PI / 2, 0.3);
         telemetry.addData("Finalized x pos", polePosAbsolute[0]);
         telemetry.addData("Finalized y pos", polePosAbsolute[1]);
 
@@ -159,17 +169,16 @@ public class BasePoleDetector extends OpenCvPipeline {
      *
      * @param xOffset          the current x position of the robot
      * @param yOffset          the current y position of th robot
-     * @param camOffset        the distance the camera is to the right of the center
      * @param robotOffsetAngle the angle the robot is currently at IN RADIANS
      * @param detectedDistance the sensor measurement from the distance sensor
      * @return an array with the x and y position to move to
      */
-    public double[] getRepositionCoord(double xOffset, double yOffset, double camOffset, double robotOffsetAngle, double detectedDistance) {
-        double h = calculateH(camOffset, detectedDistance, angle);
+    public double[] getRepositionCoord(double xOffset, double yOffset, double robotOffsetAngle, double detectedDistance) {
+        double h = calculateH(CAMERA_OFFSET, detectedDistance, angle);
         double psi = calculatePsi(detectedDistance, h, angle);
         return new double[]{
             h * Math.cos(robotOffsetAngle + psi) + xOffset, // x - keep units consistent across everything!
-            h * Math.sin(robotOffsetAngle + psi) + yOffset,  // y - keep units consistent across everything
+            h * Math.sin(robotOffsetAngle + psi) + yOffset - ROBOT_SIZE / 2,  // y - keep units consistent across everything
         };
     }
 
