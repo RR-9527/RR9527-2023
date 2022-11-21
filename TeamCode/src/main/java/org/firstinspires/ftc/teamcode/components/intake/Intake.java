@@ -11,7 +11,7 @@ public class Intake {
     }
 
     public void enable()  {
-        intakeServo.set(1);
+        intakeServo.set(-1);
     }
 
     public void disable() {
@@ -19,6 +19,6 @@ public class Intake {
     }
 
     public void reverse() {
-        intakeServo.set(-1);
+        intakeServo.set(1);
     }
 }
