@@ -26,8 +26,8 @@ public class BasePoleDetector extends OpenCvPipeline {
     private double angle;
 
     // Simple frame size in pixels determined empirically through Mat.rows() and Mat.cols().
-    private int frameWidth;
-    private int frameHeight;
+    private static int frameWidth = 1280;
+    private static int frameHeight = 760;
 
     /**
      * Meant to be around 6 camera FOVs to the top (estimated from a distance of ~15cm
@@ -44,6 +44,13 @@ public class BasePoleDetector extends OpenCvPipeline {
      * Size in centimeters of the robot on a side
      */
     private static final double ROBOT_SIZE = 40;
+
+    private static final double FOV = 30; // Degrees here!
+    private static final double FOV_MULT;
+
+    static {
+        FOV_MULT = 2 * Math.tan(Math.toRadians(FOV)) / frameWidth;
+    }
 
     /**
      * Constructor to assign the telemetry object and actually have telemetry work.
@@ -159,7 +166,7 @@ public class BasePoleDetector extends OpenCvPipeline {
      * @return the angle in radians (+ is right of middle, - is left of middle)
      */
     private double pixelXAngle(double xPos) {
-        return Math.atan(5.7735 * (xPos - frameWidth / 2.0) / (frameWidth / 2.0 * 10));
+        return Math.atan(FOV_MULT * (xPos - (frameWidth / 2.0)));
     }
 
 
