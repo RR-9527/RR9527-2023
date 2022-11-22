@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.RogueBaseAuto;
+package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
 import org.firstinspires.ftc.teamcode.pipelines.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.pipelines.BasePoleDetector;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -61,7 +60,7 @@ public abstract class RougeBaseAuto extends LinearOpMode {
 
 
     protected void initHardware() {
-        telemetry.setMsTransmissionInterval(50);
+//        telemetry.setMsTransmissionInterval(50);
 
         drive = new SampleMecanumDrive(hardwareMap);
 
@@ -71,7 +70,7 @@ public abstract class RougeBaseAuto extends LinearOpMode {
         arm = new Arm(hardwareMap);
         wrist = new Wrist(hardwareMap);
         lift = new Lift(hardwareMap, voltageScaler);
-        frontSensor = new ShortRangeSensor(hardwareMap, "FRONT_SENSOR"); // TODO: Make sure this is what the name is!
+        frontSensor = new ShortRangeSensor(hardwareMap, "F_USDS", telemetry);
 
         //***************************
         // Set up camera and pipeline

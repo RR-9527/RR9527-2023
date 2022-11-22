@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.RogueBaseAuto;
+package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -9,8 +9,16 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
+import java.text.DecimalFormat;
+
 @Autonomous
-public class LM2_Right extends RougeBaseAuto {
+public class LM2_Left extends RougeBaseAuto {
+
+    private static final DecimalFormat fmt;
+
+    static {
+        fmt = new DecimalFormat("000.00");
+    }
     private Runnable armPosFunction;
     private Runnable wristPosFunction;
 
@@ -29,6 +37,9 @@ public class LM2_Right extends RougeBaseAuto {
         Scheduler.beforeEach(() -> {
             armPosFunction.run();
             wristPosFunction.run();
+
+            frontSensor.getDistance();
+            telemetry.update();
         });
 
         schedulePaths();
@@ -47,11 +58,15 @@ public class LM2_Right extends RougeBaseAuto {
             });
 
         switch (signalZone) {
-            case 1:
-                parkTrajBuilder.forward(in(126));
+            case 3:
+                parkTrajBuilder
+                    .strafeRight(in(3))
+                    .forward(in(126));
                 break;
             case 2:
-                parkTrajBuilder.forward(in(0.001));
+                parkTrajBuilder
+                    .strafeRight(in(3))
+                    .forward(in(70));
 //                parkTrajBuilder
 //                    .UNSTABLE_addTemporalMarkerOffset(0, () -> {
 //                        lift.setHeight(RobotConstants.Lift.HIGH);
@@ -97,9 +112,10 @@ public class LM2_Right extends RougeBaseAuto {
             if (startParking) {
                 startParking = false;
 
-                drive.followTrajectorySequenceAsync(parkTraj);
+                drive.followTrajectorySequence(parkTraj);
             }
 
+            frontSensor.getDistance();
             telemetry.update();
         });
     }
@@ -112,7 +128,7 @@ public class LM2_Right extends RougeBaseAuto {
             RobotConstants.Lift.AUTO_INTAKE_4,
         };
 
-        Pose2d startPose = new Pose2d(in(91), in(-159), rad(90));
+        Pose2d startPose = new Pose2d(in(-91), in(-159), rad(90));
         drive.setPoseEstimate(startPose);
 
         TrajectorySequenceBuilder builder = drive.trajectorySequenceBuilder(startPose);
@@ -124,9 +140,15 @@ public class LM2_Right extends RougeBaseAuto {
                 armPosFunction = arm::setToForwardsPos;
             })
 
-            .splineTo(new Vector2d(in(91), in(-50)), rad(90))
-            .splineTo(new Vector2d(in(AutoData.DEPOSIT_X+1-0.125), in(AutoData.DEPOSIT_Y+0.25+0.125)), rad(AutoData.DEPOSIT_ANGLE-3))
+            .splineTo(new Vector2d(in(-91), in(-50)), rad(90))
+            .splineTo(new Vector2d(in(-AutoData.DEPOSIT_X+1.5), in(AutoData.DEPOSIT_Y+1.5)), rad(180 - (AutoData.DEPOSIT_ANGLE - .02)- 12));
 
+        double distance = frontSensor.getDistance();
+        if(Math.abs(distance-15) > 1){
+            builder.forward(distance-15);
+        }
+
+        builder
             .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
                 lift.setHeight(RobotConstants.Lift.HIGH - AutoData.DEPOSIT_DROP_AMOUNT);
             })
@@ -150,7 +172,7 @@ public class LM2_Right extends RougeBaseAuto {
                 })
 
                 .setReversed(true)
-                .splineTo(new Vector2d(in(AutoData.INTAKE_X+0.25), in(AutoData.INTAKE_Y)), rad(0))
+                .splineTo(new Vector2d(in(-AutoData.INTAKE_X+1.25), in(AutoData.INTAKE_Y+3.5+1)), rad(180))
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                     claw.close();
@@ -169,18 +191,24 @@ public class LM2_Right extends RougeBaseAuto {
 
                 .setReversed(false)
                 .waitSeconds(0.125)
-                .splineTo(new Vector2d(in(AutoData.DEPOSIT_X+1-0.125), in(AutoData.DEPOSIT_Y+0.25+0.125)), rad(AutoData.DEPOSIT_ANGLE - 7 - AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i))
-
-                .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
-                    lift.setHeight(RobotConstants.Lift.HIGH - AutoData.DEPOSIT_DROP_AMOUNT);
-                })
-
-                .UNSTABLE_addTemporalMarkerOffset(AutoData.DEPOSIT_OFFSET, () -> {
-                    claw.openForDeposit(); // Deposit the cone while turning
-                })
-
-                .waitSeconds(AutoData.DEPOSIT_DELAY);
+                .splineTo(new Vector2d(in(-AutoData.DEPOSIT_X+1.5), in(AutoData.DEPOSIT_Y+1.5)), rad(180 - (AutoData.DEPOSIT_ANGLE - 1 - (AutoData.DEPOSIT_ANGLE_ADJUSTMENT - .02) * i)));
         }
+
+        distance = frontSensor.getDistance();
+        if(Math.abs(distance-15) > 1){
+            builder.forward(distance-15);
+        }
+
+        builder
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
+                lift.setHeight(RobotConstants.Lift.HIGH - AutoData.DEPOSIT_DROP_AMOUNT);
+            })
+
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.DEPOSIT_OFFSET, () -> {
+                claw.openForDeposit(); // Deposit the cone while turning
+            })
+
+            .waitSeconds(AutoData.DEPOSIT_DELAY);
 
         builder
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
@@ -192,7 +220,7 @@ public class LM2_Right extends RougeBaseAuto {
             })
 
             .setReversed(true)
-            .splineTo(new Vector2d(in(AutoData.INTAKE_X+0.25), in(AutoData.INTAKE_Y)), rad(0))
+            .splineTo(new Vector2d(in(-AutoData.INTAKE_X+1.25), in(AutoData.INTAKE_Y+4.5)), rad(180))
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                 claw.close();
@@ -201,10 +229,10 @@ public class LM2_Right extends RougeBaseAuto {
         builder
             .turn(rad(3))
             .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-            startParking = true;
-            armPosFunction = arm::setToRestingPos;
-            telemetry.addData("Entering parking auto","");
-        });
+                startParking = true;
+                armPosFunction = arm::setToRestingPos;
+                telemetry.addData("Entering parking auto","");
+            });
 
         drive.followTrajectorySequenceAsync(mainTraj = builder.build());
     }
