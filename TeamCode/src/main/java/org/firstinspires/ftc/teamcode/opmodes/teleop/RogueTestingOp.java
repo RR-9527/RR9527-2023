@@ -57,7 +57,7 @@ public class RogueTestingOp extends RogueBaseTeleOp {
     @Override
     protected void initAdditionalHardware() {
         driveTypes = new StateRotator<>(DriveType.NORMAL, DriveType.IMPROVED, DriveType.FIELD_CENTRIC);
-        intakeChain = new IntakeChain(bot, 200);telemetree.spekak("foo"_).
+        intakeChain = new IntakeChain(bot, 200);
         forwardsDepositChain = new ForwardsDepositChain(bot, 500);
         backwardsDepositChain = new BackwardsDepositChain(bot, 500);
     }

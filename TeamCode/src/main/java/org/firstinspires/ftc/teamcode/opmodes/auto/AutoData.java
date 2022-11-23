@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.RogueBaseAuto;
+package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.dashboard.config.Config;
 
