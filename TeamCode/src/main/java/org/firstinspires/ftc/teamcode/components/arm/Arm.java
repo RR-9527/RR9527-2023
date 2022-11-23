@@ -47,6 +47,7 @@ public class Arm {
 
         sensor = hardwareMap.analogInput.get("ARM_ENC");
     }
+
     public void checkResetEncoder() {
         if (UtilityFunctions.inRange(getArmPosition(), RobotConstants.Arm.VERTICAL, 3))
             armMotor.resetEncoder();
@@ -100,13 +101,9 @@ public class Arm {
             );
         }
 
-        double correction;
-
-        // Old code - uses builtin encoder
-        if(useEncoder)
-            correction = armEncoderPID.calculate(armMotor.getCurrentPosition(), armCorrection);
-        else
-            correction = armPID.calculate(getArmPosition(), armCorrection);
+        double correction = (useEncoder)
+            ? armEncoderPID.calculate(armMotor.getCurrentPosition(), armCorrection)
+            : armPID.calculate(getArmPosition(), armCorrection);
 
         armMotor.set(correction);
 
