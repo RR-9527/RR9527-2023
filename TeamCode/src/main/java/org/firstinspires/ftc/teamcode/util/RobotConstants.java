@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 public class RobotConstants {
 	@Config
 	public static class VoltagePID {
-		public static int TARGET_VOLTAGE = 14;
+		public static double TARGET_VOLTAGE = 14;
 
 		public static double P = 0.0;
 		public static double I = 0;
@@ -22,16 +22,16 @@ public class RobotConstants {
 
     @Config
     public static class Arm {
-    	public static double BACKWARDS = 1500;
+    	public static double BACKWARDS = 1450; // TODO: see below, used to be 1500
     	public static double VERTICAL = 300;
-    	public static double FORWARDS = -320;
+    	public static double FORWARDS = -275; // TODO: change this back to -320 for tele
 
 		public static double VOLTAGE_BACKWARDS = 0.539;
 		public static double VOLTAGE_FORWARDS = 2.07;
 
-    	public static double P = 0.001;
+    	public static double P = 0.0008;
     	public static double I = 0.0;
-    	public static double D = 0.00001;
+    	public static double D = 0.00005;
     	public static double F = 0;
 
 		public static double ENC_P = 0.004;
@@ -54,18 +54,17 @@ public class RobotConstants {
     @Config
     public static class Lift {
 		public static int ZERO = 0;
-		public static int LOW = 1200;
-		public static int MID = 1900;
-		public static int HIGH = 3000;
+		public static int LOW = 870;
+		public static int MID = 1540;
+		public static int HIGH = 2280;
 
 		public static double MANUAL_ADJUSTMENT_MULT = 4;
 
-		public static int AUTO_INTAKE_1 = 399;
-		public static int AUTO_INTAKE_2 = 316;
-		public static int AUTO_INTAKE_3 = 208;
-		public static int AUTO_INTAKE_4 = 104;
-		public static int AUTO_INTAKE_5 = 29;
-
+		public static int AUTO_INTAKE_1 = 370;
+		public static int AUTO_INTAKE_2 = 295;
+		public static int AUTO_INTAKE_3 = 180;
+		public static int AUTO_INTAKE_4 = 110;
+		public static int AUTO_INTAKE_5 = 0;
 
 		public static boolean USE_AGGRESSIVE_ASCENDANCE = false;
 

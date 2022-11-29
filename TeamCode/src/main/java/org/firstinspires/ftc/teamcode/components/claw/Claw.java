@@ -22,6 +22,10 @@ public class Claw {
         clawServo.setPosition(RobotConstants.Claw.DEPOSIT);
     }
 
+    public void openForIntakeAuto() {
+        clawServo.setPosition(RobotConstants.Claw.INTAKE + 0.15);
+    }
+
     public void close() {
         clawServo.setPosition(RobotConstants.Claw.CLOSE);
     }

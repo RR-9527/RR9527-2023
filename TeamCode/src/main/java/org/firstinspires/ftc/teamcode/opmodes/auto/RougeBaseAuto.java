@@ -42,7 +42,6 @@ public abstract class RougeBaseAuto extends LinearOpMode {
 
     private int numFramesWithoutDetection = 0;
 
-
     // Lens intrinsics
     // Units are in pixels
     private static final double fx = 578.272;
