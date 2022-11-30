@@ -12,11 +12,10 @@ import org.firstinspires.ftc.teamcode.components.lift.Lift;
 import org.firstinspires.ftc.teamcode.components.voltagescaler.VoltageScaler;
 import org.firstinspires.ftc.teamcode.components.wrist.Wrist;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.util.OpModeType;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
 import org.firstinspires.ftc.teamcodekt.components.motors.DriveMotors;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.listeners.GamepadEx2;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.listeners.GamepadEx2;
 
 @SuppressWarnings("SameParameterValue")
 public abstract class RogueBaseTeleOp extends LinearOpMode {
@@ -34,9 +33,6 @@ public abstract class RogueBaseTeleOp extends LinearOpMode {
 
     protected GamepadEx2 driver;
     protected GamepadEx2 codriver;
-
-    // Default opmode is set to teleop
-    protected OpModeType opModeType = OpModeType.TELEOP;
 
     protected abstract void scheduleTasks();
 
@@ -57,10 +53,10 @@ public abstract class RogueBaseTeleOp extends LinearOpMode {
             arm.update(telemetry);
             lift.update(telemetry, RobotConstants.Lift.USE_AGGRESSIVE_ASCENDANCE);
             wrist.update();
-            telemetry.update();
 
-            if (opModeType == OpModeType.TELEOP)
-                driveMotors.drive(gamepad1, localizer, powerMulti);
+            driveMotors.drive(gamepad1, localizer, powerMulti);
+
+            telemetry.update();
         });
     }
 
@@ -83,5 +79,13 @@ public abstract class RogueBaseTeleOp extends LinearOpMode {
         bot = new Bot(driveMotors, localizer, claw, intake, arm, wrist, lift);
 
         initAdditionalHardware();
+    }
+
+    protected void decreaseDriveSpeedABit() {
+        powerMulti = Math.max(1.0 - gamepad1.left_trigger, .35);
+    }
+
+    protected void decreaseDriveSpeedALot() {
+        powerMulti = Math.max(1.0 - gamepad1.left_trigger, .1);
     }
 }

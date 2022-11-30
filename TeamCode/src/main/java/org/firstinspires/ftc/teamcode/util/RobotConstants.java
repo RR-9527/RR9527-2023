@@ -22,9 +22,11 @@ public class RobotConstants {
 
     @Config
     public static class Arm {
-    	public static double BACKWARDS = 1450; // TODO: see below, used to be 1500
+    	public static double BACKWARDS_AUTO = 1465;
+    	public static double BACKWARDS_TELE = 1500;
     	public static double VERTICAL = 300;
-    	public static double FORWARDS = -275; // TODO: change this back to -320 for tele
+    	public static double FORWARDS_AUTO = -275;
+    	public static double FORWARDS_TELE = -320;
 
 		public static double VOLTAGE_BACKWARDS = 0.539;
 		public static double VOLTAGE_FORWARDS = 2.07;

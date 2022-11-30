@@ -14,10 +14,8 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.taskchains.TaskChai
 
 @TeleOp
 public class RogueCompOp extends RogueBaseTeleOp {
-    private StateRotator<DriveType> driveTypes;
     private TaskChain intakeChain;
     private CancellableTaskChain forwardsDepositChain, backwardsDepositChain;
-
 
     @Override
     public void scheduleTasks() {
@@ -38,26 +36,15 @@ public class RogueCompOp extends RogueBaseTeleOp {
             lift.setHeight(lift.getHeight() + (int) (RobotConstants.Lift.MANUAL_ADJUSTMENT_MULT * Math.pow(-gamepad2.right_stick_y, 3)));
         });
 
-        driver.left_trigger.whileHigh(this::decreaseDriveSpeed);
+        driver.left_trigger(.1).whileHigh(this::decreaseDriveSpeedALot);
+        driver.right_trigger(.1).whileHigh(this::decreaseDriveSpeedABit);
 
-        driver.y.onRise(this::rotateDriveType);
-
-        new Listener(() -> lift.getHeight() > 1000)
+        new Listener(() -> lift.getHeight() > 1500)
             .whileHigh(() -> powerMulti /= 2);
-    }
-
-    private void rotateDriveType() {
-        driveMotors.setDriveType(driveTypes.next());
-    }
-
-    private void decreaseDriveSpeed() {
-        // TODO: Change power scaling to a cubic
-        powerMulti = Math.max(1.0 - gamepad1.left_trigger, .1);
     }
 
     @Override
     protected void initAdditionalHardware() {
-        driveTypes = new StateRotator<>(DriveType.IMPROVED, DriveType.FIELD_CENTRIC);
         intakeChain = new IntakeChain(bot, 200);
         forwardsDepositChain = new ForwardsDepositChain(bot, 500);
         backwardsDepositChain = new BackwardsDepositChain(bot, 500);

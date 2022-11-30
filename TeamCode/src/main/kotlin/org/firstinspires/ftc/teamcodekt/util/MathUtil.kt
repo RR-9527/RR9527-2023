@@ -3,6 +3,27 @@
 package org.firstinspires.ftc.teamcodekt.util
 
 /**
+ * Simple utility function to convert from cm to inces without having to type out a
+ * long function name (and without having to do `<Int>.toDouble()` in Kotlin)
+ *
+ * Kotlin usage examples:
+ * ```
+ * val inches = inches(30)
+ * ```
+ *
+ * Java usage examples:
+ * ```java
+ * double inches = MU.inches(30);
+ * ```
+ */
+fun inches(cm: Number) = cm.toDouble() / 2.54
+
+/**
+ * Kotlin syntac sugar for the above
+ */
+fun Number.toIn() = this.toDouble() / 2.54
+
+/**
  * Simple utility function to convert from degrees to radians without having to type out a
  * long function name (and without having to do `<Int>.toDouble()` in Kotlin)
  *
@@ -15,29 +36,13 @@ package org.firstinspires.ftc.teamcodekt.util
  * ```java
  * double theta = MU.rad(180);
  * ```
- *
- * @param int The degree value to convert
- *
- * @return 'int' in radians
- *
- * @author KG
  */
-fun rad(int: Int) = Math.toRadians(int.toDouble())
+fun rad(x: Number) = Math.toRadians(x.toDouble())
 
 /**
- * Overloaded method of the above to accept doubles
- *
- * @param double The degree value to convert
- *
- * @return 'double' in radians
- *
- * @author KG
+ * Kotlin syntac sugar for the above
  */
-fun rad(double: Double) = Math.toRadians(double)
-
-fun Double.toIn() = this / 2.54
-
-fun Double.toRad() = Math.toRadians(this)
+fun Number.toRad() = Math.toRadians(this.toDouble())
 
 /**
  * Simple utility function to return a default value if the given double is NaN
@@ -78,3 +83,34 @@ fun Double.ifNaN(default: Double) = if (isNaN()) default else this
  * @author KG
  */
 fun Float.ifNaN(default: Double) = if (isNaN()) default else this
+
+/**
+ * Just returns `true` if the given number is in between the given min and maxes
+ *
+ * Kotlin usage examples:
+ * ```kotlin
+ * val willBeTrue = inRange(5, 0, 10)
+ * ```
+ *
+ * Java usage examples:
+ * ```java
+ * boolean willBeTrue = MU.inRange(5, 0, 10);
+ * ```
+ */
+fun inRange(x: Number, min: Number, max: Number) =
+    x.toDouble() in min.toDouble()..max.toDouble()
+
+/**
+ * Finds the average of the given numbers
+ *
+ * Kotlin usage examples:
+ * ```kotlin
+ * val average = average(1, 2, 3, 4, 5)
+ * ```
+ *
+ * Java usage examples:
+ * ```java
+ * double average = MU.average(1, 2, 3, 4, 5);
+ * ```
+ */
+fun avg(vararg xs: Number) = xs.sumOf { it.toDouble() } / xs.size

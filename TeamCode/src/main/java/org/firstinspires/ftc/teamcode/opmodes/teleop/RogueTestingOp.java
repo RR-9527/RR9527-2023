@@ -33,25 +33,21 @@ public class RogueTestingOp extends RogueBaseTeleOp {
         backwardsDepositChain.invokeOn(driver.y);
         backwardsDepositChain.cancelOn(driver.x);
 
-        driver.right_stick_y(.2).and(driver.right_trigger)
-            .whileHigh(() -> {
-                lift.setHeight(lift.getHeight() + (int) (RobotConstants.Lift.MANUAL_ADJUSTMENT_MULT * Math.pow(-gamepad2.right_stick_y, 3)));
-            });
+        driver.right_stick_y(.2).and(driver.b).whileHigh(() -> {
+            lift.setHeight(lift.getHeight() + (int) (RobotConstants.Lift.MANUAL_ADJUSTMENT_MULT * Math.pow(-gamepad2.right_stick_y, 3)));
+        });
 
         driver.a.onRise(this::rotateDriveType);
 
-        driver.left_trigger.whileHigh(this::decreaseDriveSpeed);
+        driver.left_trigger(.1).whileHigh(this::decreaseDriveSpeedALot);
+        driver.right_trigger(.1).whileHigh(this::decreaseDriveSpeedABit);
 
-        new Listener(() -> lift.getHeight() > 1000)
+        new Listener(() -> lift.getHeight() > 1500)
             .whileHigh(() -> powerMulti /= 2);
     }
 
     private void rotateDriveType() {
         driveMotors.setDriveType(driveTypes.next());
-    }
-
-    private void decreaseDriveSpeed() {
-        powerMulti = Math.max(1.0 - gamepad1.left_trigger, .1);
     }
 
     @Override

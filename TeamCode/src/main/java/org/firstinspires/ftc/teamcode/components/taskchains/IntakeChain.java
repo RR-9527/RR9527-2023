@@ -34,7 +34,7 @@ public class IntakeChain implements TaskChain {
 
         clawTimer
             .whileWaiting(() -> {
-                bot.arm().setToBackwardsPos();
+                bot.arm().setToBackwardsTelePos();
                 bot.wrist().setToBackwardsPos();
             })
 

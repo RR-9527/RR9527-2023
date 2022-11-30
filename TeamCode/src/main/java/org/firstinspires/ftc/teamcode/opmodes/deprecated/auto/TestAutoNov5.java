@@ -55,7 +55,7 @@ public class TestAutoNov5 extends RougeBaseAuto {
                 lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
 
-                armPosFunction = arm::setToForwardsPos;
+                armPosFunction = arm::setToForwardsAutoPos;
 //                arm.setToForwardsPos();
             })
 
@@ -84,7 +84,7 @@ public class TestAutoNov5 extends RougeBaseAuto {
             .setReversed(true)
             .splineTo(new Vector2d(in(AutoData.INTAKE_X), in(AutoData.INTAKE_Y)), rad(0))
             .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                armPosFunction = arm::setToBackwardsPos; // TODO: Move this earlier to reduce time it takes to intake
+                armPosFunction = arm::setToBackwardsAutoPos; // TODO: Move this earlier to reduce time it takes to intake
 
             })
             .setReversed(false)
@@ -92,7 +92,7 @@ public class TestAutoNov5 extends RougeBaseAuto {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
-                armPosFunction = arm::setToForwardsPos;
+                armPosFunction = arm::setToForwardsAutoPos;
 //                arm.setToForwardsPos();
 
                 lift.setHeight(RobotConstants.Lift.HIGH);
@@ -118,7 +118,7 @@ public class TestAutoNov5 extends RougeBaseAuto {
                 claw.openForIntake();
                 intake.enable();
                 lift.setHeight(AutoData.INTAKING_START_POS-AutoData.INTAKING_DECREMENT);
-                armPosFunction = arm::setToBackwardsPos;
+                armPosFunction = arm::setToBackwardsAutoPos;
 //                arm.setToBackwardsPos();
 
                 wristPosFunction = wrist::setToBackwardsPos;

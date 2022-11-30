@@ -58,7 +58,7 @@ public class TestAutoNov3 extends RougeBaseAuto {
                 // Start getting the lift ready while turning
                 lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
-                armPosFunction = arm::setToForwardsPos;
+                armPosFunction = arm::setToForwardsAutoPos;
             })
             .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                 // Deposit the cone while turning
@@ -71,7 +71,7 @@ public class TestAutoNov3 extends RougeBaseAuto {
                 claw.openForIntake();
                 intake.enable();
                 lift.setHeight(400); // TODO: I don't think this works... look into this later
-                armPosFunction = arm::setToBackwardsPos;
+                armPosFunction = arm::setToBackwardsAutoPos;
                 wristPosFunction = wrist::setToBackwardsPos;
             })
             .back(in(4))
@@ -86,7 +86,7 @@ public class TestAutoNov3 extends RougeBaseAuto {
                 claw.close();
             })
             .UNSTABLE_addTemporalMarkerOffset(0.25, () -> {
-                armPosFunction = arm::setToForwardsPos;
+                armPosFunction = arm::setToForwardsAutoPos;
                 lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
             })
@@ -100,7 +100,7 @@ public class TestAutoNov3 extends RougeBaseAuto {
                 claw.openForIntake();
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.ZERO);
-                armPosFunction = arm::setToBackwardsPos;
+                armPosFunction = arm::setToBackwardsAutoPos;
 
                 wristPosFunction = wrist::setToBackwardsPos;
 

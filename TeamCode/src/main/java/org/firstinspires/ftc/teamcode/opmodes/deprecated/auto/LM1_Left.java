@@ -129,7 +129,7 @@ public class LM1_Left extends RougeBaseAuto {
             .UNSTABLE_addTemporalMarkerOffset(0.0, () -> {
                 lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
-                armPosFunction = arm::setToForwardsPos;
+                armPosFunction = arm::setToForwardsAutoPos;
             })
 
             .splineTo(new Vector2d(in(-91), in(-50)), rad(90))
@@ -153,7 +153,7 @@ public class LM1_Left extends RougeBaseAuto {
                     claw.openForIntake();
                     lift.setHeight(liftOffsets[finalI]);
 
-                    armPosFunction = arm::setToBackwardsPos;
+                    armPosFunction = arm::setToBackwardsAutoPos;
                     wristPosFunction = wrist::setToBackwardsPos;
                 })
 
@@ -169,7 +169,7 @@ public class LM1_Left extends RougeBaseAuto {
                 })
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
-                    armPosFunction = arm::setToForwardsPos;
+                    armPosFunction = arm::setToForwardsAutoPos;
                     wristPosFunction = wrist::setToForwardsPos;
                 })
 
@@ -195,7 +195,7 @@ public class LM1_Left extends RougeBaseAuto {
                 claw.openForIntake();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_5);
 
-                armPosFunction = arm::setToBackwardsPos;
+                armPosFunction = arm::setToBackwardsAutoPos;
                 wristPosFunction = wrist::setToBackwardsPos;
             })
 

@@ -9,22 +9,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
-import org.firstinspires.ftc.teamcode.util.UtilityFunctions;
+import org.firstinspires.ftc.teamcodekt.util.MU;
 
 public class Arm {
     private final Motor armMotor;
     private final PIDFController armPID, armEncoderPID;
 
-    private HardwareMap hardwareMap;
-    private AnalogInput sensor;
+    private final AnalogInput sensor;
 
     private double armCorrection;
 
     public boolean useEncoder;
 
     public Arm(HardwareMap hwMap) {
-        hardwareMap = hwMap;
-
         armMotor = new Motor(hwMap, "AR", Motor.GoBILDA.RPM_84);
         armMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         armMotor.setRunMode(Motor.RunMode.VelocityControl);
@@ -45,33 +42,42 @@ public class Arm {
 
         useEncoder = false;
 
-        sensor = hardwareMap.analogInput.get("ARM_ENC");
+        sensor = hwMap.analogInput.get("ARM_ENC");
     }
 
     public void checkResetEncoder() {
-        if (UtilityFunctions.inRange(getArmPosition(), RobotConstants.Arm.VERTICAL, 3))
+        if (MU.inRange(getArmPosition(), RobotConstants.Arm.VERTICAL, 3))
             armMotor.resetEncoder();
     }
 
     public void setToRestingPos() {
-        if(useEncoder)
-            armCorrection = RobotConstants.Arm.ENC_VERTICAL;
-        else
-            armCorrection = RobotConstants.Arm.VERTICAL;
+        armCorrection = (useEncoder)
+            ? RobotConstants.Arm.ENC_VERTICAL
+            : RobotConstants.Arm.VERTICAL;
     }
 
-    public void setToBackwardsPos() {
-        if(useEncoder)
-            armCorrection = RobotConstants.Arm.ENC_BACKWARDS;
-        else
-            armCorrection = RobotConstants.Arm.BACKWARDS;
+    public void setToBackwardsAutoPos() {
+        armCorrection = (useEncoder)
+            ? RobotConstants.Arm.ENC_BACKWARDS
+            : RobotConstants.Arm.BACKWARDS_AUTO;
     }
 
-    public void setToForwardsPos() {
-        if(useEncoder)
-            armCorrection = RobotConstants.Arm.ENC_FORWARDS;
-        else
-            armCorrection = RobotConstants.Arm.FORWARDS;
+    public void setToForwardsAutoPos() {
+        armCorrection = (useEncoder)
+            ? RobotConstants.Arm.ENC_FORWARDS
+            : RobotConstants.Arm.FORWARDS_AUTO;
+    }
+
+    public void setToBackwardsTelePos() {
+        armCorrection = (useEncoder)
+            ? RobotConstants.Arm.ENC_BACKWARDS
+            : RobotConstants.Arm.BACKWARDS_TELE;
+    }
+
+    public void setToForwardsTelePos() {
+        armCorrection = (useEncoder)
+            ? RobotConstants.Arm.ENC_FORWARDS
+            : RobotConstants.Arm.FORWARDS_TELE;
     }
 
     public double getArmRawPosition(){

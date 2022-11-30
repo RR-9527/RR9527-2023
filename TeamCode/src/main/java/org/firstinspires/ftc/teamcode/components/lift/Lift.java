@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.components.voltagescaler.VoltageScaler;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
-import org.firstinspires.ftc.teamcode.util.UtilityFunctions;
+import org.firstinspires.ftc.teamcodekt.util.MU;
 
 public class Lift {
     private final Motor liftA, liftB;
@@ -19,14 +19,12 @@ public class Lift {
     private int liftHeight;
     private int prevLiftHeight;
 
-    private HardwareMap hardwareMap;
+    private final PIDFController liftPID;
+    private final PIDFController liftIncreasingPID;
 
-    private PIDFController liftPID, liftIncreasingPID;
-
-    private VoltageScaler voltageScaler;
+    private final VoltageScaler voltageScaler;
 
     public Lift(HardwareMap hwMap, VoltageScaler voltageScaler) {
-        hardwareMap = hwMap;
         this.voltageScaler = voltageScaler;
 
         liftA = new Motor(hwMap, "L1", Motor.GoBILDA.RPM_1150);
@@ -117,7 +115,7 @@ public class Lift {
         // If you want to increase lift height aggressively,
         // and the previous height the lift was set to was below the current target,
         // and the lift height is not within +/- 50 ticks of the target, use aggressive ascendance
-        if (aggressiveAscendance && prevLiftHeight < liftHeight && !UtilityFunctions.inRange(getCurrentPos(), liftHeight, 50))
+        if (aggressiveAscendance && prevLiftHeight < liftHeight && !MU.inRange(getCurrentPos(), liftHeight, 50))
             correction = liftIncreasingPID.calculate(liftA.getCurrentPosition(), liftHeight+voltageCorrection);
         // In any other case, use default PIDF
         else

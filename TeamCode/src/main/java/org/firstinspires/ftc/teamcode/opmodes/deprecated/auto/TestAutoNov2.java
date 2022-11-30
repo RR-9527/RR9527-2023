@@ -10,14 +10,12 @@ import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.RoadrunnerWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.SequenceWrapper;
 import org.firstinspires.ftc.teamcode.roadrunner.roadrunnerplus.WrapperBuilder;
-import org.firstinspires.ftc.teamcode.util.OpModeType;
 
 @Disabled
 @Autonomous
 public class TestAutoNov2 extends RogueBaseTeleOp {
     @Override
     protected void scheduleTasks() {
-        opModeType = OpModeType.AUTO;
         runAuto();
     }
 

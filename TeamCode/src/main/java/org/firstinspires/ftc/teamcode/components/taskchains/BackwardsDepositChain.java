@@ -38,7 +38,7 @@ public class BackwardsDepositChain implements CancellableTaskChain {
         depositTimer
             .whileWaiting(() -> {
                 if (!isCancelled) {
-                    bot.arm().setToBackwardsPos();
+                    bot.arm().setToBackwardsTelePos();
                     bot.wrist().setToBackwardsPos();
                 }
             })

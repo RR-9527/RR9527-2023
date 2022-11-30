@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode.pipelines;
 
-import static org.firstinspires.ftc.teamcode.util.UtilityFunctions.avg;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcodekt.util.MU;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -109,7 +108,7 @@ public class BasePoleDetector extends OpenCvPipeline {
 
                 // Perform biased averaging
                 if (angle != -1)
-                    angle = avg(angle, (pixelXAngle(calculateTopXPixels(p0, p1))));
+                    angle = MU.avg(angle, (pixelXAngle(calculateTopXPixels(p0, p1))));
                 else
                     angle = pixelXAngle(calculateTopXPixels(p0, p1));
             }
@@ -155,7 +154,7 @@ public class BasePoleDetector extends OpenCvPipeline {
         double slopeInv = 1 / ((-p1.y + p0.y) / (p1.x - p0.x));
         double yInt = p1.y - slopeInv * p1.x;
         // Line is slope*x + (p1.y-slope^-1*x)
-        return slopeInv * (PIXELS_TO_EXTRAPOLATE_AT - yInt) + avg(p0.x, p1.x);
+        return slopeInv * (PIXELS_TO_EXTRAPOLATE_AT - yInt) + MU.avg(p0.x, p1.x);
     }
 
     /**

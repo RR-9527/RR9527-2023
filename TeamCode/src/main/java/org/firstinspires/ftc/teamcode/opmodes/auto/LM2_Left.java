@@ -13,16 +13,9 @@ import java.text.DecimalFormat;
 
 @Autonomous
 public class LM2_Left extends RougeBaseAuto {
-
-    private static final DecimalFormat fmt;
-
-    static {
-        fmt = new DecimalFormat("000.00");
-    }
     private Runnable armPosFunction;
     private Runnable wristPosFunction;
 
-    // Variable added to signal when to start the parking sequence
     private boolean startParking = false;
 
     private TrajectorySequence mainTraj, parkTraj;
@@ -37,9 +30,6 @@ public class LM2_Left extends RougeBaseAuto {
         Scheduler.beforeEach(() -> {
             armPosFunction.run();
             wristPosFunction.run();
-
-            frontSensor.getDistance();
-            telemetry.update();
         });
 
         schedulePaths();
@@ -48,7 +38,6 @@ public class LM2_Left extends RougeBaseAuto {
         int signalZone = waitForStartWithVision();
         telemetry.addData("Final signal zone", signalZone);
         telemetry.update();
-
 
         TrajectorySequenceBuilder parkTrajBuilder = drive.trajectorySequenceBuilder(mainTraj.end())
             .UNSTABLE_addTemporalMarkerOffset(0.05, () -> {
@@ -90,8 +79,7 @@ public class LM2_Left extends RougeBaseAuto {
 //                        lift.setHeight(RobotConstants.Lift.ZERO);
 //                        armPosFunction = arm::setToForwardsPos;
 //                        wristPosFunction = wrist::setToForwardsPos;
-//                    })
-//                ;
+//                    });
                 break;
             default:
                 parkTrajBuilder.forward(in(1));
@@ -111,7 +99,6 @@ public class LM2_Left extends RougeBaseAuto {
 
             if (startParking) {
                 startParking = false;
-
                 drive.followTrajectorySequence(parkTraj);
             }
 
@@ -137,7 +124,7 @@ public class LM2_Left extends RougeBaseAuto {
             .UNSTABLE_addTemporalMarkerOffset(0.0, () -> {
                 lift.setHeight(RobotConstants.Lift.HIGH);
                 wristPosFunction = wrist::setToForwardsPos;
-                armPosFunction = arm::setToForwardsPos;
+                armPosFunction = arm::setToForwardsAutoPos;
             })
 
             .splineTo(new Vector2d(in(-91), in(-50)), rad(90))
@@ -167,7 +154,7 @@ public class LM2_Left extends RougeBaseAuto {
                     claw.openForIntake();
                     lift.setHeight(liftOffsets[finalI]);
 
-                    armPosFunction = arm::setToBackwardsPos;
+                    armPosFunction = arm::setToBackwardsAutoPos;
                     wristPosFunction = wrist::setToBackwardsPos;
                 })
 
@@ -183,7 +170,7 @@ public class LM2_Left extends RougeBaseAuto {
                 })
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
-                    armPosFunction = arm::setToForwardsPos;
+                    armPosFunction = arm::setToForwardsAutoPos;
                     wristPosFunction = wrist::setToForwardsPos;
                 })
 
@@ -215,7 +202,7 @@ public class LM2_Left extends RougeBaseAuto {
                 claw.openForIntake();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_5);
 
-                armPosFunction = arm::setToBackwardsPos;
+                armPosFunction = arm::setToBackwardsAutoPos;
                 wristPosFunction = wrist::setToBackwardsPos;
             })
 

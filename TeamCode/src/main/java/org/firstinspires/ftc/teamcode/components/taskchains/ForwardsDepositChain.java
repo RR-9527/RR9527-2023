@@ -42,7 +42,7 @@ public class ForwardsDepositChain implements CancellableTaskChain {
         depositTimer
             .whileWaiting(() -> {
                 if (!isCancelled) {
-                    bot.arm().setToForwardsPos();
+                    bot.arm().setToForwardsTelePos();
                     bot.wrist().setToForwardsPos();
                 }
             })

@@ -89,11 +89,11 @@ public class OldBaseOp extends RobotCommon {
     private void updateArm() {
         double correction = 0;
         if (game_pad1.getButton(GamepadKeys.Button.X)) {
-            correction = armPID.calculate(arm.getCurrentPosition(), Arm.BACKWARDS);
+            correction = armPID.calculate(arm.getCurrentPosition(), Arm.BACKWARDS_AUTO);
         } else if (game_pad1.getButton(GamepadKeys.Button.Y)) {
             correction = armPID.calculate(arm.getCurrentPosition(), Arm.VERTICAL);
         } else if (game_pad1.getButton(GamepadKeys.Button.B)) {
-            correction = armPID.calculate(arm.getCurrentPosition(), Arm.FORWARDS);
+            correction = armPID.calculate(arm.getCurrentPosition(), Arm.FORWARDS_AUTO);
         }
         arm.set(correction);
     }

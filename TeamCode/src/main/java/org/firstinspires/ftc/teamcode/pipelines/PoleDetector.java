@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.pipelines;
 
 
+import org.firstinspires.ftc.teamcodekt.util.MU;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -9,7 +10,6 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.firstinspires.ftc.teamcode.util.UtilityFunctions;
 
 /**
  * Class to detect the pole in an EasyOpenCV pipeline.
@@ -67,8 +67,8 @@ public class PoleDetector extends OpenCvPipeline {
                 poleLocationPixels.y = center.y;
             }
             else {
-                poleLocationPixels.x = UtilityFunctions.avg(poleLocationPixels.x, center.x);
-                poleLocationPixels.y = UtilityFunctions.avg(poleLocationPixels.y, center.y);
+                poleLocationPixels.x = MU.avg(poleLocationPixels.x, center.x);
+                poleLocationPixels.y = MU.avg(poleLocationPixels.y, center.y);
             }
             poleLocationPixels.radius = radius;
         }
@@ -88,7 +88,6 @@ public class PoleDetector extends OpenCvPipeline {
         // TODO: Apply some operation to convert pixel location to x/y in cm!
         return poleLocationPixels;
     }
-
 
     /**
      * Process the frame by returning the canny edge of the input image
