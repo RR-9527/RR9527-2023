@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 import java.util.HashMap;
 import java.util.Map;
 
+@Disabled
 @Autonomous
 public class LM2_Left_v2 extends RougeBaseAuto {
     private final Map<String, TrajectorySequence> trajectories;
@@ -293,17 +295,17 @@ public class LM2_Left_v2 extends RougeBaseAuto {
     public static double in(double centimeters) {
         return centimeters * 0.3837008;
     }
-}
 
-enum State {
-    WAITING,
-    INTAKING,
-    DEPOSITING,
-    DISTANCE_ADJUSTING,
-    CYCLE_INTAKE_PATH,
-    CYCLE_DEPOSIT_PATH,
-    PRELOAD_DEPOSIT_PATH,
-    PARKING,
-    PARKING_PREP,
-    TEST,
+    enum State {
+        WAITING,
+        INTAKING,
+        DEPOSITING,
+        DISTANCE_ADJUSTING,
+        CYCLE_INTAKE_PATH,
+        CYCLE_DEPOSIT_PATH,
+        PRELOAD_DEPOSIT_PATH,
+        PARKING,
+        PARKING_PREP,
+        TEST,
+    }
 }

@@ -49,12 +49,12 @@ public class LM2_Left extends RougeBaseAuto {
         switch (signalZone) {
             case 3:
                 parkTrajBuilder
-                    .strafeRight(in(3))
+                    .strafeRight(in(1.5))
                     .forward(in(126));
                 break;
             case 2:
                 parkTrajBuilder
-                    .strafeRight(in(3))
+                    .strafeRight(in(1.5))
                     .forward(in(70));
 //                parkTrajBuilder
 //                    .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -128,11 +128,11 @@ public class LM2_Left extends RougeBaseAuto {
             })
 
             .splineTo(new Vector2d(in(-91), in(-50)), rad(90))
-            .splineTo(new Vector2d(in(-AutoData.DEPOSIT_X+1.5), in(AutoData.DEPOSIT_Y+1.5)), rad(180 - (AutoData.DEPOSIT_ANGLE - .02)- 12));
+            .splineTo(new Vector2d(in(-AutoData.DEPOSIT_X + 1.5), in(AutoData.DEPOSIT_Y + 1.5)), rad(180 - (AutoData.DEPOSIT_ANGLE - .02) - 12));
 
         double distance = frontSensor.getDistance();
-        if(Math.abs(distance-15) > 1){
-            builder.forward(distance-15);
+        if (Math.abs(distance - 15) > 1) {
+            builder.forward(distance - 15);
         }
 
         builder
@@ -159,7 +159,7 @@ public class LM2_Left extends RougeBaseAuto {
                 })
 
                 .setReversed(true)
-                .splineTo(new Vector2d(in(-AutoData.INTAKE_X+1.25), in(AutoData.INTAKE_Y+3.5+1)), rad(180))
+                .splineTo(new Vector2d(in(-AutoData.INTAKE_X + 1.25), in(AutoData.INTAKE_Y + 3.5 + 1)), rad(180))
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                     claw.close();
@@ -178,12 +178,12 @@ public class LM2_Left extends RougeBaseAuto {
 
                 .setReversed(false)
                 .waitSeconds(0.125)
-                .splineTo(new Vector2d(in(-AutoData.DEPOSIT_X+1.5), in(AutoData.DEPOSIT_Y+1.5)), rad(180 - (AutoData.DEPOSIT_ANGLE - 1 - (AutoData.DEPOSIT_ANGLE_ADJUSTMENT - .02) * i)));
+                .splineTo(new Vector2d(in(-AutoData.DEPOSIT_X + 1.5), in(AutoData.DEPOSIT_Y + 1.5)), rad(180 - (AutoData.DEPOSIT_ANGLE - 1 - (AutoData.DEPOSIT_ANGLE_ADJUSTMENT - .02) * i)));
         }
 
         distance = frontSensor.getDistance();
-        if(Math.abs(distance-15) > 1){
-            builder.forward(distance-15);
+        if (Math.abs(distance - 15) > 1) {
+            builder.forward(distance - 15);
         }
 
         builder
@@ -207,7 +207,7 @@ public class LM2_Left extends RougeBaseAuto {
             })
 
             .setReversed(true)
-            .splineTo(new Vector2d(in(-AutoData.INTAKE_X+1.25), in(AutoData.INTAKE_Y+4.5)), rad(180))
+            .splineTo(new Vector2d(in(-AutoData.INTAKE_X + 1.25), in(AutoData.INTAKE_Y + 4.5)), rad(180))
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                 claw.close();
@@ -218,7 +218,7 @@ public class LM2_Left extends RougeBaseAuto {
             .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                 startParking = true;
                 armPosFunction = arm::setToRestingPos;
-                telemetry.addData("Entering parking auto","");
+                telemetry.addData("Entering parking auto", "");
             });
 
         drive.followTrajectorySequenceAsync(mainTraj = builder.build());
