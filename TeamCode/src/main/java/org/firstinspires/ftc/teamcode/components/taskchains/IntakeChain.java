@@ -21,7 +21,7 @@ public class IntakeChain implements TaskChain {
         button
             .onRise(() -> {
                 bot.intake().enable();
-                bot.claw().openForIntake();
+                bot.claw().openForIntakeTele();
                 bot.lift().goToZero();
                 clawTimer.setPending();
             })

@@ -85,7 +85,7 @@ public abstract class RogueBaseTeleOp extends LinearOpMode {
         powerMulti = Math.max(1.0 - gamepad1.left_trigger, .35);
     }
 
-    protected void decreaseDriveSpeedALot() {
-        powerMulti = Math.max(1.0 - gamepad1.left_trigger, .1);
+    protected void halveDriveSpeed() {
+        powerMulti /= 2;
     }
 }

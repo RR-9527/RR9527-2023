@@ -151,7 +151,7 @@ public class LM2_Left_v2 extends RougeBaseAuto {
 
         createTrajectory("intake_cycle", drive.trajectorySequenceBuilder(nextIntendedStartPose)
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
-                claw.openForIntake();
+                claw.openForIntakeTele();
                 lift.setHeight(liftOffsets[cycleNumber]);
 
                 armPosFunction = arm::setToBackwardsAutoPos;
@@ -207,7 +207,7 @@ public class LM2_Left_v2 extends RougeBaseAuto {
 
         createTrajectory("parking_prep", drive.trajectorySequenceBuilder(nextIntendedStartPose)
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
-                claw.openForIntake();
+                claw.openForIntakeTele();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_5);
 
                 armPosFunction = arm::setToBackwardsAutoPos;

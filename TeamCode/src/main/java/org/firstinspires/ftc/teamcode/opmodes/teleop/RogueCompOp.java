@@ -6,8 +6,6 @@ import org.firstinspires.ftc.teamcode.components.taskchains.BackwardsDepositChai
 import org.firstinspires.ftc.teamcode.components.taskchains.ForwardsDepositChain;
 import org.firstinspires.ftc.teamcode.components.taskchains.IntakeChain;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
-import org.firstinspires.ftc.teamcode.util.StateRotator;
-import org.firstinspires.ftc.teamcodekt.components.motors.DriveType;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.taskchains.CancellableTaskChain;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.listeners.Listener;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.taskchains.TaskChain;
@@ -36,10 +34,10 @@ public class RogueCompOp extends RogueBaseTeleOp {
             lift.setHeight(lift.getHeight() + (int) (RobotConstants.Lift.MANUAL_ADJUSTMENT_MULT * Math.pow(-gamepad2.right_stick_y, 3)));
         });
 
-        driver.left_trigger(.1).whileHigh(this::decreaseDriveSpeedALot);
+        driver.left_trigger(.1).whileHigh(this::halveDriveSpeed);
         driver.right_trigger(.1).whileHigh(this::decreaseDriveSpeedABit);
 
-        new Listener(() -> lift.getHeight() > 1500)
+        new Listener(() -> lift.getHeight() > 1525)
             .whileHigh(() -> powerMulti /= 2);
     }
 

@@ -39,10 +39,10 @@ public class RogueTestingOp extends RogueBaseTeleOp {
 
         driver.a.onRise(this::rotateDriveType);
 
-        driver.left_trigger(.1).whileHigh(this::decreaseDriveSpeedALot);
+        driver.left_trigger(.1).whileHigh(this::halveDriveSpeed);
         driver.right_trigger(.1).whileHigh(this::decreaseDriveSpeedABit);
 
-        new Listener(() -> lift.getHeight() > 1500)
+        new Listener(() -> lift.getHeight() > 1525)
             .whileHigh(() -> powerMulti /= 2);
     }
 

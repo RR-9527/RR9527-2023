@@ -44,7 +44,7 @@ public class LiftTestingOp extends LinearOpMode {
 
             double leftPower = driver.getGamepad().left_stick_y;
             double rightPower = driver.getGamepad().right_stick_y;
-            lift.manualLiftControl(leftPower, rightPower);
+            lift.manualLiftControl(leftPower, leftPower);
 
             telemetry.addLine("Left stick is motor A, right stick is motor B, motor A is on left and motor B is on right side of bot");
 
@@ -52,12 +52,16 @@ public class LiftTestingOp extends LinearOpMode {
             telemetry.addData("Right stick power:", rightPower);
             telemetry.addData("Lift A current draw:", lift.getACurrent());
             telemetry.addData("Lift B current draw:", lift.getBCurrent());
+            telemetry.addData("Lift C current draw:", lift.getCCurrent());
+            telemetry.addData("Lift A power:", lift.getCPower());
+            telemetry.addData("Lift B power:", lift.getCPower());
+            telemetry.addData("Lift C power:", lift.getCPower());
             telemetry.update();
         });
     }
 
     private void initHardware() {
-        driver   = new GamepadEx2(gamepad1);
+        driver  = new GamepadEx2(gamepad1);
         VoltageScaler voltageScaler = new VoltageScaler(hardwareMap);
         arm    = new Arm(hardwareMap);
         lift   = new Lift(hardwareMap, voltageScaler);

@@ -68,7 +68,7 @@ public class TestAutoNov3 extends RougeBaseAuto {
             .forward(in(4))
             .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntake();
+                claw.openForIntakeTele();
                 intake.enable();
                 lift.setHeight(400); // TODO: I don't think this works... look into this later
                 armPosFunction = arm::setToBackwardsAutoPos;
@@ -97,7 +97,7 @@ public class TestAutoNov3 extends RougeBaseAuto {
             .UNSTABLE_addTemporalMarkerOffset(0.35, () -> {
                 // TODO: Increase delay, at the moment (11/3) the lift goes up and down too quickly,
                 //  no time to deposit
-                claw.openForIntake();
+                claw.openForIntakeTele();
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.ZERO);
                 armPosFunction = arm::setToBackwardsAutoPos;

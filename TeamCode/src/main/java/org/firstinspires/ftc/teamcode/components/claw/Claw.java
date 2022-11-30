@@ -14,8 +14,8 @@ public class Claw {
         clawServo = new SimpleServo(hwMap, "CL", 0, 180, AngleUnit.DEGREES);
     }
 
-    public void openForIntake() {
-        clawServo.setPosition(RobotConstants.Claw.INTAKE);
+    public void openForIntakeTele() {
+        clawServo.setPosition(RobotConstants.Claw.INTAKE_TELE);
     }
 
     public void openForDeposit() {
@@ -23,7 +23,7 @@ public class Claw {
     }
 
     public void openForIntakeAuto() {
-        clawServo.setPosition(RobotConstants.Claw.INTAKE + 0.15);
+        clawServo.setPosition(RobotConstants.Claw.INTAKE_AUTO);
     }
 
     public void close() {

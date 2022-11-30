@@ -9,8 +9,6 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
-import java.text.DecimalFormat;
-
 @Autonomous
 public class LM2_Left extends RougeBaseAuto {
     private Runnable armPosFunction;
@@ -151,7 +149,7 @@ public class LM2_Left extends RougeBaseAuto {
 
             builder
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
-                    claw.openForIntake();
+                    claw.openForIntakeAuto();
                     lift.setHeight(liftOffsets[finalI]);
 
                     armPosFunction = arm::setToBackwardsAutoPos;
@@ -199,7 +197,7 @@ public class LM2_Left extends RougeBaseAuto {
 
         builder
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
-                claw.openForIntake();
+                claw.openForIntakeAuto();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_5);
 
                 armPosFunction = arm::setToBackwardsAutoPos;
