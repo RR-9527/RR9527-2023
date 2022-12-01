@@ -146,7 +146,7 @@ public class LM1_Right extends RougeBaseAuto {
 
             builder
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
-                    claw.openForIntakeTele();
+                    claw.openForIntakeNarrow();
                     lift.setHeight(liftOffsets[finalI]);
 
                     armPosFunction = arm::setToBackwardsAutoPos;
@@ -188,7 +188,7 @@ public class LM1_Right extends RougeBaseAuto {
 
         builder
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_5);
 
                 armPosFunction = arm::setToBackwardsAutoPos;

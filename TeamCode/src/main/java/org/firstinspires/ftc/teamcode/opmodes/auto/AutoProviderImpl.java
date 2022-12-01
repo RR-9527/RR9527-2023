@@ -8,7 +8,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.auto.AutoProvider;
-import org.firstinspires.ftc.teamcodekt.components.scheduler.auto.ActualAutoBuilder;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.auto.TrajectorySequenceBuilderEx;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -19,7 +19,7 @@ import java.io.ObjectInputStream;
 public class AutoProviderImpl implements AutoProvider {
     @Override
     public void scheduleAuto(@NonNull SampleMecanumDrive drive) {
-        ActualAutoBuilder builder = new ActualAutoBuilder(drive)
+        TrajectorySequenceBuilderEx builder = new TrajectorySequenceBuilderEx(drive)
             .forward(forward0$distance) 
             .turn(turn0$angle) 
             .splineTo(splineTo0$x, splineTo0$y, splineTo0$heading) 

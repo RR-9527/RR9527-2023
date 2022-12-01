@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
+@SuppressWarnings("CodeBlock2Expr")
 @Autonomous
 public class LM2_Right extends RougeBaseAuto {
     private Runnable armPosFunction;
@@ -125,7 +126,7 @@ public class LM2_Right extends RougeBaseAuto {
 
             .splineTo(new Vector2d(in(91), in(-50)), rad(90))
             .setTurnConstraint(Math.toRadians(430), Math.toRadians(125))
-            .splineTo(new Vector2d(in(AutoData.DEPOSIT_X + 1 - 0.25), in(AutoData.DEPOSIT_Y + 0.25 + 0.25)), rad(AutoData.DEPOSIT_ANGLE - 4))
+            .splineTo(new Vector2d(in(AutoData.DEPOSIT_X + 1 - 0.4), in(AutoData.DEPOSIT_Y + 0.4 + 0.25)), rad(AutoData.DEPOSIT_ANGLE - 2.95))
             .resetTurnConstraint()
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
@@ -143,7 +144,7 @@ public class LM2_Right extends RougeBaseAuto {
 
             builder
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
-                    claw.openForIntakeAuto();
+                    claw.openForIntakeWide();
                     lift.setHeight(liftOffsets[finalI]);
 
                     armPosFunction = arm::setToBackwardsAutoPos;
@@ -152,6 +153,7 @@ public class LM2_Right extends RougeBaseAuto {
 
                 .setReversed(true)
                 .splineTo(new Vector2d(in(AutoData.INTAKE_X + 0.325), in(AutoData.INTAKE_Y + 2)), rad(0))
+                .setReversed(false)
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
                     claw.close();
@@ -166,12 +168,10 @@ public class LM2_Right extends RougeBaseAuto {
                     wristPosFunction = wrist::setToForwardsPos;
                 })
 
-                .waitSeconds(AutoData.INTAKE_DELAY + 0.125)
+                .waitSeconds(AutoData.INTAKE_DELAY + .25)
 
-                .setReversed(false)
-                .waitSeconds(0.125)
                 .setTurnConstraint(Math.toRadians(430), Math.toRadians(125))
-                .splineTo(new Vector2d(in(AutoData.DEPOSIT_X + 1 - 0.25 - 0.125), in(AutoData.DEPOSIT_Y + 0.25 + 0.25 + 0.125)), rad(AutoData.DEPOSIT_ANGLE + AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i - 2))
+                .splineTo(new Vector2d(in(AutoData.DEPOSIT_X + .475), in(AutoData.DEPOSIT_Y + .775)), rad(AutoData.DEPOSIT_ANGLE + AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i - 2))
                 .resetTurnConstraint()
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
@@ -187,9 +187,10 @@ public class LM2_Right extends RougeBaseAuto {
 
         builder
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
-                claw.openForIntakeTele();
-                lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_5);
                 intake.enable();
+                claw.openForIntakeNarrow();
+
+                lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_5);
 
                 armPosFunction = arm::setToBackwardsAutoPos;
                 wristPosFunction = wrist::setToBackwardsPos;

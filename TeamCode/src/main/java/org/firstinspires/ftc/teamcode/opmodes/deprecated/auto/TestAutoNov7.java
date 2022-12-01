@@ -73,7 +73,7 @@ public class TestAutoNov7 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_1);
                 armPosFunction = arm::setToRestingPos;  // TODO: See about just setting this directly to backwards now that arm PIDF is fixed
@@ -115,7 +115,7 @@ public class TestAutoNov7 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_1);
                 armPosFunction = arm::setToBackwardsAutoPos;
@@ -162,7 +162,7 @@ public class TestAutoNov7 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_2);
                 armPosFunction = arm::setToBackwardsAutoPos;
@@ -208,7 +208,7 @@ public class TestAutoNov7 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_3);
                 armPosFunction = arm::setToBackwardsAutoPos;
@@ -253,7 +253,7 @@ public class TestAutoNov7 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_4);
                 armPosFunction = arm::setToBackwardsAutoPos;

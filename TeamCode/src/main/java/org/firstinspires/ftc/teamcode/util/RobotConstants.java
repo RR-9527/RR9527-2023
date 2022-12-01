@@ -57,16 +57,16 @@ public class RobotConstants {
     @Config
     public static class Lift {
 		public static int ZERO = 0;
-		public static int LOW = 1020;
-		public static int MID = 1700;
-		public static int HIGH = 2400;
+		public static int LOW = 1040;
+		public static int MID = 1720;
+		public static int HIGH = 2420;
 
 		public static double MANUAL_ADJUSTMENT_MULT = 4;
 
-		public static int AUTO_INTAKE_1 = 370;
-		public static int AUTO_INTAKE_2 = 295;
-		public static int AUTO_INTAKE_3 = 180;
-		public static int AUTO_INTAKE_4 = 110;
+		public static int AUTO_INTAKE_1 = 370 - 5;
+		public static int AUTO_INTAKE_2 = 295 - 5;
+		public static int AUTO_INTAKE_3 = 180 - 5;
+		public static int AUTO_INTAKE_4 = 110 - 5;
 		public static int AUTO_INTAKE_5 = 0;
 
 		public static boolean USE_AGGRESSIVE_ASCENDANCE = false;

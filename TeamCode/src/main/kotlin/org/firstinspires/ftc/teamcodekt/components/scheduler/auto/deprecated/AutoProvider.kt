@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcodekt.components.scheduler.auto
+package org.firstinspires.ftc.teamcodekt.components.scheduler.auto.deprecated
 
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 

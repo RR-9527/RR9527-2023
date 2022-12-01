@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import org.firstinspires.ftc.teamcodekt.components.scheduler.auto.TuningAutoBuilder;
+import org.firstinspires.ftc.teamcodekt.components.scheduler.auto.deprecated.TuningAutoBuilder;
 
 public class SuperExperimentalWIPTestAutoNov5ForMyTestingOnlyPleaseDoNotUseItWontWork extends RougeBaseAuto {
     @Override
