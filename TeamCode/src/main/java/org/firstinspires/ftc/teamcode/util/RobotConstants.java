@@ -61,7 +61,7 @@ public class RobotConstants {
 		public static int MID = 1720;
 		public static int HIGH = 2420;
 
-		public static double MANUAL_ADJUSTMENT_MULT = 4;
+		public static double MANUAL_ADJUSTMENT_MULT = 50;
 
 		public static int AUTO_INTAKE_1 = 370 - 8;
 		public static int AUTO_INTAKE_2 = 295 - 8;

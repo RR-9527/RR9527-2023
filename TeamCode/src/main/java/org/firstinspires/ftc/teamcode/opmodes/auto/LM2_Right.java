@@ -58,17 +58,16 @@ public class LM2_Right extends RougeBaseAuto {
                 break;
             default:
                 parkTrajBuilder
-                    .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET - 0.25, () -> {
+                    .UNSTABLE_addTemporalMarkerOffset(0.05, () -> {
                         lift.setHeight(RobotConstants.Lift.HIGH);
                     })
 
-                    .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET - 0.125, () -> {
+                    .UNSTABLE_addTemporalMarkerOffset(0.155, () -> {
                         armPosFunction = arm::setToForwardsAutoPos;
                         wristPosFunction = wrist::setToForwardsPos;
                     })
 
-                    .waitSeconds(AutoData.INTAKE_DELAY + 0.125)
-                    .waitSeconds(0.125)
+                    .waitSeconds(0.155)
 
                     .setReversed(false)
                     .splineTo(new Vector2d(in(AutoData.DEPOSIT_X + .775 + .25), in(AutoData.DEPOSIT_Y + .475 - .25)), rad(AutoData.DEPOSIT_ANGLE + AutoData.DEPOSIT_ANGLE_ADJUSTMENT * 5 - 2))
@@ -81,7 +80,21 @@ public class LM2_Right extends RougeBaseAuto {
                         claw.openForDeposit(); // Deposit the cone while turning
                     })
 
-                    .waitSeconds(AutoData.DEPOSIT_DELAY);
+                    .waitSeconds(AutoData.DEPOSIT_DELAY)
+
+                    .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
+                        lift.goToZero();
+
+                        armPosFunction = arm::setToRestingPos;
+                        wristPosFunction = wrist::setToRestingPos;
+                    })
+
+                    .back(in(10))
+                    .turn(rad(47.5))
+
+                    .addTemporalMarker(() -> {
+                        claw.close();
+                    });
                 break;
         }
 
@@ -155,11 +168,11 @@ public class LM2_Right extends RougeBaseAuto {
                 .setReversed(true)
                 .splineTo(new Vector2d(in(AutoData.INTAKE_X + 0.315), in(AutoData.INTAKE_Y + 2)), rad(0))
 
-                .UNSTABLE_addTemporalMarkerOffset(.02, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(-0.05, () -> {
                     claw.close();
                 })
 
-                .UNSTABLE_addTemporalMarkerOffset(.1, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(.04, () -> {
                     lift.setHeight(RobotConstants.Lift.HIGH);
                 })
 
@@ -168,10 +181,10 @@ public class LM2_Right extends RougeBaseAuto {
                     wristPosFunction = wrist::setToForwardsPos;
                 })
 
-                .waitSeconds(.33)
+                .waitSeconds(.9)
 
                 .setReversed(false)
-                .splineTo(new Vector2d(in(AutoData.DEPOSIT_X + .775 + i * .05), in(AutoData.DEPOSIT_Y + .475 - i * .05)), rad(AutoData.DEPOSIT_ANGLE + AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i - 1.45))
+                .splineTo(new Vector2d(in(AutoData.DEPOSIT_X + .71 + i * .045), in(AutoData.DEPOSIT_Y + .54 - i * .045)), rad(AutoData.DEPOSIT_ANGLE + AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i - 1.75 + ((i == 0) ? .75 : 0)))
 
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
                     lift.setHeight(RobotConstants.Lift.HIGH - AutoData.DEPOSIT_DROP_AMOUNT);
