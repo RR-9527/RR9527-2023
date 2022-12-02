@@ -63,15 +63,15 @@ public class RobotConstants {
 
 		public static double MANUAL_ADJUSTMENT_MULT = 4;
 
-		public static int AUTO_INTAKE_1 = 370;
-		public static int AUTO_INTAKE_2 = 295;
-		public static int AUTO_INTAKE_3 = 180;
-		public static int AUTO_INTAKE_4 = 110;
+		public static int AUTO_INTAKE_1 = 370 - 8;
+		public static int AUTO_INTAKE_2 = 295 - 8;
+		public static int AUTO_INTAKE_3 = 180 - 8;
+		public static int AUTO_INTAKE_4 = 110 - 8;
 		public static int AUTO_INTAKE_5 = 0;
 
 		public static boolean USE_AGGRESSIVE_ASCENDANCE = false;
 
-		public static double P = 0.001;
+		public static double P = 0.0011;
 		public static double I = 0.2;
 		public static double D = 0.0001;
 		public static double F = 0.00001;
