@@ -73,7 +73,7 @@ public class TestAutoNov5 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(AutoData.INTAKING_START_POS);
                 armPosFunction = arm::setToRestingPos;
@@ -115,7 +115,7 @@ public class TestAutoNov5 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(AutoData.INTAKING_START_POS-AutoData.INTAKING_DECREMENT);
                 armPosFunction = arm::setToBackwardsAutoPos;

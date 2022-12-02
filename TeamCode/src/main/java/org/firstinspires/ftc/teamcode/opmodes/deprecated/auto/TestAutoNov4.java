@@ -71,7 +71,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(AutoData.INTAKING_START_POS);
                 armPosFunction = arm::setToBackwardsAutoPos;
@@ -105,7 +105,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(AutoData.INTAKING_START_POS-AutoData.INTAKING_DECREMENT);
                 armPosFunction = arm::setToBackwardsAutoPos;
@@ -139,7 +139,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(AutoData.INTAKING_START_POS-AutoData.INTAKING_DECREMENT*2);
                 armPosFunction = arm::setToBackwardsAutoPos;
@@ -172,7 +172,7 @@ public class TestAutoNov4 extends RougeBaseAuto {
             .waitSeconds(AutoData.DEPOSIT_DELAY)
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(AutoData.INTAKING_START_POS-AutoData.INTAKING_DECREMENT*3);
                 armPosFunction = arm::setToBackwardsAutoPos;

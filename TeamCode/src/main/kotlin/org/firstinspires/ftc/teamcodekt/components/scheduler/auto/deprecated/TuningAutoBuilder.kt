@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcodekt.components.scheduler.auto
+package org.firstinspires.ftc.teamcodekt.components.scheduler.auto.deprecated
 
 import android.os.Build
 import androidx.annotation.RequiresApi

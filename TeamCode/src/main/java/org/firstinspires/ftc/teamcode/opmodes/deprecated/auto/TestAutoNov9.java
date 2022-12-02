@@ -123,7 +123,7 @@ public class TestAutoNov9 extends RougeBaseAuto {
 
             builder
                 .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
-                    claw.openForIntakeTele();
+                    claw.openForIntakeNarrow();
                     lift.setHeight(liftOffsets[finalI]);
 
                     armPosFunction = arm::setToBackwardsAutoPos;

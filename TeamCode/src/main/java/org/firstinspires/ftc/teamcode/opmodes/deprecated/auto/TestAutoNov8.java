@@ -103,7 +103,7 @@ public class TestAutoNov8 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_1);
                 armPosFunction = arm::setToBackwardsAutoPos;
@@ -141,7 +141,7 @@ public class TestAutoNov8 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_1);
                 armPosFunction = arm::setToBackwardsAutoPos;
@@ -176,7 +176,7 @@ public class TestAutoNov8 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_2);
                 armPosFunction = arm::setToBackwardsAutoPos;
@@ -212,7 +212,7 @@ public class TestAutoNov8 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_3);
 
@@ -248,7 +248,7 @@ public class TestAutoNov8 extends RougeBaseAuto {
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.RETRACT_OFFSET, () -> {
                 // Prepare the robot for intaking
-                claw.openForIntakeTele();
+                claw.openForIntakeNarrow();
                 intake.enable();
                 lift.setHeight(RobotConstants.Lift.AUTO_INTAKE_4);
                 armPosFunction = arm::setToBackwardsAutoPos;
