@@ -1,17 +1,21 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.deprecated;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.firstinspires.ftc.teamcode.opmodes.auto.AutoData;
+import org.firstinspires.ftc.teamcode.opmodes.auto.RougeBaseAuto;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
 import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 
 @SuppressWarnings("CodeBlock2Expr")
+@Disabled
 @Autonomous
-public class LM2_Right extends RougeBaseAuto {
+public class LM2_Left_v1 extends RougeBaseAuto {
     private Runnable armPosFunction;
     private Runnable wristPosFunction;
 
@@ -52,7 +56,7 @@ public class LM2_Right extends RougeBaseAuto {
             .waitSeconds(0.375)
 
             .setReversed(false)
-            .splineTo(new Vector2d(in(AutoData.DEPOSIT_X + .775 + .25), in(AutoData.DEPOSIT_Y + .475 - .25)), rad(AutoData.DEPOSIT_ANGLE + AutoData.DEPOSIT_ANGLE_ADJUSTMENT * 5 - .39))
+            .splineTo(new Vector2d(-in(AutoData.DEPOSIT_X + .775 + .25), in(AutoData.DEPOSIT_Y + .475 - .25)), rad(180-(AutoData.DEPOSIT_ANGLE + AutoData.DEPOSIT_ANGLE_ADJUSTMENT * 5 - .39)))
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
                 lift.setHeight(RobotConstants.Lift.HIGH - AutoData.DEPOSIT_DROP_AMOUNT);
@@ -79,19 +83,19 @@ public class LM2_Right extends RougeBaseAuto {
         switch (signalZone) {
             case 1:
                 parkTrajBuilder
-                    .back(in(8))
-                    .turn(rad(45.25))
-                    .forward(in(67));
+                    .back(-in(8))
+                    .turn(rad(180-(45.25)))
+                    .forward(-in(67));
                 break;
             case 2:
                 parkTrajBuilder
-                    .back(in(10))
-                    .turn(rad(47.5));
+                    .back(-in(10))
+                    .turn(rad(180-(47.5)));
                 break;
             default:
                 parkTrajBuilder
                     .setReversed(true)
-                    .splineTo(new Vector2d(in(AutoData.INTAKE_X - 3), in(AutoData.INTAKE_Y + 2)), rad(0));
+                    .splineTo(new Vector2d(-in(AutoData.INTAKE_X - 3), in(AutoData.INTAKE_Y + 2)), rad(180-(0)));
                 break;
         }
 
@@ -123,7 +127,7 @@ public class LM2_Right extends RougeBaseAuto {
             RobotConstants.Lift.AUTO_INTAKE_4,
         };
 
-        Pose2d startPose = new Pose2d(in(91), in(-159), rad(90));
+        Pose2d startPose = new Pose2d(-in(91), in(-159), rad(180-(90)));
         drive.setPoseEstimate(startPose);
 
         TrajectorySequenceBuilder builder = drive.trajectorySequenceBuilder(startPose);
@@ -135,9 +139,9 @@ public class LM2_Right extends RougeBaseAuto {
                 armPosFunction = arm::setToForwardsAutoPos;
             })
 
-            .splineTo(new Vector2d(in(91), in(-50)), rad(90))
+            .splineTo(new Vector2d(-in(91), in(-50)), rad(180-(90)))
             .setTurnConstraint(Math.toRadians(430), Math.toRadians(125))
-            .splineTo(new Vector2d(in(AutoData.DEPOSIT_X + .68), in(AutoData.DEPOSIT_Y + 0.57)), rad(AutoData.DEPOSIT_ANGLE - 2.25))
+            .splineTo(new Vector2d(-in(AutoData.DEPOSIT_X + .68), in(AutoData.DEPOSIT_Y + 0.57)), rad(180-(AutoData.DEPOSIT_ANGLE - 2.25)))
             .resetTurnConstraint()
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.LOWER_OFFSET, () -> {
@@ -163,7 +167,7 @@ public class LM2_Right extends RougeBaseAuto {
                 })
 
                 .setReversed(true)
-                .splineTo(new Vector2d(in(AutoData.INTAKE_X + 1.073), in(AutoData.INTAKE_Y + 1.897)), rad(0))
+                .splineTo(new Vector2d(-in(AutoData.INTAKE_X + 1.073), in(AutoData.INTAKE_Y + 1.897)), rad(180-(0)))
 
                 .UNSTABLE_addTemporalMarkerOffset(-0.02, () -> {
                     claw.close();
@@ -183,9 +187,9 @@ public class LM2_Right extends RougeBaseAuto {
                 .setReversed(false);
 
             if (i == 0) {
-                builder.splineTo(new Vector2d(in(AutoData.DEPOSIT_X + .512 + i * .045), in(AutoData.DEPOSIT_Y + .738 - i * .045)), rad(AutoData.DEPOSIT_ANGLE + AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i - 2.01 - .89));
+                builder.splineTo(new Vector2d(-in(AutoData.DEPOSIT_X + .512 + i * .045), in(AutoData.DEPOSIT_Y + .738 - i * .045)), rad(180-(AutoData.DEPOSIT_ANGLE + AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i - 2.01 - .89)));
             } else {
-                builder.splineTo(new Vector2d(in(AutoData.DEPOSIT_X + .556 + i * .045), in(AutoData.DEPOSIT_Y + .6980 - i * .045)), rad(AutoData.DEPOSIT_ANGLE + AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i - 1.91));
+                builder.splineTo(new Vector2d(-in(AutoData.DEPOSIT_X + .556 + i * .045), in(AutoData.DEPOSIT_Y + .6980 - i * .045)), rad(180-(AutoData.DEPOSIT_ANGLE + AutoData.DEPOSIT_ANGLE_ADJUSTMENT * i - 1.91)));
             }
 
             builder
@@ -212,7 +216,7 @@ public class LM2_Right extends RougeBaseAuto {
             })
 
             .setReversed(true)
-            .splineTo(new Vector2d(in(AutoData.INTAKE_X + 0.15), in(AutoData.INTAKE_Y)), rad(0))
+            .splineTo(new Vector2d(-in(AutoData.INTAKE_X + 0.15), in(AutoData.INTAKE_Y)), rad(180-(0)))
 
             .UNSTABLE_addTemporalMarkerOffset(-0.12, () -> {
                 intake.disable();
