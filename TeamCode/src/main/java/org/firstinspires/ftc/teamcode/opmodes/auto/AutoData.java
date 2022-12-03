@@ -22,7 +22,7 @@ public class AutoData {
     public static double DEPOSIT_X = 87.97;
     public static double DEPOSIT_Y = -17.29;
     public static double DEPOSIT_ANGLE = 139.94;
-    public static double DEPOSIT_ANGLE_ADJUSTMENT = .05;
+    public static double DEPOSIT_ANGLE_ADJUSTMENT = .0012;
 
     public static int DEPOSIT_DROP_AMOUNT = 800;
 
