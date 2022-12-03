@@ -80,7 +80,7 @@ public class LM2_Left extends RougeBaseAuto {
             case 1:
                 parkTrajBuilder
                     .back(-in(8))
-                    .turn(rad(180-(46.5)))
+                    .turn(rad(180-(45.25)))
                     .forward(-in(67));
                 break;
             case 2:
@@ -91,7 +91,7 @@ public class LM2_Left extends RougeBaseAuto {
             default:
                 parkTrajBuilder
                     .setReversed(true)
-                    .splineTo(new Vector2d(-in(AutoData.INTAKE_X - 2), in(AutoData.INTAKE_Y + 2)), rad(180-(0)));
+                    .splineTo(new Vector2d(-in(AutoData.INTAKE_X - 3), in(AutoData.INTAKE_Y + 2)), rad(180-(0)));
                 break;
         }
 
