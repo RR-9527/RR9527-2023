@@ -76,7 +76,7 @@ public class LM2_Right extends RougeBaseAuto {
             });
 
 
-        switch (signalZone = 1) {
+        switch (signalZone) {
             case 1:
                 parkTrajBuilder
                     .back(in(8))
@@ -88,7 +88,7 @@ public class LM2_Right extends RougeBaseAuto {
                     .back(in(10))
                     .turn(rad(47.5));
                 break;
-            case 3:
+            default:
                 parkTrajBuilder
                     .setReversed(true)
                     .splineTo(new Vector2d(in(AutoData.INTAKE_X - 2), in(AutoData.INTAKE_Y + 2)), rad(0));
