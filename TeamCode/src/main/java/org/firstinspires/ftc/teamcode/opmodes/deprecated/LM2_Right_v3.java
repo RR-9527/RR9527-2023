@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.deprecated;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.firstinspires.ftc.teamcode.opmodes.auto.AutoData;
+import org.firstinspires.ftc.teamcode.opmodes.auto.RougeBaseAuto;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
@@ -12,9 +14,9 @@ import org.firstinspires.ftc.teamcodekt.components.scheduler.Scheduler;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+@Disabled
 @SuppressWarnings("CodeBlock2Expr")
-@Autonomous
-public class LM2_Left_v2_v2 extends RougeBaseAuto {
+public class LM2_Right_v3 extends RougeBaseAuto {
     public static final int MAX_CYCLES = 4;
 
     private int cycleNumber;
@@ -46,7 +48,7 @@ public class LM2_Left_v2_v2 extends RougeBaseAuto {
         telemetry.addData("Final signal zone", signalZone);
         telemetry.update();
 
-        Pose2d startPose = new Pose2d(in(-91), in(-159), rad(90));
+        Pose2d startPose = new Pose2d(in(91), in(-159), rad(90));
         createAndFollowPreload(startPose);
 
         Scheduler.start(this, () -> {
@@ -61,16 +63,16 @@ public class LM2_Left_v2_v2 extends RougeBaseAuto {
     private void createAndFollowPreload(Pose2d startPose) {
         createAndFollowTrajectory(startPose, (builder, endPose) -> builder
             .addTemporalMarker(() -> {
-                lift.setHeight(RobotConstants.Lift.HIGH);
+                lift.setHeight(RobotConstants.Lift.HIGH + 200);
                 wristPosFunction = wrist::setToForwardsPos;
                 armPosFunction = arm::setToForwardsAutoPos;
             })
 
-            .splineTo(cmVector(-91, 50), rad(90))
+            .splineTo(cmVector(91, 50), rad(90))
 
             .splineTo(
-                cmVector(-AutoData.DEPOSIT_X + 1.5, AutoData.DEPOSIT_Y + 1.5),
-                rad(180 - (AutoData.DEPOSIT_ANGLE - .02) - 12)
+                cmVector(AutoData.DEPOSIT_X + .75, AutoData.DEPOSIT_Y + .5),
+                rad(AutoData.DEPOSIT_ANGLE - 3)
             )
 
             .addTemporalMarker(() -> {
@@ -83,7 +85,7 @@ public class LM2_Left_v2_v2 extends RougeBaseAuto {
             double distance = frontSensor.getDistance();
 
             if (Math.abs(distance - 15) > 1) {
-                builder.forward(distance - 15);
+                builder.forward(in(distance - 15));
             }
 
             builder.addTemporalMarker(() -> {
@@ -122,7 +124,7 @@ public class LM2_Left_v2_v2 extends RougeBaseAuto {
             })
 
             .setReversed(true)
-            .splineTo(cmVector(-AutoData.INTAKE_X + 1.25, AutoData.INTAKE_Y + 4.5), rad(180))
+            .splineTo(cmVector(AutoData.INTAKE_X + 0.325, AutoData.INTAKE_Y + 2), 0)
             .setReversed(false)
 
             .addTemporalMarker(() -> {
@@ -136,16 +138,16 @@ public class LM2_Left_v2_v2 extends RougeBaseAuto {
                 claw.close();
             })
 
-            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
-                lift.setHeight(RobotConstants.Lift.HIGH);
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET - 0.25, () -> {
+                lift.setHeight(RobotConstants.Lift.HIGH + 200);
             })
 
-            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET, () -> {
+            .UNSTABLE_addTemporalMarkerOffset(AutoData.INTAKE_LIFT_OFFSET - 0.125, () -> {
                 armPosFunction = arm::setToForwardsAutoPos;
                 wristPosFunction = wrist::setToForwardsPos;
             })
 
-            .waitSeconds(AutoData.INTAKE_DELAY + 0.125)
+            .waitSeconds(AutoData.INTAKE_DELAY + 0.25)
 
             .addTemporalMarker(() -> {
                 createAndFollowDepositCycle(endPose.get());
@@ -155,8 +157,8 @@ public class LM2_Left_v2_v2 extends RougeBaseAuto {
     private void createAndFollowDepositCycle(Pose2d startPose) {
         createAndFollowTrajectory(startPose, (builder, endPose) -> builder
             .splineTo(
-                cmVector(-AutoData.DEPOSIT_X + 1.5, AutoData.DEPOSIT_Y + 1.5),
-                rad(180 - (AutoData.DEPOSIT_ANGLE - 1 - (AutoData.DEPOSIT_ANGLE_ADJUSTMENT - .02) * cycleNumber))
+                cmVector(AutoData.DEPOSIT_X + 1.125, AutoData.DEPOSIT_Y + 0.625),
+                rad(AutoData.DEPOSIT_ANGLE + 2 + AutoData.DEPOSIT_ANGLE_ADJUSTMENT * cycleNumber)
             )
 
             .addTemporalMarker(() -> {
@@ -179,7 +181,7 @@ public class LM2_Left_v2_v2 extends RougeBaseAuto {
             })
 
             .setReversed(true)
-            .splineTo(cmVector(-AutoData.INTAKE_X + 1.25, AutoData.INTAKE_Y + 4.5), rad(180))
+            .splineTo(cmVector(AutoData.INTAKE_X + 0.325, AutoData.INTAKE_Y), 0)
             .setReversed(false)
 
             .UNSTABLE_addTemporalMarkerOffset(AutoData.CLAW_CLOSE_OFFSET, () -> {
@@ -193,11 +195,13 @@ public class LM2_Left_v2_v2 extends RougeBaseAuto {
 
     private void createAndFollowPark(Pose2d startPose) {
         createAndFollowTrajectory(startPose, (builder, endPose) -> {
-            builder.UNSTABLE_addTemporalMarkerOffset(0.05, () -> {
-                lift.goToZero();
-                armPosFunction = arm::setToRestingPos;
-                wristPosFunction = wrist::setToRestingPos;
-            });
+            builder
+                .turn(rad(1.75))
+                .UNSTABLE_addTemporalMarkerOffset(0.05, () -> {
+                    lift.goToZero();
+                    armPosFunction = arm::setToRestingPos;
+                    wristPosFunction = wrist::setToRestingPos;
+                });
 
             switch (signalZone) {
                 case 3:
