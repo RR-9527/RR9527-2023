@@ -77,7 +77,7 @@ public class LM2_Left extends RougeBaseAuto {
 
 
         switch (signalZone) {
-            case 1:
+            case 3:
                 parkTrajBuilder
                     .back(-in(8))
                     .turn(rad(180-(45.25)))

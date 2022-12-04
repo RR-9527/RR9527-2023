@@ -63,10 +63,10 @@ public class RobotConstants {
 
 		public static double MANUAL_ADJUSTMENT_MULT = 50;
 
-		public static int AUTO_INTAKE_1 = 370 + 1;
-		public static int AUTO_INTAKE_2 = 295 + 1;
-		public static int AUTO_INTAKE_3 = 180 + 1;
-		public static int AUTO_INTAKE_4 = 110 + 1;
+		public static int AUTO_INTAKE_1 = 370 + 3;
+		public static int AUTO_INTAKE_2 = 295 + 2;
+		public static int AUTO_INTAKE_3 = 180 + 2;
+		public static int AUTO_INTAKE_4 = 110 + 2;
 		public static int AUTO_INTAKE_5 = 0;
 
 		public static boolean USE_AGGRESSIVE_ASCENDANCE = false;
