@@ -44,10 +44,6 @@ public class ChildOp extends RogueBaseTeleOp {
 
         codriver.a.onRise(this::stop); // Kill switch
 
-        new Listener(() -> true).whileHigh(() -> {
-            driveMotors.drive(gamepad2, localizer, powerMulti);
-        });
-
         codriver.dpad_up   .onRise(lift::goToHigh);
         codriver.dpad_down .onRise(lift::goToZero);
         codriver.dpad_right.onRise(lift::goToMid);
@@ -58,6 +54,11 @@ public class ChildOp extends RogueBaseTeleOp {
 
         codriver.left_trigger(.1).whileHigh(this::halveDriveSpeed);
         codriver.right_trigger(.1).whileHigh(() -> powerMulti = 0.0);
+    }
+
+    @Override
+    protected void doEveryLoop() {
+        driveMotors.drive(gamepad2, localizer, powerMulti);
     }
 
     @Override

@@ -56,11 +56,15 @@ public abstract class RogueBaseTeleOp extends LinearOpMode {
 
             driveMotors.drive(gamepad1, localizer, powerMulti);
 
+            doEveryLoop();
+
             telemetry.update();
         });
     }
 
     protected void initAdditionalHardware() {}
+
+    protected void doEveryLoop() {}
 
     private void initHardware() {
         driver   = new GamepadEx2(gamepad1);
