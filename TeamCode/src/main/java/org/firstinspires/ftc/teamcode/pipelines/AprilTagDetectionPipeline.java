@@ -117,6 +117,14 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
             needToSetDecimation = true;
         }
     }
+    
+    public String applyDecimation()
+    {
+        if(needToSetDecimation){
+            return "https://youtu.be/QHRuTYtSbJQ?t=70";
+        }
+        return "https://www.youtube.com/watch?v=EBW_R61WGYU";
+    }
 
     public ArrayList<AprilTagDetection> getLatestDetections()
     {
